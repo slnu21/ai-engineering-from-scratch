@@ -1,6 +1,6 @@
 # 용어 대조표 — 한국어 표기 기준
 
-`glossary/terms.md` 의 83개 용어를 한국어로 어떻게 쓸지 고정한 표입니다.
+`glossary/terms.md`의 83개 용어를 한국어로 어떻게 쓸지 고정한 표입니다.
 학습 노트를 쓸 때 **여기 적힌 표기를 그대로** 씁니다. 매번 새로 번역하면
 1편의 "어텐션"이 20편에서 "주의 메커니즘"이 되고, 나중에 검색이 안 됩니다.
 
@@ -14,8 +14,8 @@
    `ReLU` · `Adam` · `LoRA` · `GPT` · `JAX`. 억지로 풀면 오히려 못 알아봅니다.
 4. **병기는 글마다 첫 등장 1회만.** 처음엔 `어텐션(attention)`, 그다음부터는
    그냥 `어텐션`. 매 문단 병기하면 읽는 리듬이 죽습니다.
-5. **코드 · 에러 메시지 · 라이브러리 API 는 절대 번역하지 않습니다.**
-   `loss.backward()` 는 `loss.backward()` 입니다.
+5. **코드 · 에러 메시지 · 라이브러리 API는 절대 번역하지 않습니다.**
+   `loss.backward()`는 `loss.backward()`입니다.
 
 ## 대조표
 
@@ -23,8 +23,8 @@
 |---|---|---|
 | Activation Function | 활성화 함수(activation function) | 선형 레이어 뒤에 붙어 비선형성을 넣는 함수. 없으면 층을 쌓아도 하나로 붕괴합니다 |
 | Adam (Optimizer) | `Adam` | 모멘텀 + 파라미터별 적응 학습률. 튜닝 없이도 웬만하면 도는 기본값 |
-| AdamW | `AdamW` | Adam 에서 가중치 감쇠를 손실이 아니라 갱신 단계로 분리한 버전 |
-| Agent | 에이전트(agent) | LLM 이 다음에 쓸 도구를 고르고, 실행하고, 결과를 보고, 반복하는 while 루프 |
+| AdamW | `AdamW` | Adam에서 가중치 감쇠를 손실이 아니라 갱신 단계로 분리한 버전 |
+| Agent | 에이전트(agent) | LLM이 다음에 쓸 도구를 고르고, 실행하고, 결과를 보고, 반복하는 while 루프 |
 | Alignment | 정렬(alignment) | 시스템의 행동을 사람의 의도·가치에 맞추는 문제. 예상 못 한 경우까지 포함해서 |
 | Attention | 어텐션(attention) | 모든 토큰이 다른 모든 토큰의 값을 가중합하는 방식. 가중치는 쿼리·키의 내적 |
 | Autograd | 자동 미분(autograd) | 순전파를 기록해 두고 역방향으로 기울기를 자동 계산하는 장치 |
@@ -38,7 +38,7 @@
 | Contrastive Learning | 대조 학습(contrastive learning) | 비슷한 쌍은 가깝게, 다른 쌍은 멀게 임베딩을 밀고 당기며 배우는 방식 |
 | Cosine Similarity | 코사인 유사도(cosine similarity) | 두 벡터의 각도로 재는 유사도. 크기는 무시하고 방향만 봅니다 |
 | Cross-Entropy | 교차 엔트로피(cross-entropy) | 예측 분포가 정답 분포와 얼마나 다른지 재는 손실. 분류의 기본값 |
-| CUDA | `CUDA` | NVIDIA GPU 에서 행렬 연산을 수천 코어로 병렬 실행하는 플랫폼 |
+| CUDA | `CUDA` | NVIDIA GPU에서 행렬 연산을 수천 코어로 병렬 실행하는 플랫폼 |
 | Data Augmentation | 데이터 증강(data augmentation) | 원본을 뒤집고 자르고 흔들어 학습 데이터를 인위적으로 불리는 것 |
 | Decoder | 디코더(decoder) | 표현을 받아 출력 시퀀스를 하나씩 만들어 내는 쪽 |
 | Diffusion Model | 디퓨전 모델(diffusion model) | 노이즈를 조금씩 걷어내는 과정을 학습해 이미지를 생성하는 모델 |
@@ -51,7 +51,7 @@
 | Feature | 특징(feature) | 모델이 입력으로 받는 측정 가능한 성질 하나 |
 | Few-Shot | 퓨샷(few-shot) | 프롬프트 안에 예시 몇 개를 넣어 형식을 잡아 주는 것 |
 | Fine-tuning | 파인튜닝(fine-tuning) | 사전 학습된 모델을 특정 작업 데이터로 이어서 학습시키는 것 |
-| Function Calling | 함수 호출(function calling) | 모델이 정해진 스키마에 맞춰 호출할 함수와 인자를 JSON 으로 뱉게 하는 것 |
+| Function Calling | 함수 호출(function calling) | 모델이 정해진 스키마에 맞춰 호출할 함수와 인자를 JSON으로 뱉게 하는 것 |
 | GAN (Generative Adversarial Network) | `GAN`(생성적 적대 신경망) | 생성기와 판별기를 맞붙여 서로 속이고 잡아내며 학습시키는 구조 |
 | GPT | `GPT` | Generative Pre-trained Transformer. 자기회귀 디코더 전용 트랜스포머 계열 |
 | Gradient | 기울기(gradient) | 각 파라미터를 조금 흔들었을 때 손실이 얼마나 변하는지의 벡터 |
@@ -80,7 +80,7 @@
 | Precision & Recall | 정밀도 · 재현율(precision & recall) | 맞다고 한 것 중 진짜 비율 · 진짜 중 잡아낸 비율 |
 | Prompt Engineering | 프롬프트 엔지니어링(prompt engineering) | 원하는 출력이 나오도록 입력을 설계하는 일 |
 | Prompt Injection | 프롬프트 인젝션(prompt injection) | 데이터인 척 들어온 텍스트가 모델의 지시를 가로채는 공격 |
-| QLoRA | `QLoRA` | 4비트로 양자화한 모델 위에 LoRA 를 얹어 메모리를 더 줄인 방식 |
+| QLoRA | `QLoRA` | 4비트로 양자화한 모델 위에 LoRA를 얹어 메모리를 더 줄인 방식 |
 | Quantization | 양자화(quantization) | 가중치를 낮은 비트 수로 표현해 모델을 가볍게 만드는 것 |
 | RAG (Retrieval-Augmented Generation) | `RAG` | 답을 만들기 전에 관련 문서를 검색해 프롬프트에 끼워 넣는 구조 |
 | ReLU | `ReLU` | 음수는 0, 양수는 그대로. 가장 흔한 활성화 함수 |
@@ -104,6 +104,20 @@
 | Weight | 가중치(weight) | 입력에 곱해지는 학습 대상 계수 |
 | Weight Decay | 가중치 감쇠(weight decay) | 가중치가 커지지 않도록 갱신마다 조금씩 줄이는 정규화 |
 | Zero-Shot | 제로샷(zero-shot) | 예시 없이 지시만으로 시키는 것 |
+
+## 도구 · 워크플로우 용어
+
+`glossary/terms.md`에는 없지만 레슨 본문에서 반복되는 용어입니다. 정책은 위와 같습니다.
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Branch | 브랜치(branch) | 커밋을 가리키는 포인터. 작업하면 같이 앞으로 움직입니다 |
+| Commit | 커밋(commit) | 특정 시점 프로젝트 전체의 스냅숏 |
+| Fast-forward | 패스트포워드(fast-forward) | 갈라진 이력이 없어 병합 커밋 없이 포인터만 앞으로 옮기는 병합 |
+| Merge | 머지(merge) | 한 브랜치의 변경을 다른 브랜치에 적용하는 것 |
+| Remote | 리모트(remote) | 다른 곳에 호스팅된 저장소 사본(GitHub, GitLab) |
+| Staging Area | 스테이징 영역(staging area) | 다음 커밋에 담을 변경을 모아 두는 중간 자리 |
+| Working Directory | 작업 디렉터리(working directory) | 실제로 파일을 편집하는 디스크상의 공간 |
 
 ## 표에 없는 용어를 만나면
 
