@@ -11,21 +11,27 @@ scripts in `scripts/` pass and generated files are not stale.
 
 ## Commands
 
+These are written for this machine (Windows): `python`, not `python3` — see the traps below.
+Upstream docs and CI use `python3`; on Linux/macOS substitute it back.
+
 ```bash
-python3 scripts/audit_lessons.py            # lesson invariants L001–L010 (CI gate)
-python3 scripts/audit_lessons.py --phase 14 # one phase; --json, --strict also available
-python3 scripts/build_catalog.py            # rewrite catalog.json from the filesystem (CI drift gate)
-python3 scripts/check_readme_counts.py      # README hardcoded counts vs catalog totals (CI gate); --fix rewrites
-python3 scripts/lesson_run.py               # byte-compile every lesson .py; --execute to actually run (10s timeout)
-python3 scripts/lesson_run.py --phase 14    # narrow to one phase
-python3 scripts/link_check.py --strict      # external HTTP links; caches 7d in .link-cache.json
+PYTHONIOENCODING=utf-8 python scripts/audit_lessons.py   # lesson invariants L001–L010 (CI gate)
+PYTHONIOENCODING=utf-8 python scripts/audit_lessons.py --phase 14   # --json, --strict too
+PYTHONIOENCODING=utf-8 python scripts/build_catalog.py   # rewrite catalog.json (CI drift gate)
+PYTHONIOENCODING=utf-8 python scripts/check_readme_counts.py   # README counts vs catalog; --fix rewrites
+PYTHONIOENCODING=utf-8 python scripts/lesson_run.py      # byte-compile lesson .py; --execute to run
+PYTHONIOENCODING=utf-8 python scripts/link_check.py --strict   # external links; caches 7d
+python scripts/install_skills.py <target>   # export lesson outputs as skills/prompts/agents
 node site/build.js                          # regenerate site/data.js from README/ROADMAP/glossary
 scripts/scaffold-lesson.sh <phase-dir> <NN-slug> ["Title"]   # new lesson skeleton (bash)
-python3 scripts/install_skills.py <target>  # export lesson outputs as skills/prompts/agents
-python scripts/study_progress.py            # Korean study-note progress, derived from study/
+
+python scripts/study_progress.py            # study-note progress + SEO frontmatter check
 python scripts/study_progress.py --phase 0  # one phase, lesson by lesson
 python scripts/study_progress.py --write    # regenerate study/PROGRESS.md
+python scripts/study_progress.py --strict   # exit 1 on orphan notes or SEO issues
 ```
+
+`study_progress.py` reconfigures its own stdout, so it needs no `PYTHONIOENCODING`.
 
 All Python scripts are stdlib-only, Python 3.10+. `.github/workflows/curriculum.yml` runs
 audit + catalog drift + README counts on any push touching `phases/`, `catalog.json`, or `README.md`.
@@ -142,8 +148,11 @@ no tokens. Event shapes (`t` = type):
 ```jsonc
 {"t":"start","slug":"phase-01","title":"Phase 01 - Math Foundations","start":"2026-07-20"}
 {"t":"done","slug":"phase-00","title":"Phase 00 - Setup And Tooling","completed":"2026-07-25"}
-{"t":"changelog","slug":"phase-00","contentFile":"study/phase-00/01-dev-environment.md","impact":"Medium"}
+{"t":"changelog","slug":"phase-00","contentFile":"study/phase-00/00-summary.md","impact":"Medium"}
 ```
+
+**Log at phase boundaries only, never per lesson.** `study_progress.py` is the fine-grained
+truth; 435 per-lesson changelogs would destroy the coarse view Atlas exists to give.
 
 `slug` must be `phase-NN`. `.atlas/wbs-map.json` maps those to existing WBS ids, so a mapped
 slug **updates** its item and never creates a duplicate. `.atlas/project.json` pins project 36

@@ -1,5 +1,20 @@
 # study — 한국어 학습 노트
 
+> **이 프로젝트 설정** — 전역 `study-note` · `study-post` 스킬이 읽는 값입니다.
+>
+> | 항목 | 값 |
+> |---|---|
+> | 원문 경로 | `phases/NN-*/MM-*/docs/en.md` |
+> | 레슨 노트 | `study/phase-NN/MM-slug.md` (슬러그 = 원문 디렉터리명) |
+> | 루트 글 | `study/NN-slug.md` |
+> | 용어 표기 | [`glossary-ko.md`](glossary-ko.md) |
+> | 태그 · SEO | [`tags-ko.md`](tags-ko.md) |
+> | 진행 · 검사 | `python scripts/study_progress.py [--phase N\|--write\|--strict]` |
+> | 시리즈명 | `AI Engineering from Scratch 한국어 학습 노트` |
+> | 환경 함정 | `CLAUDE.md`의 "On Windows, two traps" 참고 |
+>
+> 스킬 문서와 여기가 어긋나면 **여기가 이깁니다.**
+
 이 커리큘럼을 한국어로 공부하며 남기는 노트입니다.
 
 **원문 레슨의 자연스러운 한국어 판 + 실제로 확인한 주의점·오류 해결**로 구성합니다.
