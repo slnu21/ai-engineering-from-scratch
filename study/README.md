@@ -22,12 +22,31 @@
 study/
 ├── README.md          이 파일
 ├── glossary-ko.md     용어 표기 기준 — 노트 쓰기 전에 여기부터
+├── PROGRESS.md        생성물 — 직접 고치지 않습니다
 └── phase-NN/
     └── MM-lesson-slug.md
 ```
 
 파일명은 원문 레슨 디렉터리 슬러그를 그대로 씁니다.
 `phases/00-setup-and-tooling/01-dev-environment` → `study/phase-00/01-dev-environment.md`.
+
+**슬러그가 정확해야 진행 계산에 잡힙니다.** 어긋나면 `study_progress.py` 가
+"짝 없는 노트"로 잡아 줍니다.
+
+## 진행 상태
+
+진행 상태는 **디스크에서 파생**됩니다. 노트 파일이 있으면 그 레슨은 완료입니다.
+따로 체크할 목록이 없으므로 어긋날 수가 없습니다.
+
+```bash
+python scripts/study_progress.py             # 전체 요약 + 다음 레슨
+python scripts/study_progress.py --phase 0   # 한 Phase 를 레슨 단위로
+python scripts/study_progress.py --write     # PROGRESS.md 재생성
+python scripts/study_progress.py --json      # 기계용
+```
+
+공부를 시작할 때 먼저 돌려 어디까지 왔는지 확인하고, 노트를 추가한 뒤 `--write` 로
+`PROGRESS.md` 를 갱신합니다. `PROGRESS.md` 는 생성물이라 손으로 고치지 않습니다.
 
 ## 노트 한 편의 구조
 

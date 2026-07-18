@@ -22,6 +22,9 @@ python3 scripts/link_check.py --strict      # external HTTP links; caches 7d in 
 node site/build.js                          # regenerate site/data.js from README/ROADMAP/glossary
 scripts/scaffold-lesson.sh <phase-dir> <NN-slug> ["Title"]   # new lesson skeleton (bash)
 python3 scripts/install_skills.py <target>  # export lesson outputs as skills/prompts/agents
+python scripts/study_progress.py            # Korean study-note progress, derived from study/
+python scripts/study_progress.py --phase 0  # one phase, lesson by lesson
+python scripts/study_progress.py --write    # regenerate study/PROGRESS.md
 ```
 
 All Python scripts are stdlib-only, Python 3.10+. `.github/workflows/curriculum.yml` runs
@@ -108,6 +111,23 @@ From `CONTRIBUTING.md` / `LESSON_TEMPLATE.md` — these are enforced by review, 
 - Direct prose, no filler, no decorative emoji in headings (the `Lang` column flags are the
   one exception, and only because the parser maps them).
 - One contribution per pull request.
+
+## Korean study notes (`study/`)
+
+This fork carries a Korean learning layer that upstream does not have. `study/phase-NN/MM-slug.md`
+holds a natural-Korean rendering of a lesson plus verified environment gotchas — it is *not* a
+translation, so it deliberately does not live in the `docs/ko.md` slot (that slot is upstream's
+translation contract). See `study/README.md` for the note structure and `study/glossary-ko.md`
+for the fixed Korean term spellings.
+
+**Progress is derived, never hand-maintained.** A note file existing means that lesson is done;
+`scripts/study_progress.py` matches notes against `catalog.json` by phase number + lesson slug.
+Run it at the start of a study session to see where things stand and what's next. A note whose
+filename doesn't match a lesson slug is reported as an orphan rather than silently not counting.
+`study/PROGRESS.md` is generated output — never edit it by hand.
+
+Nothing under `study/` affects CI: `build_catalog.py`, `audit_lessons.py`, and `site/build.js`
+all read only `phases/**/docs/en.md`.
 
 ## Skills
 
