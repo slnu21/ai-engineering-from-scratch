@@ -49,6 +49,7 @@ class PhaseProgress:
     title: str
     total: int
     done_slugs: set[str] = field(default_factory=set)
+    draft_slugs: set[str] = field(default_factory=set)
     lessons: list[dict] = field(default_factory=list)
 
     @property
@@ -73,9 +74,15 @@ def load_catalog() -> dict:
     return json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
 
 
-def collect_notes() -> dict[int, set[str]]:
-    """Map phase number -> set of lesson slugs that have a study note."""
-    notes: dict[int, set[str]] = {}
+def collect_notes() -> dict[int, dict[str, set[str]]]:
+    """Map phase number -> {"done": slugs, "draft": slugs}.
+
+    A note is written in two passes: part 1 (the Korean rendering) lands while
+    the lesson is still being worked through, and part 2 (verified problems)
+    is appended at the end. Only `status: done` counts as a finished lesson —
+    otherwise starting a lesson would immediately mark it complete.
+    """
+    notes: dict[int, dict[str, set[str]]] = {}
     if not STUDY_DIR.is_dir():
         return notes
     for phase_dir in sorted(STUDY_DIR.glob("phase-*")):
@@ -86,7 +93,10 @@ def collect_notes() -> dict[int, set[str]]:
         except ValueError:
             continue
         for note in sorted(phase_dir.glob("*.md")):
-            notes.setdefault(phase_num, set()).add(note.stem)
+            fm = parse_frontmatter(note.read_text(encoding="utf-8")) or {}
+            bucket = "done" if str(fm.get("status", "")).strip() == "done" else "draft"
+            notes.setdefault(phase_num, {"done": set(), "draft": set()})
+            notes[phase_num][bucket].add(note.stem)
     return notes
 
 
@@ -129,7 +139,8 @@ def parse_frontmatter(text: str) -> dict[str, object] | None:
 
 
 REQUIRED_FM = ("title", "description", "date", "slug", "series")
-LESSON_ONLY_FM = ("phase", "lesson")
+LESSON_ONLY_FM = ("phase", "lesson", "status")
+VALID_STATUS = ("draft", "done")
 TITLE_MAX = 60
 DESC_MIN, DESC_MAX = 80, 200
 TAGS_MIN, TAGS_MAX = 3, 6
@@ -170,6 +181,12 @@ def collect_seo_issues() -> list[str]:
         for field in required:
             if not fm.get(field):
                 issues.append(f"{rel}: missing '{field}'")
+        if is_lesson:
+            status = str(fm.get("status", "")).strip()
+            if status and status not in VALID_STATUS:
+                issues.append(
+                    f"{rel}: status {status!r} (want one of {'/'.join(VALID_STATUS)})"
+                )
         title = str(fm.get("title", ""))
         if len(title) > TITLE_MAX:
             issues.append(f"{rel}: title {len(title)} chars (max {TITLE_MAX})")
@@ -195,9 +212,12 @@ def collect_seo_issues() -> list[str]:
     return issues
 
 
-def build(catalog: dict, notes: dict[int, set[str]]) -> tuple[list[PhaseProgress], list[str]]:
+def build(
+    catalog: dict, notes: dict[int, dict[str, set[str]]]
+) -> tuple[list[PhaseProgress], list[str]]:
     phases: list[PhaseProgress] = []
     matched: dict[int, set[str]] = {}
+    empty = {"done": set(), "draft": set()}
 
     for p in catalog["phases"]:
         pp = PhaseProgress(
@@ -207,34 +227,45 @@ def build(catalog: dict, notes: dict[int, set[str]]) -> tuple[list[PhaseProgress
             total=p["lesson_count"],
             lessons=p["lessons"],
         )
-        have = notes.get(p["num"], set())
+        have = notes.get(p["num"], empty)
         for lesson in p["lessons"]:
-            if lesson["slug"] in have:
+            if lesson["slug"] in have["done"]:
                 pp.done_slugs.add(lesson["slug"])
-                matched.setdefault(p["num"], set()).add(lesson["slug"])
+            elif lesson["slug"] in have["draft"]:
+                pp.draft_slugs.add(lesson["slug"])
+            else:
+                continue
+            matched.setdefault(p["num"], set()).add(lesson["slug"])
         phases.append(pp)
 
     orphans = []
-    for phase_num, slugs in notes.items():
-        for slug in sorted(slugs - matched.get(phase_num, set())):
+    for phase_num, buckets in notes.items():
+        all_slugs = buckets["done"] | buckets["draft"]
+        for slug in sorted(all_slugs - matched.get(phase_num, set())):
             orphans.append(f"study/phase-{phase_num:02d}/{slug}.md")
     return phases, sorted(orphans)
 
 
 def next_lesson(phases: list[PhaseProgress]) -> dict | None:
-    """First lesson, in curriculum order, without a note."""
+    """First lesson, in curriculum order, that is not finished.
+
+    A drafted lesson (part 1 written, part 2 pending) is the one currently in
+    progress, so it is reported before any untouched lesson.
+    """
     for pp in phases:
         for lesson in pp.lessons:
-            if lesson["slug"] not in pp.done_slugs:
-                return {
-                    "phase": pp.num,
-                    "phase_title": pp.title,
-                    "num": lesson["num"],
-                    "slug": lesson["slug"],
-                    "title": lesson["title"],
-                    "path": lesson["path"],
-                    "note_path": f"study/phase-{pp.num:02d}/{lesson['slug']}.md",
-                }
+            if lesson["slug"] in pp.done_slugs:
+                continue
+            return {
+                "phase": pp.num,
+                "phase_title": pp.title,
+                "num": lesson["num"],
+                "slug": lesson["slug"],
+                "title": lesson["title"],
+                "path": lesson["path"],
+                "note_path": f"study/phase-{pp.num:02d}/{lesson['slug']}.md",
+                "state": "draft" if lesson["slug"] in pp.draft_slugs else "todo",
+            }
     return None
 
 
@@ -248,15 +279,22 @@ def render_text(
     total = sum(p.total for p in phases)
     out: list[str] = []
 
+    drafts = sum(len(p.draft_slugs) for p in phases)
+
     if only is None:
         pct = 100.0 * done / total if total else 0.0
         out.append("")
-        out.append(f"  study progress: {done}/{total} lessons ({pct:.1f}%)")
+        line = f"  study progress: {done}/{total} lessons ({pct:.1f}%)"
+        if drafts:
+            line += f"  +{drafts} in progress"
+        out.append(line)
         out.append("")
         for pp in phases:
             mark = "*" if 0 < pp.done < pp.total else (" " if pp.done == 0 else "+")
+            suffix = f"  ~{len(pp.draft_slugs)} drafting" if pp.draft_slugs else ""
             out.append(
-                f"  {mark} P{pp.num:02d} {pp.bar()} {pp.done:>3}/{pp.total:<3} {pp.title}"
+                f"  {mark} P{pp.num:02d} {pp.bar()} {pp.done:>3}/{pp.total:<3} "
+                f"{pp.title}{suffix}"
             )
     else:
         pp = next((p for p in phases if p.num == only), None)
@@ -267,16 +305,24 @@ def render_text(
         out.append(f"  Phase {pp.num:02d} - {pp.title}   {pp.done}/{pp.total} ({pp.pct:.0f}%)")
         out.append("")
         for lesson in pp.lessons:
-            mark = "[x]" if lesson["slug"] in pp.done_slugs else "[ ]"
+            if lesson["slug"] in pp.done_slugs:
+                mark = "[x]"
+            elif lesson["slug"] in pp.draft_slugs:
+                mark = "[~]"
+            else:
+                mark = "[ ]"
             out.append(f"  {mark} {lesson['num']:>2}. {lesson['title']}")
 
     nxt = next_lesson(phases)
     out.append("")
     if nxt:
-        out.append(f"  next: P{nxt['phase']:02d} L{nxt['num']:02d} {nxt['title']}")
+        label = "in progress" if nxt["state"] == "draft" else "next"
+        out.append(f"  {label}: P{nxt['phase']:02d} L{nxt['num']:02d} {nxt['title']}")
         out.append(f"        {nxt['path']}")
+        if nxt["state"] == "draft":
+            out.append(f"        part 1 written, part 2 pending -> {nxt['note_path']}")
     else:
-        out.append("  all lessons have notes.")
+        out.append("  every lesson is done.")
 
     if orphans:
         out.append("")
@@ -316,25 +362,33 @@ def render_markdown(phases: list[PhaseProgress], orphans: list[str]) -> str:
         )
 
     nxt = next_lesson(phases)
-    lines += ["", "## 다음 레슨", ""]
+    heading = "## 진행 중" if nxt and nxt["state"] == "draft" else "## 다음 레슨"
+    lines += ["", heading, ""]
     if nxt:
         lines += [
             f"**Phase {nxt['phase']:02d} · Lesson {nxt['num']:02d} — {nxt['title']}**",
             "",
             f"- 원문: [`{nxt['path']}`](../{nxt['path']}/docs/en.md)",
-            f"- 노트 예정 위치: `{nxt['note_path']}`",
         ]
+        if nxt["state"] == "draft":
+            lines.append(f"- 노트: [`{nxt['note_path']}`](../{nxt['note_path']}) — 1부 작성됨, 2부 대기")
+        else:
+            lines.append(f"- 노트 예정 위치: `{nxt['note_path']}`")
     else:
-        lines.append("모든 레슨에 노트가 있습니다.")
+        lines.append("모든 레슨이 완료됐습니다.")
 
     for pp in phases:
-        if pp.done == 0:
+        if pp.done == 0 and not pp.draft_slugs:
             continue
         lines += ["", f"## Phase {pp.num:02d} — {pp.title}", ""]
         for lesson in pp.lessons:
+            rel = f"phase-{pp.num:02d}/{lesson['slug']}.md"
             if lesson["slug"] in pp.done_slugs:
-                rel = f"phase-{pp.num:02d}/{lesson['slug']}.md"
                 lines.append(f"- [x] {lesson['num']:02d}. [{lesson['title']}]({rel})")
+            elif lesson["slug"] in pp.draft_slugs:
+                lines.append(
+                    f"- [~] {lesson['num']:02d}. [{lesson['title']}]({rel}) — 2부 대기"
+                )
             else:
                 lines.append(f"- [ ] {lesson['num']:02d}. {lesson['title']}")
 
@@ -370,6 +424,7 @@ def main(argv: list[str]) -> int:
                     "done": p.done,
                     "total": p.total,
                     "done_slugs": sorted(p.done_slugs),
+                    "draft_slugs": sorted(p.draft_slugs),
                 }
                 for p in phases
             ],

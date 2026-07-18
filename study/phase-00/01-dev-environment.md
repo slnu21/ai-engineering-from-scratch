@@ -5,6 +5,7 @@ date: 2026-07-18
 slug: ai-dev-environment-setup-windows
 series: "AI Engineering from Scratch 한국어 학습 노트"
 phase: 0
+status: done
 lesson: 1
 tags: [환경설정, Python, CUDA, 개발환경, Windows, AI엔지니어링]
 keywords:

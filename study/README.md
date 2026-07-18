@@ -84,6 +84,20 @@ python scripts/study_progress.py --json      # 기계용
 
 `phase-00/01-dev-environment.md`가 기준 샘플입니다.
 
+**노트는 두 번에 나눠 씁니다.** 코드 실행·설치는 직접 하고, Claude는 번역만 먼저
+올립니다.
+
+| | 시점 | 쓰는 것 | `status` |
+|---|---|---|---|
+| 1단계 | 레슨 시작 전 | 1부(한국어 판) | `draft` |
+| 2단계 | 그 레슨을 끝냈을 때 | 2부(확인된 문제와 해결) | `done` |
+
+2부의 재료는 **진행하며 물어본 것 · 헷갈렸던 것 · 실제로 만난 에러**입니다.
+질문이 나올 때마다 2부에 누적하고 레슨 끝에 정리합니다.
+
+**`draft`는 진행률에서 완료로 세지 않습니다.** `study_progress.py`가 `~1 drafting`
+으로 따로 보여 주고, 레슨 목록에서는 `[~]`로 표시합니다.
+
 **0부 — SEO 프론트매터 (필수)**
 
 블로그로 나가는 글이므로 모든 노트는 프론트매터로 시작합니다. 상세 기준은
@@ -98,6 +112,7 @@ slug: git-basics-crlf-no-ff-merge                  # 영문 kebab-case
 series: "AI Engineering from Scratch 한국어 학습 노트"
 phase: 0
 lesson: 2
+status: done                                       # draft(1부만) | done(2부까지)
 tags: [환경설정, git, 버전관리, 트러블슈팅, Windows, AI엔지니어링]   # 통제 어휘 3~6개
 keywords:                    # 롱테일 5개 이상. 에러 원문을 그대로 넣습니다
   - "LF will be replaced by CRLF"
