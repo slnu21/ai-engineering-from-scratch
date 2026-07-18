@@ -27,9 +27,13 @@ python3 scripts/install_skills.py <target>  # export lesson outputs as skills/pr
 All Python scripts are stdlib-only, Python 3.10+. `.github/workflows/curriculum.yml` runs
 audit + catalog drift + README counts on any push touching `phases/`, `catalog.json`, or `README.md`.
 
-**On Windows:** the console is cp949, so `audit_lessons.py` and friends crash with
-`UnicodeEncodeError` on em-dashes. Prefix with `PYTHONIOENCODING=utf-8`, and use `python`
-(not `python3`, which is a Store stub).
+**On Windows, two traps:**
+
+1. The console is cp949, so `audit_lessons.py` and friends crash with `UnicodeEncodeError`
+   on em-dashes. Prefix with `PYTHONIOENCODING=utf-8`.
+2. **Never use `python3`.** It resolves to the Microsoft Store app-execution alias, which
+   prints `Python`, runs nothing, and **exits 0** — so a gate appears to pass when it never
+   ran. Use `python`. Verified: `python3 scripts/audit_lessons.py` → `Python`, exit 0.
 
 ## The two sources of truth
 
