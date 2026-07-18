@@ -20,13 +20,19 @@
 
 ```
 study/
-├── README.md          이 파일
-├── glossary-ko.md     용어 표기 기준 — 노트 쓰기 전에 여기부터
-├── tags-ko.md         태그 통제 어휘 · SEO 기준
-├── PROGRESS.md        생성물 — 직접 고치지 않습니다
+├── README.md          이 파일          ┐
+├── glossary-ko.md     용어 표기 기준    │ 인프라 문서
+├── tags-ko.md         태그 · SEO 기준   │ (발행 대상 아님)
+├── PROGRESS.md        생성물           ┘
+├── 00-intro.md        시리즈 소개 — 루트 글
 └── phase-NN/
-    └── MM-lesson-slug.md
+    └── MM-lesson-slug.md                레슨 노트
 ```
+
+**발행 대상은 두 종류입니다.** `phase-NN/`의 **레슨 노트**와, 루트에 두는 **루트 글**
+(시리즈 소개처럼 특정 레슨에 속하지 않는 글)입니다. 루트 글은 `phase` · `lesson`
+프론트매터가 없어도 되며, 그 외 규칙은 같습니다. 위 인프라 문서 4개는 검사·발행
+대상에서 제외됩니다(`study_progress.py`의 `NON_POST_FILES`).
 
 파일명은 원문 레슨 디렉터리 슬러그를 그대로 씁니다.
 `phases/00-setup-and-tooling/01-dev-environment` → `study/phase-00/01-dev-environment.md`.

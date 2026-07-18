@@ -128,50 +128,70 @@ def parse_frontmatter(text: str) -> dict[str, object] | None:
     return result
 
 
-REQUIRED_FM = ("title", "description", "date", "slug", "series", "phase", "lesson")
+REQUIRED_FM = ("title", "description", "date", "slug", "series")
+LESSON_ONLY_FM = ("phase", "lesson")
 TITLE_MAX = 60
 DESC_MIN, DESC_MAX = 80, 200
 TAGS_MIN, TAGS_MAX = 3, 6
 KEYWORDS_MIN = 5
 
+# Root-level study/*.md that are infrastructure, not published posts.
+NON_POST_FILES = {"README.md", "PROGRESS.md", "glossary-ko.md", "tags-ko.md"}
+
+
+def iter_posts() -> list[tuple[Path, bool]]:
+    """Every publishable markdown file, flagged as (path, is_lesson_note).
+
+    Lesson notes live in `study/phase-NN/`. Root-level posts (e.g. the series
+    intro) are published too but carry no phase/lesson numbers.
+    """
+    posts: list[tuple[Path, bool]] = []
+    if not STUDY_DIR.is_dir():
+        return posts
+    for md in sorted(STUDY_DIR.glob("*.md")):
+        if md.name not in NON_POST_FILES:
+            posts.append((md, False))
+    for phase_dir in sorted(STUDY_DIR.glob("phase-*")):
+        for note in sorted(phase_dir.glob("*.md")):
+            posts.append((note, True))
+    return posts
+
 
 def collect_seo_issues() -> list[str]:
     """Frontmatter problems that would silently degrade search exposure."""
     issues: list[str] = []
-    if not STUDY_DIR.is_dir():
-        return issues
-    for phase_dir in sorted(STUDY_DIR.glob("phase-*")):
-        for note in sorted(phase_dir.glob("*.md")):
-            rel = note.relative_to(ROOT).as_posix()
-            fm = parse_frontmatter(note.read_text(encoding="utf-8"))
-            if fm is None:
-                issues.append(f"{rel}: no frontmatter")
-                continue
-            for field in REQUIRED_FM:
-                if not fm.get(field):
-                    issues.append(f"{rel}: missing '{field}'")
-            title = str(fm.get("title", ""))
-            if len(title) > TITLE_MAX:
-                issues.append(f"{rel}: title {len(title)} chars (max {TITLE_MAX})")
-            desc = str(fm.get("description", ""))
-            if desc and not (DESC_MIN <= len(desc) <= DESC_MAX):
-                issues.append(
-                    f"{rel}: description {len(desc)} chars (want {DESC_MIN}-{DESC_MAX})"
-                )
-            tags = fm.get("tags") or []
-            if not isinstance(tags, list) or not (TAGS_MIN <= len(tags) <= TAGS_MAX):
-                issues.append(
-                    f"{rel}: {len(tags) if isinstance(tags, list) else 0} tags "
-                    f"(want {TAGS_MIN}-{TAGS_MAX})"
-                )
-            elif "AI엔지니어링" not in tags:
-                issues.append(f"{rel}: tags missing the series tag 'AI엔지니어링'")
-            kws = fm.get("keywords") or []
-            if not isinstance(kws, list) or len(kws) < KEYWORDS_MIN:
-                issues.append(
-                    f"{rel}: {len(kws) if isinstance(kws, list) else 0} keywords "
-                    f"(want >= {KEYWORDS_MIN})"
-                )
+    for note, is_lesson in iter_posts():
+        rel = note.relative_to(ROOT).as_posix()
+        fm = parse_frontmatter(note.read_text(encoding="utf-8"))
+        if fm is None:
+            issues.append(f"{rel}: no frontmatter")
+            continue
+        required = REQUIRED_FM + (LESSON_ONLY_FM if is_lesson else ())
+        for field in required:
+            if not fm.get(field):
+                issues.append(f"{rel}: missing '{field}'")
+        title = str(fm.get("title", ""))
+        if len(title) > TITLE_MAX:
+            issues.append(f"{rel}: title {len(title)} chars (max {TITLE_MAX})")
+        desc = str(fm.get("description", ""))
+        if desc and not (DESC_MIN <= len(desc) <= DESC_MAX):
+            issues.append(
+                f"{rel}: description {len(desc)} chars (want {DESC_MIN}-{DESC_MAX})"
+            )
+        tags = fm.get("tags") or []
+        if not isinstance(tags, list) or not (TAGS_MIN <= len(tags) <= TAGS_MAX):
+            issues.append(
+                f"{rel}: {len(tags) if isinstance(tags, list) else 0} tags "
+                f"(want {TAGS_MIN}-{TAGS_MAX})"
+            )
+        elif "AI엔지니어링" not in tags:
+            issues.append(f"{rel}: tags missing the series tag 'AI엔지니어링'")
+        kws = fm.get("keywords") or []
+        if not isinstance(kws, list) or len(kws) < KEYWORDS_MIN:
+            issues.append(
+                f"{rel}: {len(kws) if isinstance(kws, list) else 0} keywords "
+                f"(want >= {KEYWORDS_MIN})"
+            )
     return issues
 
 
