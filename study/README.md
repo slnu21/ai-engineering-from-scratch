@@ -22,6 +22,7 @@
 study/
 ├── README.md          이 파일
 ├── glossary-ko.md     용어 표기 기준 — 노트 쓰기 전에 여기부터
+├── tags-ko.md         태그 통제 어휘 · SEO 기준
 ├── PROGRESS.md        생성물 — 직접 고치지 않습니다
 └── phase-NN/
     └── MM-lesson-slug.md
@@ -52,9 +53,38 @@ python scripts/study_progress.py --json      # 기계용
 
 `phase-00/01-dev-environment.md`가 기준 샘플입니다.
 
+**0부 — SEO 프론트매터 (필수)**
+
+블로그로 나가는 글이므로 모든 노트는 프론트매터로 시작합니다. 상세 기준은
+[`tags-ko.md`](tags-ko.md).
+
+```yaml
+---
+title: "Git 기초와 협업 — CRLF 경고와 --no-ff 머지"   # 60자 이내, 핵심 키워드를 앞에
+description: "..."          # 80~200자. 검색 결과에 뜨는 문장
+date: 2026-07-18
+slug: git-basics-crlf-no-ff-merge                  # 영문 kebab-case
+series: "AI Engineering from Scratch 한국어 학습 노트"
+phase: 0
+lesson: 2
+tags: [환경설정, git, 버전관리, 트러블슈팅, Windows, AI엔지니어링]   # 통제 어휘 3~6개
+keywords:                    # 롱테일 5개 이상. 에러 원문을 그대로 넣습니다
+  - "LF will be replaced by CRLF"
+  - core.autocrlf 설정
+---
+```
+
+**한국어 SERP는 30~35자에서 잘립니다.** `title`은 60자를 넘기지 않되, 핵심
+키워드가 앞 30자 안에 들어오게 배치합니다.
+
+`python scripts/study_progress.py`가 프론트매터 누락 · 길이 초과 · 태그 개수를
+검사합니다. `--strict`면 위반 시 exit 1.
+
 **1부 — 레슨 본문 (원문 구조를 따라감)**
 
 1. 제목 · 모토 · 메타 표(유형 · 언어 · 선수 지식 · 소요 시간 · 원문 링크)
+   H1은 프론트매터 `title`과 같게 씁니다(원문 제목을 그대로 옮기지 않고,
+   검색어를 담은 제목으로 바꾸는 유일한 지점입니다)
 2. 학습 목표
 3. 왜 필요한가 (The Problem)
 4. 개념 (The Concept)
@@ -73,6 +103,12 @@ python scripts/study_progress.py --json      # 기계용
 - 왜 그런가 (원인)
 - **해결** — 구체적인 명령이나 설정
 
+**2부의 소제목이 SEO 핵심입니다.** 사람들은 에러 메시지를 그대로 검색창에
+붙여넣습니다. 각 항목 제목에 **에러 원문이나 증상 문장**을 넣습니다.
+
+- 약함 — `### 콘솔 인코딩 오류`
+- 강함 — ``### `UnicodeEncodeError: 'cp949' codec can't encode character` 해결``
+
 **인라인 주의 블록.** 본문 흐름 중간에 경고가 필요하면 그 자리에 삽입합니다.
 
 ```markdown
@@ -84,6 +120,10 @@ python scripts/study_progress.py --json      # 기계용
 ## 규칙
 
 - **문체는 기술 문서체.** `-습니다`체, 1인칭 배제, 감상 배제. 설명과 근거 위주.
+- **키워드를 본문에 억지로 심지 않습니다.** SEO는 프론트매터 · 제목 · 소제목의
+  구조로 처리합니다. 본문은 정확성이 우선입니다.
+- **용어 병기가 곧 SEO입니다.** `어텐션(attention)` 표기는 한국어 검색과 영어
+  검색을 한 문구로 동시에 잡습니다. 병기 정책을 지키는 것만으로 이득입니다.
 - **용어는 `glossary-ko.md` 표를 따릅니다.** 표에 없으면 정책대로 정하고 표에 추가.
   병기는 글마다 첫 등장 1회.
 - **코드 · 명령 · 에러 메시지 · API는 번역하지 않습니다.**

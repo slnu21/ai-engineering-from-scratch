@@ -1,4 +1,26 @@
-# 개발 환경
+---
+title: "Windows AI 개발 환경 설정 — Python · CUDA · Rust"
+description: "AI 엔지니어링 학습용 개발 환경을 Windows에서 구축합니다. uv로 Python 가상환경을 만들고 CUDA를 검증하는 과정과 함께, python3 스텁이 종료 코드 0을 내는 함정 · cp949 인코딩 오류 · verify.py의 CUDA FAIL 오진까지 실제로 겪은 문제와 해결법을 정리했습니다."
+date: 2026-07-18
+slug: ai-dev-environment-setup-windows
+series: "AI Engineering from Scratch 한국어 학습 노트"
+phase: 0
+lesson: 1
+tags: [환경설정, Python, CUDA, 개발환경, Windows, AI엔지니어링]
+keywords:
+  - AI 개발 환경 설정
+  - 윈도우 파이썬 가상환경 설정
+  - uv 설치 방법
+  - CUDA 설치 확인
+  - nvidia-smi 확인
+  - "UnicodeEncodeError: 'cp949' codec can't encode character"
+  - python3 Windows Store 별칭
+  - torch.cuda.is_available False
+  - PYTHONIOENCODING utf-8
+  - RTX 2060 VRAM 6GB 딥러닝
+---
+
+# Windows AI 개발 환경 설정 — Python · CUDA · Rust
 
 > 도구가 사고의 틀을 만듭니다. 한 번 세팅하되, 제대로 세팅합니다.
 
@@ -181,7 +203,7 @@ python phases/00-setup-and-tooling/01-dev-environment/code/verify.py
 
 이 환경(Windows 11 · Python 3.12.10 · RTX 2060)에서 실제로 실행하며 확인한 사항입니다.
 
-### `python3`는 스크립트를 실행하지 않고 종료 코드 0을 냅니다
+### Windows에서 `python3`가 스크립트를 실행하지 않고 종료 코드 0을 냅니다
 
 가장 위험한 함정입니다. 원문과 CI는 `python3`를 쓰지만, Windows에서 `python3`는 Microsoft Store 앱 실행 별칭(`WindowsApps/python3`)으로 연결됩니다.
 
@@ -202,7 +224,7 @@ $ which python
 
 **해결** — Windows에서는 `python`을 씁니다. 별칭을 아예 끄려면 `설정 → 앱 → 고급 앱 설정 → 앱 실행 별칭`에서 `python3.exe`를 해제합니다.
 
-### 콘솔 인코딩 오류 — `cp949`
+### `UnicodeEncodeError: 'cp949' codec can't encode character` 해결
 
 이 레포의 Python 스크립트는 출력에 em-dash(`—`)를 씁니다. Windows 콘솔 기본 인코딩이 `cp949`라 그대로 실행하면 실패합니다.
 
@@ -218,7 +240,7 @@ PYTHONIOENCODING=utf-8 python scripts/audit_lessons.py
 
 PowerShell에서는 `$env:PYTHONIOENCODING = "utf-8"`, 또는 콘솔 코드 페이지를 `chcp 65001`로 바꿉니다.
 
-### `verify.py`의 CUDA `[FAIL]`은 GPU 없음을 뜻하지 않습니다
+### `torch.cuda.is_available()`이 False — GPU가 없는 게 아닐 수 있습니다
 
 검증 스크립트 실행 결과입니다.
 
