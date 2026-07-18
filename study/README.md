@@ -7,14 +7,14 @@
 
 ## 이건 순수 번역이 아닙니다
 
-`phases/**/docs/ko.md` 가 아니라 `study/` 에 따로 쌓는 이유입니다.
+`phases/**/docs/ko.md`가 아니라 `study/`에 따로 쌓는 이유입니다.
 
-- `docs/ko.md` 는 CONTRIBUTING 상 **`en.md` 의 번역** 슬롯이고, "영어판과 같은
+- `docs/ko.md`는 CONTRIBUTING 상 **`en.md`의 번역** 슬롯이고, "영어판과 같은
   구조를 유지하라"는 제약이 붙습니다. 업스트림 기여를 전제한 자리입니다.
 - 여기 노트는 번역에 더해 **특정 환경(Windows · RTX 2060)에서 확인한 주의점과
   오류 해결**을 덧붙입니다. 이 부분은 환경 의존적이라 업스트림에 맞지 않습니다.
 
-순수 번역을 기여하고 싶어지면 그때 `docs/ko.md` 를 따로 만듭니다. 목적이 다릅니다.
+순수 번역을 기여하고 싶어지면 그때 `docs/ko.md`를 따로 만듭니다. 목적이 다릅니다.
 
 ## 자리
 
@@ -30,7 +30,7 @@ study/
 파일명은 원문 레슨 디렉터리 슬러그를 그대로 씁니다.
 `phases/00-setup-and-tooling/01-dev-environment` → `study/phase-00/01-dev-environment.md`.
 
-**슬러그가 정확해야 진행 계산에 잡힙니다.** 어긋나면 `study_progress.py` 가
+**슬러그가 정확해야 진행 계산에 잡힙니다.** 어긋나면 `study_progress.py`가
 "짝 없는 노트"로 잡아 줍니다.
 
 ## 진행 상태
@@ -40,17 +40,17 @@ study/
 
 ```bash
 python scripts/study_progress.py             # 전체 요약 + 다음 레슨
-python scripts/study_progress.py --phase 0   # 한 Phase 를 레슨 단위로
+python scripts/study_progress.py --phase 0   # 한 Phase를 레슨 단위로
 python scripts/study_progress.py --write     # PROGRESS.md 재생성
 python scripts/study_progress.py --json      # 기계용
 ```
 
-공부를 시작할 때 먼저 돌려 어디까지 왔는지 확인하고, 노트를 추가한 뒤 `--write` 로
-`PROGRESS.md` 를 갱신합니다. `PROGRESS.md` 는 생성물이라 손으로 고치지 않습니다.
+공부를 시작할 때 먼저 돌려 어디까지 왔는지 확인하고, 노트를 추가한 뒤 `--write`로
+`PROGRESS.md`를 갱신합니다. `PROGRESS.md`는 생성물이라 손으로 고치지 않습니다.
 
 ## 노트 한 편의 구조
 
-`phase-00/01-dev-environment.md` 가 기준 샘플입니다.
+`phase-00/01-dev-environment.md`가 기준 샘플입니다.
 
 **1부 — 레슨 본문 (원문 구조를 따라감)**
 
@@ -67,7 +67,7 @@ python scripts/study_progress.py --json      # 기계용
 
 **2부 — 확인된 문제와 해결**
 
-`---` 로 구분한 뒤, 실제로 실행하며 확인한 것만 적습니다. 항목마다:
+`---`로 구분한 뒤, 실제로 실행하며 확인한 것만 적습니다. 항목마다:
 
 - 무엇이 어떻게 잘못 보이는가 (실제 출력)
 - 왜 그런가 (원인)
@@ -86,12 +86,12 @@ python scripts/study_progress.py --json      # 기계용
 - **문체는 기술 문서체.** `-습니다`체, 1인칭 배제, 감상 배제. 설명과 근거 위주.
 - **용어는 `glossary-ko.md` 표를 따릅니다.** 표에 없으면 정책대로 정하고 표에 추가.
   병기는 글마다 첫 등장 1회.
-- **코드 · 명령 · 에러 메시지 · API 는 번역하지 않습니다.**
+- **코드 · 명령 · 에러 메시지 · API는 번역하지 않습니다.**
 - **실행 결과는 실제 출력만.** 안 돌려 봤으면 그 사실을 적습니다. 창작 금지.
 - **"확인된 문제"는 재현한 것만.** 있을 법한 문제를 추측으로 적지 않습니다.
 
-## CI 에 영향 없음
+## CI에 영향 없음
 
-`build_catalog.py` 와 `audit_lessons.py` 는 `phases/` 아래 `en.md` 만 봅니다.
-`site/build.js` 도 이 폴더를 읽지 않습니다. `study/` 에 무엇을 쌓아도
+`build_catalog.py`와 `audit_lessons.py`는 `phases/` 아래 `en.md`만 봅니다.
+`site/build.js`도 이 폴더를 읽지 않습니다. `study/`에 무엇을 쌓아도
 `catalog.json` 드리프트나 감사 실패가 발생하지 않습니다.

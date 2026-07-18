@@ -186,8 +186,8 @@ def render_markdown(phases: list[PhaseProgress], orphans: list[str]) -> str:
     lines = [
         "# 학습 진행 상태",
         "",
-        "> 이 파일은 `python scripts/study_progress.py --write` 로 생성됩니다.",
-        "> 직접 고치지 마세요. `study/` 의 노트 파일이 유일한 진실원입니다.",
+        "> 이 파일은 `python scripts/study_progress.py --write`로 생성됩니다.",
+        "> 직접 고치지 마세요. `study/`의 노트 파일이 유일한 진실원입니다.",
         "",
         f"**{done} / {total} 레슨 ({pct:.1f}%)**",
         "",

@@ -96,7 +96,7 @@ print(f"Vector: {a}, dot product with itself: {np.dot(a, a)}")
 > powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 > ```
 >
-> `winget install --id=astral-sh.uv` 도 동작합니다.
+> `winget install --id=astral-sh.uv`도 동작합니다.
 
 ### 3단계 — pnpm으로 Node.js 설치
 
