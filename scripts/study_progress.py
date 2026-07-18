@@ -90,6 +90,91 @@ def collect_notes() -> dict[int, set[str]]:
     return notes
 
 
+def parse_frontmatter(text: str) -> dict[str, object] | None:
+    """Minimal YAML-subset parser: scalars, inline lists, and block lists.
+
+    `scripts/_lib.py` skips indented lines, so it cannot read the block-list
+    `keywords:` used by study notes (error strings contain commas, which an
+    inline list would split). This handles both forms.
+    """
+    if not text.startswith("---\n"):
+        return None
+    end = text.find("\n---\n", 4)
+    if end == -1:
+        return None
+    result: dict[str, object] = {}
+    key: str | None = None
+    for raw in text[4:end].split("\n"):
+        if not raw.strip() or raw.lstrip().startswith("#"):
+            continue
+        stripped = raw.strip()
+        if raw[0] in (" ", "\t") and stripped.startswith("- "):
+            if key:
+                result.setdefault(key, [])
+                if isinstance(result[key], list):
+                    result[key].append(stripped[2:].strip().strip("'\""))
+            continue
+        if ":" not in raw:
+            continue
+        key, _, value = raw.partition(":")
+        key, value = key.strip(), value.strip()
+        if not value:
+            result[key] = []
+        elif value.startswith("[") and value.endswith("]"):
+            inner = value[1:-1].strip()
+            result[key] = [i.strip().strip("'\"") for i in inner.split(",") if i.strip()]
+        else:
+            result[key] = value.strip("'\"")
+    return result
+
+
+REQUIRED_FM = ("title", "description", "date", "slug", "series", "phase", "lesson")
+TITLE_MAX = 60
+DESC_MIN, DESC_MAX = 80, 200
+TAGS_MIN, TAGS_MAX = 3, 6
+KEYWORDS_MIN = 5
+
+
+def collect_seo_issues() -> list[str]:
+    """Frontmatter problems that would silently degrade search exposure."""
+    issues: list[str] = []
+    if not STUDY_DIR.is_dir():
+        return issues
+    for phase_dir in sorted(STUDY_DIR.glob("phase-*")):
+        for note in sorted(phase_dir.glob("*.md")):
+            rel = note.relative_to(ROOT).as_posix()
+            fm = parse_frontmatter(note.read_text(encoding="utf-8"))
+            if fm is None:
+                issues.append(f"{rel}: no frontmatter")
+                continue
+            for field in REQUIRED_FM:
+                if not fm.get(field):
+                    issues.append(f"{rel}: missing '{field}'")
+            title = str(fm.get("title", ""))
+            if len(title) > TITLE_MAX:
+                issues.append(f"{rel}: title {len(title)} chars (max {TITLE_MAX})")
+            desc = str(fm.get("description", ""))
+            if desc and not (DESC_MIN <= len(desc) <= DESC_MAX):
+                issues.append(
+                    f"{rel}: description {len(desc)} chars (want {DESC_MIN}-{DESC_MAX})"
+                )
+            tags = fm.get("tags") or []
+            if not isinstance(tags, list) or not (TAGS_MIN <= len(tags) <= TAGS_MAX):
+                issues.append(
+                    f"{rel}: {len(tags) if isinstance(tags, list) else 0} tags "
+                    f"(want {TAGS_MIN}-{TAGS_MAX})"
+                )
+            elif "AI엔지니어링" not in tags:
+                issues.append(f"{rel}: tags missing the series tag 'AI엔지니어링'")
+            kws = fm.get("keywords") or []
+            if not isinstance(kws, list) or len(kws) < KEYWORDS_MIN:
+                issues.append(
+                    f"{rel}: {len(kws) if isinstance(kws, list) else 0} keywords "
+                    f"(want >= {KEYWORDS_MIN})"
+                )
+    return issues
+
+
 def build(catalog: dict, notes: dict[int, set[str]]) -> tuple[list[PhaseProgress], list[str]]:
     phases: list[PhaseProgress] = []
     matched: dict[int, set[str]] = {}
@@ -133,7 +218,12 @@ def next_lesson(phases: list[PhaseProgress]) -> dict | None:
     return None
 
 
-def render_text(phases: list[PhaseProgress], orphans: list[str], only: int | None) -> str:
+def render_text(
+    phases: list[PhaseProgress],
+    orphans: list[str],
+    only: int | None,
+    seo: list[str] | None = None,
+) -> str:
     done = sum(p.done for p in phases)
     total = sum(p.total for p in phases)
     out: list[str] = []
@@ -173,6 +263,12 @@ def render_text(phases: list[PhaseProgress], orphans: list[str], only: int | Non
         out.append("  orphan notes (no matching lesson - check the filename):")
         for o in orphans:
             out.append(f"    ! {o}")
+
+    if seo:
+        out.append("")
+        out.append("  SEO frontmatter issues:")
+        for s in seo:
+            out.append(f"    ! {s}")
 
     out.append("")
     return "\n".join(out) + "\n"
@@ -234,15 +330,19 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--phase", type=int, help="show one phase, lesson by lesson")
     parser.add_argument("--json", action="store_true", help="machine-readable output")
     parser.add_argument("--write", action="store_true", help="regenerate study/PROGRESS.md")
-    parser.add_argument("--strict", action="store_true", help="exit 1 if orphan notes exist")
+    parser.add_argument(
+        "--strict", action="store_true", help="exit 1 if orphan notes or SEO issues exist"
+    )
     args = parser.parse_args(argv)
 
     phases, orphans = build(load_catalog(), collect_notes())
+    seo = collect_seo_issues()
 
     if args.json:
         payload = {
             "done": sum(p.done for p in phases),
             "total": sum(p.total for p in phases),
+            "seo_issues": seo,
             "phases": [
                 {
                     "num": p.num,
@@ -258,7 +358,7 @@ def main(argv: list[str]) -> int:
         }
         sys.stdout.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
     else:
-        sys.stdout.write(render_text(phases, orphans, args.phase))
+        sys.stdout.write(render_text(phases, orphans, args.phase, seo))
 
     if args.write:
         STUDY_DIR.mkdir(exist_ok=True)
@@ -266,7 +366,7 @@ def main(argv: list[str]) -> int:
         if not args.json:
             sys.stdout.write(f"  wrote {PROGRESS_MD.relative_to(ROOT).as_posix()}\n\n")
 
-    return 1 if (args.strict and orphans) else 0
+    return 1 if (args.strict and (orphans or seo)) else 0
 
 
 if __name__ == "__main__":

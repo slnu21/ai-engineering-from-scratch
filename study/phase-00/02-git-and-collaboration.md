@@ -1,4 +1,25 @@
-# Git & 협업
+---
+title: "Git 기초와 협업 — CRLF 경고와 --no-ff 머지"
+description: "AI 프로젝트에 필요한 git 명령을 정리합니다. add · commit · push의 일상 흐름과 브랜치 전략을 다루고, Windows에서 커밋마다 뜨는 LF will be replaced by CRLF 경고의 원인인 core.autocrlf 설정과 패스트포워드 머지가 브랜치 흔적을 지우는 문제까지 확인했습니다."
+date: 2026-07-18
+slug: git-basics-crlf-no-ff-merge
+series: "AI Engineering from Scratch 한국어 학습 노트"
+phase: 0
+lesson: 2
+tags: [환경설정, git, 버전관리, 트러블슈팅, Windows, AI엔지니어링]
+keywords:
+  - git 기초 명령어
+  - "LF will be replaced by CRLF"
+  - core.autocrlf 설정
+  - git merge --no-ff 차이
+  - 패스트포워드 머지란
+  - gitignore 모델 체크포인트
+  - git 브랜치 전략
+  - gitattributes text eol lf
+  - git config user.name 변경
+---
+
+# Git 기초와 협업 — CRLF 경고와 `--no-ff` 머지
 
 > 버전 관리는 선택이 아닙니다. 모든 실험, 모든 모델, 여기서 만드는 모든 레슨이 추적됩니다.
 
@@ -115,7 +136,7 @@ git push origin my-progress
 
 이 레슨은 `code/` 디렉터리가 없는 **Learn 타입**이라 실행할 코드가 없습니다. 대신 레슨의 명령을 이 저장소에서 직접 확인했습니다.
 
-### 커밋마다 CRLF 경고가 뜹니다
+### `warning: LF will be replaced by CRLF` 경고가 커밋마다 뜹니다
 
 이 저장소에서 커밋할 때마다 반복해서 나타납니다.
 
@@ -142,7 +163,7 @@ git config advice.addIgnoredFile false   # 경고 억제 (동작은 그대로)
 
 크로스 플랫폼 저장소라면 `.gitattributes`에 `* text=auto eol=lf`를 두어 설정에 의존하지 않게 하는 편이 낫습니다.
 
-### 3단계의 `git merge`는 이 저장소의 규율과 다릅니다
+### `git merge`와 `git merge --no-ff`의 차이 — 패스트포워드는 브랜치 흔적을 지웁니다
 
 레슨은 다음을 제시합니다.
 
