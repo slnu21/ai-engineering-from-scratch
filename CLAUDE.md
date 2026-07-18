@@ -129,6 +129,30 @@ filename doesn't match a lesson slug is reported as an orphan rather than silent
 Nothing under `study/` affects CI: `build_catalog.py`, `audit_lessons.py`, and `site/build.js`
 all read only `phases/**/docs/en.md`.
 
+## Atlas tracking (`.atlas/`, gitignored)
+
+This repo is registered in Atlas as project **36** ("AI Engineering from Scratch"), with one
+WBS item per phase (ids 621–640, `phase-00`…`phase-19`). `study_progress.py` stays the
+fine-grained truth; Atlas is the coarse, cross-project view.
+
+**Do not call `atlas-cli` inline for routine tracking.** Append one JSON line per event to
+`.atlas/ledger.jsonl`; a Stop/SessionEnd hook flushes it out of the model loop, so it costs
+no tokens. Event shapes (`t` = type):
+
+```jsonc
+{"t":"start","slug":"phase-01","title":"Phase 01 - Math Foundations","start":"2026-07-20"}
+{"t":"done","slug":"phase-00","title":"Phase 00 - Setup And Tooling","completed":"2026-07-25"}
+{"t":"changelog","slug":"phase-00","contentFile":"study/phase-00/01-dev-environment.md","impact":"Medium"}
+```
+
+`slug` must be `phase-NN`. `.atlas/wbs-map.json` maps those to existing WBS ids, so a mapped
+slug **updates** its item and never creates a duplicate. `.atlas/project.json` pins project 36
+— it is required, because the hook's fallback resolves projects by repo folder name
+(`ai-engineering-from-scratch`), which does not match the Atlas project name.
+
+Check `.atlas/errors.log` and `.atlas/needs-confirm` if events seem not to land. Meetings are
+deferred to the interactive `/atlas-meeting`; use `/atlas-log` for a full completed-work write-up.
+
 ## Skills
 
 `.claude/skills/` ships two course-facing skills: `find-your-level` (placement across the
