@@ -41,8 +41,13 @@ study/
 ├── PROGRESS.md        생성물           ┘
 ├── 00-intro.md        시리즈 소개 — 루트 글
 └── phase-NN/
-    └── MM-lesson-slug.md                레슨 노트
+    ├── MM-lesson-slug.md                레슨 노트
+    └── files/                           실습 스크래치 (gitignore)
 ```
+
+`phase-NN/files/`는 레슨을 따라 치며 돌려 보는 스크립트를 두는 자리입니다.
+`.gitignore`의 `study/**/files/`로 제외되므로 저장소에 올라가지 않습니다. 여기서
+확인한 내용은 노트 2부에 옮겨 적고, 스크립트 자체는 남기지 않습니다.
 
 **발행 대상은 두 종류이고, 쓰는 스킬이 다릅니다.**
 
