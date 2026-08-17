@@ -28,18 +28,18 @@
 | 18 | `................` | 0/30 | Ethics Safety Alignment |
 | 19 | `................` | 0/17 | Capstone Projects |
 
-## 다음 레슨
+## 진행 중
 
 **Phase 00 · Lesson 03 — GPU Setup & Cloud**
 
 - 원문: [`phases/00-setup-and-tooling/03-gpu-setup-and-cloud`](../phases/00-setup-and-tooling/03-gpu-setup-and-cloud/docs/en.md)
-- 노트 예정 위치: `study/phase-00/03-gpu-setup-and-cloud.md`
+- 노트: [`study/phase-00/03-gpu-setup-and-cloud.md`](../study/phase-00/03-gpu-setup-and-cloud.md) — 1부 작성됨, 2부 대기
 
 ## Phase 00 — Setup And Tooling
 
 - [x] 01. [Dev Environment](phase-00/01-dev-environment.md)
 - [x] 02. [Git & Collaboration](phase-00/02-git-and-collaboration.md)
-- [ ] 03. GPU Setup & Cloud
+- [~] 03. [GPU Setup & Cloud](phase-00/03-gpu-setup-and-cloud.md) — 2부 대기
 - [ ] 04. APIs & Keys
 - [ ] 05. Jupyter Notebooks
 - [ ] 06. Python Environments
