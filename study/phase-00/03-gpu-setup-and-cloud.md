@@ -10,7 +10,9 @@ status: done
 tags: [환경설정, CUDA, PyTorch, GPU, 트러블슈팅, AI엔지니어링]
 keywords:
   - torch.cuda.is_available 확인
+  - "ModuleNotFoundError: No module named 'torch'"
   - "Checked 3 packages in"
+  - uv venv 활성화 PowerShell
   - torch 2.6.0+cu124 확인
   - uv pip install --reinstall torch
   - GPU CPU 속도 차이 벤치마크
@@ -204,6 +206,54 @@ torchvision               0.21.0+cu124
 ```powershell
 uv pip install --reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 ```
+
+### 설치는 됐는데 `ModuleNotFoundError: No module named 'torch'` — 인터프리터가 두 개입니다
+
+`uv pip install`이 성공한 직후 PowerShell에서 `python`을 띄우면 `torch`가 없다고 나옵니다.
+
+```
+> python
+Python 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)] on win32
+>>> import torch
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'torch'
+```
+
+**`uv pip install`은 가상 환경을 활성화하지 않아도 현재 디렉터리의 `.venv`를 자동으로 찾아 거기에 설치합니다.** 활성화 단계를 건너뛰어도 설치가 성공하기 때문에, 셸의 `python`은 계속 시스템 인터프리터를 가리키는 상태로 남습니다.
+
+버전 숫자가 결정적인 단서입니다.
+
+```
+> (Get-Command python).Source
+C:\Users\raltl\AppData\Local\Programs\Python\Python312\python.exe
+> python -c "import sys; print(sys.version.split()[0])"
+3.12.10
+> .\.venv\Scripts\python.exe -c "import sys; print(sys.version.split()[0])"
+3.12.13
+```
+
+`uv venv`가 만든 환경은 시스템 Python을 재사용하지 않고 **uv가 관리하는 별도 Python**을 씁니다. 그래서 마이너 버전까지 다릅니다. `3.12.10`이 보이면 시스템 쪽, `3.12.13`이 보이면 `.venv` 쪽입니다.
+
+**해결** — 셋 중 하나를 씁니다.
+
+```powershell
+.\.venv\Scripts\activate                  # 활성화. 프롬프트 앞에 (.venv)가 붙습니다
+uv run python phases/.../gpu_check.py     # 활성화 없이 그때그때
+.\.venv\Scripts\python.exe script.py      # 경로를 직접 지정
+```
+
+> **주의 (Windows) — PowerShell에서 `activate.bat`은 조용히 실패합니다**
+>
+> 확장자 없는 `.\.venv\Scripts\activate`는 PowerShell이 `activate.ps1`로 해석하므로 정상 동작합니다. 하지만 `.bat`을 명시하면 별도 `cmd` 프로세스에서 실행되고 끝나, **오류 없이 활성화도 되지 않습니다.**
+>
+> ```
+> > .\.venv\Scripts\activate.bat
+> > python -c "import sys; print(sys.version.split()[0])"
+> 3.12.10        # 그대로입니다
+> ```
+>
+> 실패 신호가 전혀 없다는 점이 위험합니다. 활성화 여부는 프롬프트의 `(.venv)` 표시나 버전 숫자로 확인합니다.
 
 ### `Speedup: 1x` — GPU가 CPU보다 전혀 빠르지 않게 나옵니다
 
