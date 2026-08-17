@@ -226,7 +226,7 @@ ModuleNotFoundError: No module named 'torch'
 
 ```
 > (Get-Command python).Source
-C:\Users\raltl\AppData\Local\Programs\Python\Python312\python.exe
+C:\Users\<사용자명>\AppData\Local\Programs\Python\Python312\python.exe
 > python -c "import sys; print(sys.version.split()[0])"
 3.12.10
 > .\.venv\Scripts\python.exe -c "import sys; print(sys.version.split()[0])"
