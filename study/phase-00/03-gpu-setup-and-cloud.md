@@ -1,23 +1,26 @@
 ---
 title: "GPU 확인과 클라우드 GPU — CUDA · Colab · VRAM 계산"
-description: "AI 학습에 GPU가 필요해지는 시점과 로컬 GPU · Google Colab · 클라우드 GPU 세 선택지를 비교합니다. nvidia-smi와 torch.cuda.is_available()로 GPU를 확인하고, CPU 대비 행렬 곱 속도를 재고, VRAM에서 fp16 기준 최대 모델 크기를 어림하는 방법까지 정리했습니다."
+description: "AI 학습에 GPU가 필요해지는 시점과 로컬 GPU · Google Colab · 클라우드 GPU를 비교합니다. uv가 Checked 3 packages만 찍었을 때 CUDA 빌드가 실제로 깔렸는지 확인하는 법, 벤치마크가 Speedup 1x로 나오는 원인, VRAM 기준 최대 모델 크기가 학습에서는 1/4로 줄어드는 이유를 실측으로 정리했습니다."
 date: 2026-08-17
 slug: gpu-setup-cloud-cuda-colab-vram
 series: "AI Engineering from Scratch 한국어 학습 노트"
 phase: 0
 lesson: 3
-status: draft
-tags: [환경설정, CUDA, PyTorch, GPU, AI엔지니어링]
+status: done
+tags: [환경설정, CUDA, PyTorch, GPU, 트러블슈팅, AI엔지니어링]
 keywords:
   - torch.cuda.is_available 확인
-  - nvidia-smi 사용법
-  - Google Colab T4 GPU 설정
+  - "Checked 3 packages in"
+  - torch 2.6.0+cu124 확인
+  - uv pip install --reinstall torch
   - GPU CPU 속도 차이 벤치마크
+  - GPU Speedup 1x 원인
   - torch.cuda.synchronize 이유
+  - cuBLAS 첫 호출 느림
   - VRAM 모델 크기 계산
   - fp16 파라미터당 2바이트
-  - 클라우드 GPU 시간당 가격
-  - PyTorch CUDA 버전 확인
+  - Adam 옵티마이저 메모리 4배
+  - RTX 2060 6GB 학습 한계
 ---
 
 # GPU 확인과 클라우드 GPU — CUDA · Colab · VRAM 계산
@@ -169,3 +172,110 @@ if torch.cuda.is_available():
 | `VRAM` | "GPU 메모리" | GPU에 붙은 전용 메모리. 시스템 RAM과 별개이며 모델 크기의 상한을 정한다 |
 | `fp16` | "반정밀도" | 16비트 부동소수점. `fp32`의 절반 메모리를 쓰면서 정확도 손실은 대체로 미미하다 |
 | `Tensor Core` | "행렬 연산 전용 하드웨어" | 행렬 곱에 특화된 GPU 코어. 일반 코어보다 4~8배 빠르다 |
+
+---
+
+## 확인된 문제와 해결
+
+이 환경(Windows 11 · Python 3.12.13 · RTX 2060 6GB · 드라이버 591.86 · PyTorch 2.6.0+cu124)에서 실제로 실행하며 확인한 사항입니다.
+
+### `Checked 3 packages`는 CUDA 빌드가 설치됐다는 뜻이 아닙니다
+
+`--index-url`로 CUDA 빌드를 지정해 설치했을 때의 출력입니다.
+
+```
+> uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+Checked 3 packages in 1.13s
+```
+
+`uv`가 **요구 조건이 이미 충족됐다고 판단해 아무것도 하지 않았다**는 뜻입니다. 문제는 이 판단이 패키지 이름과 버전 범위만 본다는 점입니다. 이전에 CPU 전용 `torch`가 깔려 있었다면 `--index-url`은 무시되고 그대로 통과하며, 출력만 봐서는 구분되지 않습니다.
+
+**해결** — 설치된 빌드를 직접 확인합니다. 버전 문자열의 `+cu124` 접미사가 CUDA 빌드라는 표시입니다.
+
+```
+> uv pip list
+torch                     2.6.0+cu124
+torchaudio                2.6.0+cu124
+torchvision               0.21.0+cu124
+```
+
+접미사가 없는 `2.6.0`이면 CPU 전용 빌드입니다. 이 경우 `--reinstall`을 붙여야 실제로 교체됩니다.
+
+```powershell
+uv pip install --reinstall torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+```
+
+### `Speedup: 1x` — GPU가 CPU보다 전혀 빠르지 않게 나옵니다
+
+`gpu_check.py`를 설치 후 처음 실행한 결과입니다.
+
+```
+CPU matrix multiply (4000x4000): 0.297s
+GPU matrix multiply (4000x4000): 0.285s
+Speedup: 1x
+```
+
+GPU는 정상적으로 잡혀 있는데(`CUDA available: True`) 속도 이득이 없습니다. 그런데 같은 스크립트를 그대로 다시 돌리면 값이 달라집니다.
+
+```
+--- run 1 ---   GPU matrix multiply (4000x4000): 0.062s   Speedup: 4x
+--- run 2 ---   GPU matrix multiply (4000x4000): 0.065s   Speedup: 3x
+```
+
+즉 `1x`는 **설치 후 첫 실행에서만** 나오고 재현되지 않습니다. 첫 실행에는 프로세스 밖에 남는 일회성 초기화 비용(드라이버 수준의 커널 캐시 생성)이 얹히기 때문입니다. 벤치마크 결과로 읽으면 안 되는 값입니다.
+
+**해결** — 스크립트를 한 번 더 실행한 값을 씁니다. 첫 실행 결과는 버립니다.
+
+### `torch.cuda.synchronize()`를 넣었는데도 첫 호출이 느립니다
+
+위에서 재현된 `3~4x`도 이 GPU의 실제 성능은 아닙니다. 워밍업을 넣고 여러 번 측정하면 값이 다시 갈립니다.
+
+```
+CPU                     : 0.328s
+GPU (first call)        : 0.061s   speedup 5.4x
+GPU (warmed, 10-run avg): 0.027s   speedup 12.4x
+```
+
+레슨 코드는 동기화를 올바르게 넣었으므로 큐잉 시간을 재는 실수는 없습니다. 남은 원인은 **프로세스마다 첫 GEMM 호출에 붙는 비용**입니다. cuBLAS 핸들 생성과 커널 모듈 지연 로딩이 첫 행렬 곱 안에서 함께 일어나고, 이것이 연산 자체보다 큽니다. 측정값의 절반 이상이 초기화입니다.
+
+**해결** — 측정 전에 같은 연산을 몇 번 버리고, 여러 번의 평균을 씁니다.
+
+```python
+for _ in range(3):
+    _ = a_gpu @ b_gpu
+torch.cuda.synchronize()
+
+times = []
+for _ in range(10):
+    start = time.time()
+    _ = a_gpu @ b_gpu
+    torch.cuda.synchronize()
+    times.append(time.time() - start)
+print(f"{sum(times) / len(times):.3f}s")
+```
+
+레슨의 `1x`·`3x`·`12x`가 모두 같은 하드웨어에서 나온 값입니다. **벤치마크 수치는 측정 방법이 만든다**는 것이 이 레슨에서 실제로 확인되는 부분입니다.
+
+### `Estimated max model size (fp16): ~3B parameters`는 학습에 쓸 수 없는 숫자입니다
+
+`gpu_check.py`의 마지막 줄은 VRAM을 파라미터당 2바이트로 나눈 값입니다.
+
+```python
+params_fp16 = vram_gb * 1e9 / 2
+```
+
+이 계산에는 **가중치밖에 들어 있지 않습니다.** 학습에는 기울기와 옵티마이저 상태가 추가로 올라갑니다. `fp32` 파라미터 100M짜리 모델로 단계별 실측한 값입니다.
+
+```
+parameters              : 100.0M (fp32)
+1) weights only         :   384.1 MB
+2) + gradients          :   785.6 MB
+3) + Adam states        :  1553.8 MB
+
+peak allocated          :  1937.9 MB
+multiplier vs weights   : 4.0x
+```
+
+`Adam`은 파라미터마다 1차·2차 모멘트를 각각 저장하므로, 가중치 1배 + 기울기 1배 + 옵티마이저 상태 2배 = **4배**가 됩니다. 여기에 활성값(activation)이 배치 크기에 비례해 더 붙습니다(위 실측에서 peak가 최종 할당량보다 384MB 높은 부분).
+
+**해결** — 용도에 따라 나눠 읽습니다. 6GB 기준으로 `~3B`는 추론 상한에 가까운 값이고, `Adam`으로 학습한다면 그 1/4인 **7억 파라미터 수준**이 출발점입니다. 활성값과 단편화를 감안하면 더 내려갑니다. 이 격차를 줄이는 수단이 양자화(quantization) · `LoRA` · 혼합 정밀도(mixed precision) · 배치 크기 축소이며, Phase 10 이후에서 다룹니다.
