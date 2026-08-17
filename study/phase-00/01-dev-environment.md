@@ -117,6 +117,8 @@ print(f"Vector: {a}, dot product with itself: {np.dot(a, a)}")
 >
 > ```powershell
 > powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+> # 실행 정책 때문에 막힐 경우
+> powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 > ```
 >
 > `winget install --id=astral-sh.uv`도 동작합니다.
