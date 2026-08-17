@@ -218,7 +218,7 @@ $ git log --oneline --graph -6
 $ git config user.name
 sinwoo
 $ git config user.email
-raltlsdn@naver.com
+<개인-메일주소>
 ```
 
 계정 규약상 정체성은 **slnu21**이며 구 이름은 쓰지 않기로 돼 있습니다. 지금 이 저장소의 커밋은 `sinwoo` 명의로 기록되고 있습니다.

@@ -57,3 +57,5 @@ mlruns/
 .link-cache.json
 .claude/
 .atlas/
+
+study/**/files/

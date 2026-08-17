@@ -117,6 +117,8 @@ print(f"Vector: {a}, dot product with itself: {np.dot(a, a)}")
 >
 > ```powershell
 > powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+> # 실행 정책 때문에 막힐 경우
+> powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 > ```
 >
 > `winget install --id=astral-sh.uv`도 동작합니다.
@@ -218,9 +220,9 @@ Python
 
 ```bash
 $ which python3
-/c/Users/raltl/AppData/Local/Microsoft/WindowsApps/python3   # 스텁
+/c/Users/<사용자명>/AppData/Local/Microsoft/WindowsApps/python3   # 스텁
 $ which python
-/c/Users/raltl/AppData/Local/Programs/Python/Python312/python   # 실제 인터프리터
+/c/Users/<사용자명>/AppData/Local/Programs/Python/Python312/python   # 실제 인터프리터
 ```
 
 **해결** — Windows에서는 `python`을 씁니다. 별칭을 아예 끄려면 `설정 → 앱 → 고급 앱 설정 → 앱 실행 별칭`에서 `python3.exe`를 해제합니다.
