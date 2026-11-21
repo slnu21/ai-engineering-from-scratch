@@ -3,7 +3,7 @@
 > Three independent weather lookups serialized is three round trips. Run them in parallel and total time collapses to the slowest single call. Every frontier provider now emits multiple tool calls in a single turn. The payoff is real; the plumbing is subtle. This lesson walks both halves: the parallel fan-out and the streamed-argument reassembly, with emphasis on the id-correlation trap.
 
 **Type:** Build
-**Languages:** Python (stdlib, thread pool + streaming harness)
+**Languages:** Python, TypeScript (stdlib, thread pool + streaming harness)
 **Prerequisites:** Phase 13 · 02 (function calling deep dive)
 **Time:** ~75 minutes
 
@@ -66,7 +66,7 @@ Every call the model emits has an `id`. Every result the host returns must inclu
 
 The host runs each call's executor on its own thread, coroutine, or remote worker. The simplest harness uses a thread pool; production uses asyncio with `asyncio.gather` or structured concurrency. Order of completion is unpredictable — the id is the identifier.
 
-One common bug: reply with results in call-list order instead of completion order. This usually works because the model only cares about `tool_call_id`, but if a result is dropped or duplicated, out-of-order submission makes debugging harder. Prefer to reply in completion order with explicit ids.
+One common bug: reply with results in call-list order instead of completion order. This usually works because the model only cares about `tool_call_id`, but if a result is dropped or duplicated, a reply list that is reordered away from the order the results arrived in makes the gap harder to find in logs. Prefer to reply in completion order with explicit ids.
 
 ### Streaming tool calls
 
@@ -109,6 +109,10 @@ Real-world caveat: parallel calls stress downstream APIs. A 10-way fan-out to a 
 ### Streaming fan-out wall-clock
 
 If the model itself streams, you can start executing as soon as one call's arguments are complete, rather than waiting for all calls to finalize. This is an optimization OpenAI documents but not all SDKs expose. The harness in this lesson does it: as soon as the simulated stream yields a complete argument object, the host kicks off that call.
+
+```figure
+tp-parallel-fanout
+```
 
 ## Use It
 
@@ -154,7 +158,7 @@ This lesson produces `outputs/skill-parallel-call-safety-check.md`. Given a tool
 ## Further Reading
 
 - [OpenAI — Parallel function calling](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling) — default behavior and the opt-out flag
-- [Anthropic — Tool use: implementing tool use](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/implementing-tool-use) — `disable_parallel_tool_use` and result batching
+- [Anthropic — Parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use) — `disable_parallel_tool_use` and result batching
 - [Google — Gemini function calling parallel section](https://ai.google.dev/gemini-api/docs/function-calling) — id-correlated parallel calls from Gemini 3
 - [OpenAI — Streaming responses with tools](https://platform.openai.com/docs/api-reference/responses-streaming) — chunked argument reassembly for OpenAI streams
 - [Anthropic — Streaming messages](https://docs.anthropic.com/en/api/messages-streaming) — `content_block_delta` with `input_json_delta`

@@ -3,7 +3,7 @@
 > Three technologies structure 2026 AI-generated-content provenance. SynthID (Google DeepMind) — image watermarking launched August 2023, text+video May 2024 (Gemini + Veo), text open-sourced October 2024 via Responsible GenAI Toolkit, unified multi-media detector November 2025 alongside Gemini 3 Pro. Text watermarking adjusts next-token sampling probabilities imperceptibly; image/video watermarks survive compression, cropping, filters, frame-rate changes. Stable Signature (Fernandez et al., ICCV 2023, arXiv:2303.15435) — fine-tunes the latent diffusion decoder so every output contains a fixed message; cropped (10% of content) generated images detected >90% at FPR<1e-6. Follow-up "Stable Signature is Unstable" (arXiv:2405.07145, May 2024) — fine-tuning removes the watermark while preserving quality. C2PA — cryptographically signed, tamper-evident metadata standard (C2PA 2.2 Explainer 2025). Watermarking and C2PA are complementary: metadata can be stripped but carries richer provenance; watermarks persist through transcoding but carry less information.
 
 **Type:** Build
-**Languages:** Python (stdlib, token-watermark embed + detect)
+**Languages:** Python, TypeScript (stdlib, token-watermark embed + detect)
 **Prerequisites:** Phase 10 · 04 (sampling), Phase 01 · 09 (information theory)
 **Time:** ~75 minutes
 
@@ -72,6 +72,10 @@ Transparency Code for AI-generated content labeling (first draft December 2025, 
 ### Where this fits in Phase 18
 
 Lessons 22-23 are about what the model emits (private data, provenance signal). Lesson 27 covers training-data governance. Lesson 24 is the regulatory framework that requires these technical measures.
+
+```figure
+an-watermark-greenlist
+```
 
 ## Use It
 

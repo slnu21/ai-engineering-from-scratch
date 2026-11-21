@@ -3,7 +3,7 @@
 > The agent that wrote the code cannot grade it. A reviewer is a second loop with a different system prompt, a different goal, and read-only access to everything the builder produced. The gap between builder and reviewer is where most reliability lives.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 38 (Verification Gate)
 **Time:** ~55 minutes
 
@@ -43,7 +43,7 @@ Five dimensions, each scored 0 to 2.
 | Verification quality | Does the acceptance command actually prove the goal, or did it prove a weaker version? |
 | Handoff readiness | Could the next session pick up cleanly from the current state? |
 
-Total out of 10. A run below 7 is a soft fail; a run below 5 is a hard fail.
+Total out of 10. A run below 7 is a soft fail; a run below 5, or any dimension at 0, is a hard fail.
 
 ### The reviewer is a separate role, not a separate model
 
@@ -56,6 +56,10 @@ The reviewer reads the diff, the state, the feedback, the verdict. It writes a r
 ### Reviewer rubric versus verification gate
 
 The gate (Phase 14 · 38) checks deterministic facts: did acceptance run, did rules pass, did scope hold. The reviewer makes qualitative judgments: was this the right work, is it documented, is the handoff usable. Both are required.
+
+```figure
+wb-builder-marker
+```
 
 ## Build It
 
@@ -70,6 +74,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: two review reports written to disk and a console table of dimensional scores.
@@ -122,8 +127,8 @@ The reviewer is the second pair of eyes the workbench grows when humans cannot d
 
 ## Further Reading
 
-- [OpenAI Agents SDK handoffs](https://platform.openai.com/docs/guides/agents-sdk/handoffs)
-- [Anthropic Claude Code subagents](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/sub-agents)
+- [OpenAI Agents SDK handoffs](https://openai.github.io/openai-agents-python/handoffs/)
+- [Anthropic Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
 - [Cloudflare, Orchestrating AI Code Review at Scale](https://blog.cloudflare.com/ai-code-review/) — 7-specialist + coordinator architecture, 131k runs / 30 days
 - [Agent-as-a-Judge: Evaluating Agents with Agents (OpenReview / ICLR)](https://openreview.net/forum?id=DeVm3YUnpj) — DevAI benchmark, 366 hierarchical solution requirements
 - [Adnan Masood, Rubric-Based Evaluations and LLM-as-a-Judge: Methodologies, Biases, Empirical Validation](https://medium.com/@adnanmasood/rubric-based-evals-llm-as-a-judge-methodologies-and-empirical-validation-in-domain-context-71936b989e80) — the 4 biases and mitigations

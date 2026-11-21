@@ -3,7 +3,7 @@
 > The canonical NLP task. Most of what you need to know about classical text classification shows up here.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 02 (BoW + TF-IDF), Phase 2 · 14 (Naive Bayes)
 **Time:** ~75 minutes
 
@@ -25,6 +25,10 @@ Classical sentiment is a two-step recipe.
 Naive Bayes is the dumbest model that works. Assume every feature is independent given the label. Estimate `P(word | positive)` and `P(word | negative)` from counts. At inference, multiply the probabilities. The "naive" independence assumption is laughably wrong and yet the results are shockingly strong. The reason: with sparse text features and moderate data, the classifier cares about which side each word leans toward more than how much.
 
 Logistic regression fixes the independence assumption. It learns a weight per feature, including negative weights. `not good` as a bigram feature gets a negative weight. Naive Bayes cannot do that for bigrams it has never labeled.
+
+```figure
+sentiment-logits
+```
 
 ## Build It
 
@@ -196,7 +200,7 @@ pipe.fit(X_train, y_train)
 print(pipe.score(X_test, y_test))
 ```
 
-Three things to notice. `stop_words=None` keeps negations. `ngram_range=(1, 2)` adds bigrams so `not_good` becomes a feature. `sublinear_tf=True` dampens repeated words. These three flags are the difference between a 75%-accurate baseline and an 85%-accurate baseline on SST-2.
+Three things to notice. `stop_words=None` keeps negations. `ngram_range=(1, 2)` adds bigrams so `not good` becomes a feature (scikit-learn joins the two words with a space). `sublinear_tf=True` dampens repeated words. These three flags are the difference between a 75%-accurate baseline and an 85%-accurate baseline on SST-2.
 
 ### When to reach for a transformer
 

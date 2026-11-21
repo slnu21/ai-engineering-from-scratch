@@ -3,7 +3,7 @@
 > Speech recognition is audio classification at every timestep, glued together by a sequence model that knows English and silence. CTC, RNN-T, and attention are the three ways to do it. Pick one and understand why.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 02 (Spectrograms & Mel), Phase 5 · 08 (CNNs & RNNs for Text), Phase 5 · 10 (Attention)
 **Time:** ~45 minutes
 
@@ -37,7 +37,7 @@ Advantages: highest quality on offline ASR, easy to train with standard seq2seq 
 
 ### WER: the one number
 
-**Word Error Rate** = `(S + D + I) / N`, where S=substitutions, D=deletions, I=insertions, N=reference word count. Matches Levenshtein edit distance at the word level. Lower is better. A WER above 20% is generally unusable; below 5% is human-parity for read speech. 2026 numbers on standard benchmarks:
+**Word Error Rate** = $(S + D + I) / N$, where $S$=substitutions, $D$=deletions, $I$=insertions, $N$=reference word count. Matches Levenshtein edit distance at the word level. Lower is better. A WER above 20% is generally unusable; below 5% is human-parity for read speech. 2026 numbers on standard benchmarks:
 
 | Model | LibriSpeech test-clean | LibriSpeech test-other | Size |
 |-------|------------------------|------------------------|------|
@@ -47,6 +47,10 @@ Advantages: highest quality on offline ASR, easy to train with standard seq2seq 
 | Seamless M4T v2 | 1.7% | 3.5% | 2.3B |
 
 All these are encoder-decoder or RNN-T based. Pure CTC systems (wav2vec 2.0) sit around 1.8–2.1% on test-clean.
+
+```figure
+ctc-collapse
+```
 
 ## Build It
 

@@ -1,9 +1,9 @@
 # Cold Start Mitigation for Serverless LLMs
 
-> A 20 GB model image takes 5-10 minutes (7B) to 20+ minutes (70B) to go from cold to serving. In a true serverless world, that is not a warm-up — it is an outage. Mitigations operate at five layers: pre-seeded node images (Bottlerocket on AWS, dual-volume arch), model streaming (NVIDIA Run:ai Model Streamer, native in vLLM), GPU memory snapshots (Modal checkpoints, up to 10x faster restart), warm pools (`min_workers=1`), tiered loading (ServerlessLLM's NVMe→DRAM→HBM pipeline, 10-200x latency reduction), and live migration that moves input tokens (KB) rather than KV cache (GB). Modal publishes 2-4s cold starts as a floor; Baseten 5-10s default, sub-second with pre-warming. This lesson teaches you to measure, budget, and stack the five layers.
+> A large model takes minutes to go from cold to serving: a 70B model on a fresh node needs roughly 3-8 minutes before the first token. In a true serverless world, that is not a warm-up — it is an outage. Mitigations operate at five layers: pre-seeded node images (Bottlerocket on AWS, dual-volume arch), model streaming (NVIDIA Run:ai Model Streamer, native in vLLM), GPU memory snapshots (Modal checkpoints, up to 10x faster restart), warm pools (`min_workers=1`), tiered loading (ServerlessLLM's NVMe→DRAM→HBM pipeline, 10-200x latency reduction), plus a bonus sixth pattern, live migration that moves input tokens (KB) rather than KV cache (GB). Modal publishes 2-4s cold starts as a floor; Baseten 5-10s default, sub-second with pre-warming. This lesson teaches you to measure, budget, and stack the five layers.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy cold-start path simulator)
+**Languages:** Python, TypeScript (stdlib, toy cold-start path simulator)
 **Prerequisites:** Phase 17 · 02 (Inference Platform Economics), Phase 17 · 03 (GPU Autoscaling)
 **Time:** ~60 minutes
 
@@ -85,6 +85,10 @@ Cold-start anatomy for a 70B model on a fresh node (illustrative):
 - Run:ai Model Streamer: ~2x weight-load speedup.
 - ServerlessLLM tiered loading: 10-200x latency reduction (paper numbers).
 
+```figure
+cold-start-pipeline
+```
+
 ## Use It
 
 `code/main.py` models a cold-start path with and without each mitigation. Reports total cold-start time, warm-pool cost, and the break-even request rate above which warm pool pays for itself.
@@ -121,6 +125,6 @@ This lesson produces `outputs/skill-cold-start-planner.md`. Given SLA, model siz
 - [Modal — Cold start performance](https://modal.com/docs/guide/cold-start) — Modal's published benchmarks and checkpoint architecture.
 - [AWS Bottlerocket](https://github.com/bottlerocket-os/bottlerocket) — pre-seeded data volume snapshot pattern.
 - [NVIDIA Run:ai Model Streamer](https://github.com/run-ai/runai-model-streamer) — overlap weights load with compute setup.
-- [Baseten — Cold-start mitigation](https://www.baseten.co/blog/cold-start-mitigation/) — pre-warming playbook.
+- [Baseten — Cold starts](https://docs.baseten.co/deployment/autoscaling/cold-starts) — pre-warming playbook.
 - [ServerlessLLM paper (USENIX OSDI'24)](https://www.usenix.org/conference/osdi24/presentation/fu) — tiered loading design.
 - [NVIDIA — Disaggregated LLM Inference on Kubernetes](https://developer.nvidia.com/blog/deploying-disaggregated-llm-inference-workloads-on-kubernetes/) — live migration for disaggregated deployments.

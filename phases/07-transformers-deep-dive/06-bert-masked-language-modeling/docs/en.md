@@ -3,7 +3,7 @@
 > GPT predicts the next word. BERT predicts a missing word. One sentence of difference — and half a decade of everything embedding-shaped.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, Rust
 **Prerequisites:** Phase 7 · 05 (Full Transformer), Phase 5 · 02 (Text Representation)
 **Time:** ~45 minutes
 
@@ -72,6 +72,10 @@ And unlike the 2018 stack, it is Flash-Attention-native. Inference is 2–3× fa
 | NER / token labeling | Per-position output, natively bidirectional |
 | Zero-shot entailment (NLI) | Classifier head on top of encoder |
 | Reranker for RAG | Cross-encoder scoring, 10x faster than LLM rerankers |
+
+```figure
+transformer-residual
+```
 
 ## Build It
 

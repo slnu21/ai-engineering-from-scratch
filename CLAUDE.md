@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A curriculum, not an application. 20 phases / 435 lesson directories under `phases/`,
+A curriculum, not an application. 20 phases / 542 lesson directories under `phases/`,
 each shipping runnable code plus a reusable artifact (prompt, skill, agent, MCP server).
 There is no app to build or test suite to run — "verification" here means the invariant
 scripts in `scripts/` pass and generated files are not stale.
@@ -49,15 +49,16 @@ audit + catalog drift + README counts on any push touching `phases/`, `catalog.j
 This is the thing to internalize before editing anything:
 
 1. **The filesystem** (`phases/NN-slug/MM-slug/`) is truth for what exists.
-   `scripts/build_catalog.py` walks it and emits `catalog.json`. CI rebuilds and diffs —
-   **add or rename a lesson directory and you must re-run it and commit `catalog.json`.**
+   `scripts/build_catalog.py` walks it and emits `catalog.json`. Since the 2026-11-22 upstream
+   merge, **`catalog.json` is gitignored** (upstream `517614d8` stopped tracking it) — it is a local
+   build artifact. **Run `build_catalog.py` after every pull/merge**; `study_progress.py` needs it.
 2. **`README.md` + `ROADMAP.md` + `glossary/terms.md`** are truth for the website.
    `site/build.js` parses them into `site/data.js` (generated but committed).
 
 They are checked against each other only loosely: `check_readme_counts.py` pins a handful of
 hardcoded README counts (badges, prose totals) to `catalog.json` `totals`. The per-lesson tables
 are *not* reconciled — `site/build.js` currently parses 430 lessons out of the README while the
-filesystem holds 435. Adding a lesson directory therefore means editing README/ROADMAP tables by
+filesystem holds more (count drifts with upstream). Adding a lesson directory therefore means editing README/ROADMAP tables by
 hand too; nothing will fail CI if you forget.
 
 ### Parser-fragile formats
@@ -152,7 +153,7 @@ no tokens. Event shapes (`t` = type):
 ```
 
 **Log at phase boundaries only, never per lesson.** `study_progress.py` is the fine-grained
-truth; 435 per-lesson changelogs would destroy the coarse view Atlas exists to give.
+truth; 542 per-lesson changelogs would destroy the coarse view Atlas exists to give.
 
 `slug` must be `phase-NN`. `.atlas/wbs-map.json` maps those to existing WBS ids, so a mapped
 slug **updates** its item and never creates a duplicate. `.atlas/project.json` pins project 36

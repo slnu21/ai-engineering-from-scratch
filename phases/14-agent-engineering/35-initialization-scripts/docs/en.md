@@ -3,7 +3,7 @@
 > Every session that starts cold pays a tax. The agent reads the same files, retries the same probes, and rediscovers the same paths. An init script pays the tax once and writes the answers into state.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 32 (Minimal Workbench), Phase 14 · 34 (Repo Memory)
 **Time:** ~45 minutes
 
@@ -56,6 +56,10 @@ Run it twice in a row. The second run should be a no-op except for a fresh times
 
 Rules (Phase 14 · 33) describe what must be true to act. Init is the script that establishes that those rules can be checked. Rules without init become "be careful." Init without rules becomes a polished failure.
 
+```figure
+wb-init-probes
+```
+
 ## Build It
 
 `code/main.py` implements `init_agent.py`:
@@ -68,6 +72,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The script prints the table of probes, writes `init_report.json`, and exits zero on the happy path or non-zero with a list of failed probes.

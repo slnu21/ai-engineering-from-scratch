@@ -105,6 +105,10 @@ After self-supervised pretraining, the standard evaluation is a **linear probe**
 
 Linear probe is a pure measure of feature quality; fine-tuning typically adds 2-5 points but also mixes in the effect of head retraining.
 
+```figure
+data-augmentation
+```
+
 ## Build It
 
 ### Step 1: Two-view augmentation pipeline
@@ -173,7 +177,7 @@ print(f"InfoNCE with identical pairs:  {loss_same:.3f}")
 print(f"InfoNCE with random pairs:     {loss_random:.3f}")
 ```
 
-Identical pairs should give a low loss (close to 0 for a large batch and cold temperature). Random pairs should give log(2N-1) = ~log(31) = ~3.4 with a 16-pair batch.
+Identical pairs should give a low loss (close to 0 for a large batch and cold temperature). Random pairs should give $\log(2N-1) \approx \log(31) \approx 3.4$ with a 16-pair batch.
 
 ### Step 4: MAE-style masking
 

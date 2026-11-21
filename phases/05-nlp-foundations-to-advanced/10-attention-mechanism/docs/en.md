@@ -3,7 +3,7 @@
 > The decoder stops squinting at a compressed summary and starts looking at the whole source. Everything after this is attention plus engineering.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 09 (Sequence-to-Sequence Models)
 **Time:** ~45 minutes
 
@@ -55,6 +55,10 @@ This is where every attention implementation goes wrong the first time. Read slo
 - `concat`: essentially the Bahdanau form. Rarely used since the first two are cheaper.
 
 **One Bahdanau / Luong gotcha worth naming.** Bahdanau uses `s_{t-1}` (the decoder state *before* generating the current word). Luong uses `s_t` (the state *after*). Mixing them up produces subtly wrong gradients that are extremely hard to debug. Pick one paper and stick to its convention.
+
+```figure
+attention-heatmap
+```
 
 ## Build It
 

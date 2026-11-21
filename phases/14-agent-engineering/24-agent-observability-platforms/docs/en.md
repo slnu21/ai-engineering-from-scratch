@@ -1,15 +1,15 @@
 # Agent Observability: Langfuse, Phoenix, Opik
 
-> Three open-source agent observability platforms dominate 2026. Langfuse (MIT) — 6M+ installs/month, tracing + prompt management + evals + session replay. Arize Phoenix (Elastic 2.0) — deep agent-specific evals, RAG relevancy, OpenInference auto-instrumentation. Comet Opik (Apache 2.0) — automated prompt optimization, guardrails, LLM-judge hallucination detection.
+> Three self-hostable agent observability platforms dominate 2026. Langfuse (MIT) — 6M+ installs/month, tracing + prompt management + evals + session replay. Arize Phoenix (Elastic 2.0) — deep agent-specific evals, RAG relevancy, OpenInference auto-instrumentation. Comet Opik (Apache 2.0) — automated prompt optimization, guardrails, LLM-judge hallucination detection.
 
 **Type:** Learn
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 23 (OTel GenAI)
 **Time:** ~45 minutes
 
 ## Learning Objectives
 
-- Name the three top open-source agent observability platforms and their licenses.
+- Name the three top self-hostable agent observability platforms and their licenses, and say which license is not OSI open source.
 - Distinguish what each one is strongest at: Langfuse (prompt mgmt + sessions), Phoenix (RAG + auto-instrumentation), Opik (optimization + guardrails).
 - Explain why 89% of organizations report having agent observability in place by 2026.
 - Implement a stdlib trace-to-dashboard pipeline with LLM-judge evaluation.
@@ -63,6 +63,10 @@ Per Maxim (2026 field analysis): 89% of organizations have agent observability i
 - **Self-rolled LLM-judge without grounding.** CRITIC pattern (Lesson 05) applies — judges need external tools for factual verification.
 - **Prompt versions not tied to traces.** When prod regresses, you cannot bisect to the prompt that caused it.
 
+```figure
+wb-trace-ingest
+```
+
 ## Build It
 
 `code/main.py` implements a stdlib trace collector + LLM-judge evaluator:
@@ -76,6 +80,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: per-session eval scores and failure categorization matching what Langfuse/Phoenix/Opik would show.

@@ -3,7 +3,7 @@
 > Voyager (Wang et al., TMLR 2024) treats executable code as a skill. Skills are named, retrievable, composable, and refined by environment feedback. This is the reference architecture for Claude Agent SDK skills, skillkit, and the 2026 skill-library pattern.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 07 (MemGPT), Phase 14 · 08 (Letta Blocks)
 **Time:** ~75 minutes
 
@@ -88,6 +88,10 @@ For production agents this translates to a "what's missing" operator: given the 
 - **Composed-skill drift.** Parent skill depends on a child that was refined. Version skills; a parent pinned to v1 doesn't magically pick up v3.
 - **Retrieval quality.** Vector retrieval over skill descriptions degrades as the library grows past a few hundred. Supplement with tag filters and hard constraints ("only skills with `category=tooling`").
 
+```figure
+voyager-skills
+```
+
 ## Build It
 
 `code/main.py` implements a stdlib skill library:
@@ -100,6 +104,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The trace shows library writes, retrieval, composition, a failed execution, and a v2 refinement — Voyager's loop end to end.

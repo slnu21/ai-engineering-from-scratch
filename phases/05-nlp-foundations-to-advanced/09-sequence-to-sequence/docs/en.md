@@ -3,7 +3,7 @@
 > Two RNNs pretending to be a translator. The bottleneck they hit is the reason attention exists.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 08 (CNNs + RNNs for Text), Phase 3 · 11 (PyTorch Intro)
 **Time:** ~75 minutes
 
@@ -28,6 +28,10 @@ This is worth studying for two reasons. First, the context-vector bottleneck is 
 **The bottleneck.** Everything the encoder learned about the source must be squeezed into that one context vector. Long sentences lose detail. Rare words get blurred. Reordering (chat noir vs. black cat) has to be memorized, not computed.
 
 Attention (lesson 10) fixes this by letting the decoder look at *every* encoder hidden state, not just the last one. That is the whole pitch.
+
+```figure
+lstm-gates
+```
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > Harvey, Glean, Mendable, and LlamaCloud all run the same production shape in 2026. Ingest with docling or Unstructured and ColPali for visuals. Hybrid search. Re-rank with bge-reranker-v2-gemma. Synthesize with Claude Sonnet 4.7 using prompt caching at 60-80% hit rate. Guard with Llama Guard 4 and NeMo Guardrails. Watch with Langfuse and Phoenix. Grade with RAGAS on a 200-question golden set. Build one in a regulated domain (legal, clinical, insurance), and the capstone is passing the golden set, the red team, and the drift dashboard.
 
 **Type:** Capstone
-**Languages:** Python (pipeline + API), TypeScript (chat UI)
+**Languages:** Python (pipeline + API), TypeScript (chat UI, pipeline scaffold)
 **Prerequisites:** Phase 5 (NLP), Phase 7 (transformers), Phase 11 (LLM engineering), Phase 12 (multimodal), Phase 17 (infrastructure), Phase 18 (safety)
 **Phases exercised:** P5 · P7 · P11 · P12 · P17 · P18
 **Time:** 30 hours
@@ -67,6 +67,10 @@ eval:
 - Observability: Langfuse self-hosted with annotation queue; Arize Phoenix for drift
 - Guardrails: Llama Guard 4 input/output classifier, NeMo Guardrails v0.12 policy, Presidio PII scrub
 - Compliance: role-based access labels on chunks; jurisdiction tags for GDPR/HIPAA
+
+```figure
+canary-rollout
+```
 
 ## Build It
 
@@ -146,9 +150,9 @@ answer:
 - [Harvey AI](https://www.harvey.ai) — reference legal production stack
 - [Glean enterprise search](https://www.glean.com) — reference RAG at enterprise scale
 - [Mendable documentation](https://mendable.ai) — developer-docs RAG reference
-- [LlamaCloud Parse + Index](https://docs.llamaindex.ai/en/stable/examples/llama_cloud/llama_parse/) — managed ingestion
+- [LlamaCloud Parse + Index](https://docs.cloud.llamaindex.ai/llamaparse/getting_started) — managed ingestion
 - [Anthropic prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) — the cost-lever reference
 - [RAGAS 0.2 documentation](https://docs.ragas.io/) — the canonical RAG eval framework
 - [Arize Phoenix](https://github.com/Arize-ai/phoenix) — reference drift observability
-- [Llama Guard 4](https://ai.meta.com/research/publications/llama-guard-4/) — 2026 safety classifier
+- [Llama Guard 4](https://www.llama.com/docs/model-cards-and-prompt-formats/llama-guard-4/) — 2026 safety classifier
 - [NeMo Guardrails v0.12](https://docs.nvidia.com/nemo-guardrails/) — policy rail framework

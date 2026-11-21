@@ -59,8 +59,8 @@ DDPM defines the forward process as a noisy SDE where `x_t` is increasingly corr
 
 Rectified flow defines a **straight-line** interpolation between clean data and pure noise:
 
-```
-x_t = (1 - t) * x_0 + t * epsilon,     t in [0, 1]
+```math
+x_t = (1 - t) \, x_0 + t \, \epsilon, \qquad t \in [0, 1]
 ```
 
 Train a network to predict the velocity `v_theta(x_t, t) = epsilon - x_0` — the forward direction along the straight-line path from clean data to noise (`dx_t/dt`). During sampling, you integrate this velocity backward to step from noise toward data. The resulting ODE is much closer to a straight line, so far fewer integration steps are needed to sample.
@@ -117,6 +117,10 @@ FLUX.1-schnell is the 2026 open-source default. Z-Image is the efficiency leader
 ### Why this phase shift matters
 
 DDPM + U-Net worked. DiT + rectified flow works **better, faster, and scales more cleanly**. The transition parallels the one from RNNs to transformers in NLP: both architectures solved the same problem, but transformers scaled and now dominate. Every 2026 paper on image, video, or 3D generation uses a DiT-shaped denoiser and usually a rectified flow objective. U-Net DDPM is now primarily pedagogical (Lesson 10).
+
+```figure
+cv3-rectified-flow
+```
 
 ## Build It
 
@@ -334,7 +338,7 @@ This lesson produces:
 | DiT | "Diffusion transformer" | Transformer that replaces the U-Net as the diffusion denoiser; operates on patchified latents |
 | AdaLN | "Adaptive layer norm" | Timestep/text conditioning via learned scale, shift, gate applied after LayerNorm; standard in every modern DiT |
 | MMDiT | "Multi-modal DiT (SD3)" | Separate weight streams for text and image tokens that share a joint self-attention |
-| Single-stream / double-stream | "FLUX trick" | First N blocks double-stream (separate weights per modality), later blocks single-stream (concat + shared weights) for efficiency |
+| Single-stream / double-stream | "FLUX trick" | First $N$ blocks double-stream (separate weights per modality), later blocks single-stream (concat + shared weights) for efficiency |
 | Rectified flow | "Straight-line noise-to-data" | Linear interpolation between data and noise; network predicts velocity; fewer ODE steps needed at inference |
 | Velocity target | "epsilon - x_0" | The regression target in rectified flow; points from clean data to noise |
 | CFG guidance | "classifier-free guidance" | Mix conditional and unconditional predictions; still used in rectified-flow models |

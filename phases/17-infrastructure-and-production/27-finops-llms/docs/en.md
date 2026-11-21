@@ -3,7 +3,7 @@
 > Traditional FinOps breaks on LLM spend. Costs are token-transactions, not resource-uptime. Tags don't map — an API call is a transaction, not an asset. Engineering decisions (prompt design, context window, output length) are financial decisions. The 2026 playbook has three attribution dimensions to instrument on day one: per-user (`user_id`) for seat pricing and expansion, per-task (`task_id` + `route`) for product surface cost and prioritization, per-tenant (`tenant_id`) for unit economics and renewal. Four token layers — prompt, tool, memory, response — one bucket hides spend. Enforcement ladder for multi-tenant products: rate limits per tenant (2-3x expected peak, clear 429 + retry-after); daily spend cap (1.5-3x contracted ceiling; triggers rate tightening + alert); kill switches on spend z-score > 4 (auto-pause + page on-call). Attribution patterns: tag-and-aggregate, telemetry-joiner (trace-ID → billing; highest accuracy), sampling-and-extrapolation, model-based allocation, event-sourced, real-time streaming. Unit metric: cost per resolved query, cost per generated artifact — not $/M tokens. Retroactive tagging always misses; instrument at request creation.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy cost-attribution simulator with kill switch)
+**Languages:** Python, TypeScript (stdlib, toy cost-attribution simulator with kill switch)
 **Prerequisites:** Phase 17 · 13 (Observability), Phase 17 · 14 (Caching)
 **Time:** ~60 minutes
 
@@ -113,6 +113,10 @@ Best-case stacked: ~5-10% of naive baseline. Most teams have 2-3 levers engaged;
 - Unit metric: cost per resolved query, not $/M tokens.
 - Stacked optimizations: ~5-10% of baseline possible.
 
+```figure
+i4-spend-ladder
+```
+
 ## Use It
 
 `code/main.py` simulates a multi-tenant LLM service with the three-tier enforcement ladder. Injects an abusive tenant and demonstrates the kill switch firing.
@@ -126,7 +130,7 @@ This lesson produces `outputs/skill-finops-plan.md`. Given product and scale, de
 1. Run `code/main.py`. At what z-score does the kill switch fire? How do you pick the threshold?
 2. Design a per-tenant, per-task cost dashboard. What are the 5 views you build first?
 3. Your largest tenant is unit-economics-negative. Propose three interventions ordered by customer impact.
-4. Compute cost per resolved ticket for a support product: 3M tokens/ticket, ~800 tickets/day, GPT-5 cached rate.
+4. Compute cost per resolved ticket for a support product: 3M tokens/ticket, ~800 tickets/day, all input at the GPT-5 cached rate of $0.125/M (launch list price; check the live rate card).
 5. Argue whether retroactive tagging can ever work. When is it acceptable?
 
 ## Key Terms

@@ -3,7 +3,7 @@
 > Pull the names out. Sounds easy until you deal with ambiguous boundaries, nested entities, and domain jargon.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 02 (BoW + TF-IDF), Phase 5 · 03 (Word Embeddings)
 **Time:** ~75 minutes
 
@@ -43,6 +43,10 @@ The architecture progression:
 - **CRF.** Conditional Random Field. Like HMM but discriminative, so you can mix arbitrary features (word shape, capitalization, neighboring words). Still the classical production workhorse in 2026 for low-resource deployments.
 - **BiLSTM-CRF.** Neural features instead of hand-crafted. LSTM reads the sentence both directions, CRF layer on top enforces consistent tag sequences.
 - **Transformer-based.** Fine-tune BERT with a token-classification head. Best accuracy. Most compute.
+
+```figure
+ner-bio-tagging
+```
 
 ## Build It
 

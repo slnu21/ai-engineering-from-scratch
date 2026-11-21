@@ -3,7 +3,7 @@
 > Exact-match and F1 miss semantic equivalence. Human review does not scale. LLM-as-judge is the production answer — with enough calibration to trust the number.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 13 (Question Answering), Phase 5 · 14 (Information Retrieval)
 **Time:** ~75 minutes
 
@@ -49,6 +49,10 @@ Why it fails silently:
 **G-Eval.** Define a custom criterion: "Did the answer cite the correct source?" The framework auto-expands into chain-of-thought evaluation steps, then scores 0-1. Good for domain-specific quality dimensions RAGAS does not cover.
 
 **Calibration.** Never trust the raw judge score until you have a correlation against human labels. Run 100 hand-labeled examples. Plot judge vs human. Compute Spearman rho. If rho < 0.7, your judge rubric needs work.
+
+```figure
+n5-judge-gauge
+```
 
 ## Build It
 

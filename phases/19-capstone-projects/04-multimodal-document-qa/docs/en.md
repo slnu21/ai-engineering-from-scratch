@@ -3,7 +3,7 @@
 > The 2026 document-QA frontier moved away from OCR-then-text and toward vision-first late interaction. ColPali, ColQwen2.5, and ColQwen3-omni treat each PDF page as an image, embed it with multi-vector late interaction, and let the query attend to patches directly. On financial 10-Ks, scientific papers, and handwritten notes this pattern beats OCR-first by a large margin. Build the pipeline end to end on 10k pages and publish the side-by-side against OCR-then-text.
 
 **Type:** Capstone
-**Languages:** Python (pipeline), TypeScript (viewer UI)
+**Languages:** Python (pipeline), TypeScript (viewer UI, retrieval scaffold)
 **Prerequisites:** Phase 4 (computer vision), Phase 5 (NLP), Phase 7 (transformers), Phase 11 (LLM engineering), Phase 12 (multimodal), Phase 17 (infrastructure)
 **Phases exercised:** P4 · P5 · P7 · P11 · P12 · P17
 **Time:** 30 hours
@@ -58,6 +58,10 @@ query ----+----> retrieve top-k pages (MaxSim)
 - VLM answerer: Qwen3-VL-30B self-hosted or Gemini 2.5 Pro hosted; InternVL3 as fallback
 - Evaluation: ViDoRe v3 benchmark, M3DocVQA for multi-page reasoning
 - Viewer UI: Next.js 15 with canvas overlay for evidence regions
+
+```figure
+ce-late-interaction
+```
 
 ## Build It
 

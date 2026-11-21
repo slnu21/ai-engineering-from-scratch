@@ -3,7 +3,7 @@
 > 3D is the modality where 2D-to-3D leverage is strongest. The 2023 breakthrough was 3D Gaussian Splatting. The 2024-2026 generative push layers multi-view diffusion + 3D reconstruction on top to produce objects and scenes from a single prompt or photo.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 4 (Vision), Phase 8 · 07 (Latent Diffusion)
 **Time:** ~45 minutes
 
@@ -58,6 +58,10 @@ Fine-tune a pretrained image diffusion model to generate multiple consistent vie
 ### NeRF (for context)
 
 Neural Radiance Field (Mildenhall et al., 2020). A tiny MLP takes `(x, y, z, view direction)` and outputs `(color, density)`. Render by integrating along rays. Beats mesh-based novel-view synthesis in quality but is 100-1000x slower to render. Superseded by Gaussian splatting for most real-time use but still dominant in research.
+
+```figure
+v4-3d-multiview
+```
 
 ## Build It
 
@@ -160,4 +164,4 @@ For most 2026 products, the right answer is "run a multi-view diffusion model on
 - [Shi et al. (2023). MVDream](https://arxiv.org/abs/2308.16512) — multi-view diffusion.
 - [Hong et al. (2023). LRM: Large Reconstruction Model for Single Image to 3D](https://arxiv.org/abs/2311.04400) — LRM.
 - [Gao et al. (2024). CAT3D: Create Anything in 3D with Multi-View Diffusion Models](https://arxiv.org/abs/2405.10314) — CAT3D.
-- [Stability AI (2024). Stable Video 3D (SV3D)](https://stability.ai/research/sv3d) — SV3D.
+- [Stability AI (2024). Stable Video 3D (SV3D)](https://stability.ai/research/sv3d-novel-multi-view-synthesis-and-3d-generation-from-a-single-image-using-latent-video-diffusion) — SV3D.

@@ -3,7 +3,7 @@
 > Four orchestration patterns recur across 2026 frameworks: supervisor-worker, swarm / peer-to-peer, hierarchical, debate. Anthropic's guidance: "It's about building the right system for your needs." Start simple; add topology only when a single agent plus five workflow patterns is insufficient.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 12 (Workflow Patterns), Phase 14 · 25 (Multi-Agent Debate)
 **Time:** ~60 minutes
 
@@ -52,7 +52,7 @@ When you need it: when a single supervisor's context budget cannot hold descript
 - Parallel proposers + iterative cross-critique (Lesson 25).
 - Not really orchestration — more verification — but shows up as a topology choice in frameworks.
 
-### CrewAI Crew vs Flow
+### Autonomous crews vs deterministic flows
 
 CrewAI formalizes two deployment modes:
 
@@ -79,6 +79,10 @@ Decision order:
 - **Bouncing handoffs in swarm.** A -> B -> A -> B. Use hop counters.
 - **Fake hierarchy.** Three layers because "enterprise"; two actual teams. Collapse.
 
+```figure
+orchestration-pattern
+```
+
 ## Build It
 
 `code/main.py` implements all four patterns in stdlib against a scripted LLM:
@@ -94,6 +98,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: per-pattern trace + op count. Supervisor is cleanest; swarm is shortest; hierarchical is deepest; debate is most expensive.

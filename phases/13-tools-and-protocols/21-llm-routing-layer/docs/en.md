@@ -3,7 +3,7 @@
 > Provider lock-in is expensive. Different tool-calling workloads suit different models. Routing gateways give one API surface, retries, failover, cost tracking, and guardrails. Three archetypes dominate 2026: LiteLLM (open-source self-hosted), OpenRouter (managed SaaS), Portkey (production-grade, open-sourced in March 2026). This lesson names the decision criteria and walks a stdlib routing gateway.
 
 **Type:** Learn
-**Languages:** Python (stdlib, routing + failover + cost tracker)
+**Languages:** Python (stdlib, routing + failover + cost tracker), TypeScript
 **Prerequisites:** Phase 13 · 02 (function calling), Phase 13 · 17 (gateways)
 **Time:** ~45 minutes
 
@@ -38,7 +38,7 @@ Everyone speaks OpenAI-shape. The routing gateway exposes `/v1/chat/completions`
 
 ### Model aliases
 
-Instead of `claude-3-5-sonnet-20251022`, your code says `our_smart_model`. The gateway maps aliases to real models. When Anthropic ships Claude 4, you change the alias server-side; your code does not touch a thing.
+Instead of a pinned snapshot id, your code says `our_smart_model`. The gateway maps aliases to real models. When a provider ships a new generation, you change the alias server-side; your code does not touch a thing.
 
 ### Fallback chains
 
@@ -97,6 +97,10 @@ A gateway can route both LLM calls AND MCP sampling requests. When a sampling re
 - **Cost-aware.** Pick the cheapest model meeting latency / quality.
 - **Latency-aware.** Pick the fastest model in the last N minutes.
 - **Task-aware.** Prompt classifier routes coding to one model, summarization to another.
+
+```figure
+tp-router-failover
+```
 
 ## Use It
 

@@ -3,8 +3,8 @@
 > Prefill is compute-bound; decode is memory-bound. Running both on the same GPU wastes one resource. Disaggregation splits them onto separate pools and transfers KV cache between them over NIXL (RDMA/InfiniBand or TCP fallback). NVIDIA Dynamo (GTC 2025 announce, 1.0 GA) sits above vLLM/SGLang/TRT-LLM — its Planner Profiler + SLA Planner auto-rate-match prefill:decode ratios to meet SLOs. NVIDIA publishes throughput gains in this ballpark — developer.nvidia.com (2025-06) shows a ~6x improvement for DeepSeek-R1 MoE on GB200 NVL72 + Dynamo in the medium-latency regime, and the Dynamo product page (developer.nvidia.com, undated) advertises up to 50x MoE throughput on GB300 NVL72 + Dynamo vs Hopper. The "30x" figure is a community aggregate across full-stack Blackwell + Dynamo + DeepSeek-R1 reports; we have not found a single primary source stating exactly 30x, so treat it as a directional claim. llm-d (Red Hat + AWS) is Kubernetes-native: prefill / decode / router as independent Services with per-role HPA. llm-d 0.5 adds hierarchical KV offloading, cache-aware LoRA routing, UCCL networking, scale-to-zero. Economics: internal rollup of multiple customer disclosures suggests 30–40% savings on $2M-class inference spend (i.e., $600-800K/year) when switching from colocated serving to disaggregated with Dynamo at constant SLA; the specific $2M→$600-800K figure is an internal composite, not a single published case study — use it as an order-of-magnitude anchor, not a reference citation. Short prompts (<512 tokens, short output) don't justify the transfer cost.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy disaggregated-vs-colocated simulator)
-**Prerequisites:** Phase 17 · 04 (vLLM Serving Internals), Phase 17 · 08 (Inference Metrics)
+**Languages:** Python, TypeScript (stdlib, toy disaggregated-vs-colocated simulator)
+**Prerequisites:** Phase 17 · 04 (Serving Engine Internals), Phase 17 · 08 (Inference Metrics)
 **Time:** ~75 minutes
 
 ## Learning Objectives
@@ -104,6 +104,10 @@ Benchmark numbers drift — NVIDIA and the inference stack post updated results 
 - Savings anchor (internal composite, not a single case study): $600-800K/year off a $2M annual spend at constant SLA.
 - Disaggregation threshold: prompts >512 tokens + outputs >200 tokens.
 - KV transfer via NIXL: 20-80 ms for 4K-prompt KV on 70B FP8.
+
+```figure
+prefill-decode-split
+```
 
 ## Use It
 

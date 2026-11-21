@@ -3,7 +3,7 @@
 > WebArena tests web-agent capability across four self-hosted apps. OSWorld tests desktop-agent capability across Ubuntu, Windows, macOS. At release (2023–2024) both showed a big gap between best-in-class agents and humans. The gap is narrowing; the failure modes haven't changed.
 
 **Type:** Learn
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 19 (SWE-bench, GAIA)
 **Time:** ~60 minutes
 
@@ -61,6 +61,10 @@ Claude computer use, OpenAI CUA, Gemini 2.5 Computer Use (Lesson 21) all train o
 - **Ignoring trajectory length.** Scoring only success-rate misses the 1.4-2.7x step inefficiency OSWorld-Human surfaces.
 - **Stale self-hosted apps.** WebArena's apps pin specific versions; update without re-curation breaks comparability.
 
+```figure
+ae-agent-human-gap
+```
+
 ## Build It
 
 `code/main.py` implements a toy web-agent harness:
@@ -74,6 +78,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: per-task success rate and trajectory efficiency, mirroring OSWorld-Human's methodology.

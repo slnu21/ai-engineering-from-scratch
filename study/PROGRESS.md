@@ -3,13 +3,13 @@
 > 이 파일은 `python scripts/study_progress.py --write`로 생성됩니다.
 > 직접 고치지 마세요. `study/`의 노트 파일이 유일한 진실원입니다.
 
-**3 / 435 레슨 (0.7%)**
+**3 / 542 레슨 (0.6%)**
 
 | Phase | 진행 | 완료 | 주제 |
 |---|---|---|---|
-| 00 | `####............` | 3/12 | Setup And Tooling |
+| 00 | `####............` | 3/13 | Setup And Tooling |
 | 01 | `................` | 0/22 | Math Foundations |
-| 02 | `................` | 0/18 | ML Fundamentals |
+| 02 | `................` | 0/21 | ML Fundamentals |
 | 03 | `................` | 0/13 | Deep Learning Core |
 | 04 | `................` | 0/28 | Computer Vision |
 | 05 | `................` | 0/29 | NLP Foundations To Advanced |
@@ -20,13 +20,13 @@
 | 10 | `................` | 0/24 | LLMs From Scratch |
 | 11 | `................` | 0/17 | LLM Engineering |
 | 12 | `................` | 0/25 | Multimodal AI |
-| 13 | `................` | 0/23 | Tools And Protocols |
-| 14 | `................` | 0/42 | Agent Engineering |
+| 13 | `................` | 0/45 | Tools And Protocols |
+| 14 | `................` | 0/54 | Agent Engineering |
 | 15 | `................` | 0/22 | Autonomous Systems |
 | 16 | `................` | 0/25 | Multi Agent And Swarms |
-| 17 | `................` | 0/28 | Infrastructure And Production |
+| 17 | `................` | 0/29 | Infrastructure And Production |
 | 18 | `................` | 0/30 | Ethics Safety Alignment |
-| 19 | `................` | 0/17 | Capstone Projects |
+| 19 | `................` | 0/85 | Capstone Projects |
 
 ## 다음 레슨
 
@@ -49,3 +49,4 @@
 - [ ] 10. Terminal & Shell
 - [ ] 11. Linux for AI
 - [ ] 12. Debugging and Profiling
+- [ ] 13. Python for AI Engineering

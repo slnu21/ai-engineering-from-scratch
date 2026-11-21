@@ -3,7 +3,7 @@
 > Word2Vec gave you a vector per word. Modern embedding models give you a vector per passage, cross-lingual, with sparse, dense, and multi-vector views, sized to fit your index. Pick wrong and your RAG retrieves the wrong thing.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 03 (Word2Vec), Phase 5 · 14 (Information Retrieval)
 **Time:** ~60 minutes
 
@@ -48,6 +48,10 @@ Massive Text Embedding Benchmark — 56 tasks across 8 task types at launch (202
 | Precision on top-50 | Multi-vector (ColBERTv2) or cross-encoder reranker |
 
 Most production stacks use all three.
+
+```figure
+gx-matryoshka
+```
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > Everything from lessons 01-11, stitched together. Build a voice assistant that listens, reasons, and talks back. In 2026 that is a solved engineering problem, not a research problem — but the integration details decide whether it ships.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 04, 05, 06, 07, 11; Phase 11 · 09 (Function Calling); Phase 14 · 01 (Agent Loop)
 **Time:** ~120 minutes
 
@@ -50,6 +50,10 @@ Latency target: first TTS audio byte within 800 ms of the user finishing their u
 | Moshi (full-duplex) | 200-300 ms | CC-BY 4.0 | Single-model; different architecture, lesson 15 |
 | Vapi / Retell (managed) | 300-500 ms | commercial | Fastest to launch; limited customization |
 | Whisper.cpp + llama.cpp + Kokoro-ONNX | offline | open | Privacy / edge |
+
+```figure
+v4-voice-latency
+```
 
 ## Build It
 

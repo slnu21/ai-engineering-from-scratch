@@ -3,7 +3,7 @@
 > SWE-bench Verified went from 4% to 80.9% in under three years. Same Claude Sonnet 4.5 scored 43.2% on SWE-agent v1 and 59.8% on Cline autonomous — the scaffolding around the model now matters as much as the model itself. OpenHands (formerly OpenDevin) is the most active MIT-licensed platform and its CodeAct loop executes Python actions directly in a sandbox instead of JSON tool calls. The headline numbers hide a methodological issue: 161 of 500 SWE-bench Verified tasks require only a 1–2 line change, and SWE-bench Pro (10+ line tasks) sits at 23–59% for the same frontier models.
 
 **Type:** Learn
-**Languages:** Python (stdlib, CodeAct vs JSON tool-call comparison)
+**Languages:** Python, TypeScript (stdlib, CodeAct vs JSON tool-call comparison)
 **Prerequisites:** Phase 14 · 07 (Tool use), Phase 15 · 01 (Long-horizon agents)
 **Time:** ~45 minutes
 
@@ -65,6 +65,10 @@ A coding run is a long-horizon trajectory (Lesson 1). Reliability compounds acro
 The OpenHands authors and Epoch AI both flag that SWE-bench Verified has an easy tail: 161 of 500 tasks need only 1–2 lines of change. High scores are driven partly by this tail. SWE-bench Pro restricts to 10+ line changes and returns scores in the 23–59% range even for frontier systems. Your production distribution is almost certainly closer to Pro than to Verified.
 
 Implication for choosing an agent: run a Pro-like subset of your own bug backlog. The score that matters is the score on tasks representative of what you ship.
+
+```figure
+a5-scaffold-delta
+```
 
 ## Use It
 

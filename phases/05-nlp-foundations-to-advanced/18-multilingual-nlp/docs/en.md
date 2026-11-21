@@ -3,7 +3,7 @@
 > One model, 100+ languages, zero training data for most of them. Cross-lingual transfer is the practical miracle of the 2020s.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 04 (GloVe, FastText, Subword), Phase 5 · 11 (Machine Translation)
 **Time:** ~45 minutes
 
@@ -48,6 +48,10 @@ Most teams default to English as the fine-tuning source. Recent research (2026) 
 Language similarity predicts transfer quality better than raw corpus size. For Slavic targets, German or Russian often beat English. For Indic targets, Hindi often beats English. The **qWALS** similarity metric (2026, based on World Atlas of Language Structures features) quantifies this. **LANGRANK** (Lin et al., ACL 2019) is a separate, earlier method that ranks candidate source languages from a combination of linguistic similarity, corpus size, and genetic relatedness.
 
 Practical rule: if your target language has a typologically close high-resource relative, try fine-tuning on that one first, then compare to English fine-tune.
+
+```figure
+n5-crosslingual-bridge
+```
 
 ## Build It
 

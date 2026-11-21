@@ -63,6 +63,10 @@ production apps:
 - UI: Next.js 15 App Router + Recharts + server actions
 - SDKs supported out of the box: OpenAI, Anthropic, Google GenAI, LangChain, LlamaIndex, vLLM
 
+```figure
+ce-otel-drift
+```
+
 ## Build It
 
 1. **Collector config.** OpenTelemetry Collector with the OTLP HTTP receiver, a tail-sampler keeping 100% of errored traces and 10% of successes, and exporters to ClickHouse and S3.
@@ -81,7 +85,7 @@ production apps:
 
 8. **Alerting chain.** Prometheus exporter reads eval score aggregates and latency percentiles; Alertmanager routes to Slack for warnings and PagerDuty for critical breaches.
 
-9. **Regression probe.** Inject a bug: the evaluated chatbot starts leaking fake SSNs 1% of the time. Measure MTTR: from bug deployed to Slack alert.
+9. **Regression probe.** Inject a bug: the evaluated chatbot starts leaking fake SSNs 1% of the time. Measure time to detect (MTTD): from bug deployed to Slack alert. Detection is the part of MTTR the dashboard owns; the fix and redeploy come after.
 
 ## Use It
 
@@ -102,7 +106,7 @@ $ curl -X POST https://my-otel-collector/v1/traces -d @trace.json
 |:-:|---|---|
 | 25 | Trace-schema coverage | Number of SDK families producing canonical GenAI spans (target: 6+) |
 | 20 | Eval correctness | DeepEval / RAGAS scores vs hand-labeled set |
-| 20 | Dashboard UX | MTTR on injected regression (under 5 minutes target) |
+| 20 | Dashboard UX | MTTD on injected regression (under 5 minutes target) |
 | 20 | Cost / scale | Sustained ingest at 1k spans/sec without backlog |
 | 15 | Alerting + drift detection | Prometheus/Alertmanager chain exercised end to end |
 | **100** | | |

@@ -1,6 +1,6 @@
 # Real-Time Vision — Edge Deployment
 
-> Edge inference is the discipline of getting a 90-accuracy model to run at 30 fps on a device with 2 GB of RAM. Every percentage point of accuracy is traded against milliseconds of latency.
+> Edge inference is the discipline of getting a 90%-accurate model to run at 30 fps on a device with 2 GB of RAM. Every percentage point of accuracy is traded against milliseconds of latency.
 
 **Type:** Learn + Build
 **Languages:** Python
@@ -41,7 +41,7 @@ flowchart LR
     style PWR fill:#dbeafe,stroke:#2563eb
 ```
 
-- **Latency**: p50, p95, p99. Averaging only p50 hides tail behaviour that matters for real-time systems.
+- **Latency**: p50, p95, p99. Reporting only p50 (or the mean) hides tail behaviour that matters for real-time systems.
 - **Peak memory**: the maximum the device ever sees, not the steady-state average. Matters because OOMs are fatal on embedded targets.
 - **Power / energy**: millijoules per inference on a battery-powered device. Often proxied by CPU/GPU utilisation * time.
 
@@ -101,6 +101,10 @@ In practice: export PyTorch -> ONNX -> pick the runtime for the target. ONNX is 
 | 30-80M | Swin-V2-Tiny | If stack supports window attention |
 
 Quantise all of these to INT8 unless you have a specific reason not to.
+
+```figure
+cnn-param-count
+```
 
 ## Build It
 
@@ -266,5 +270,5 @@ This lesson produces:
 
 - [EfficientNet (Tan & Le, 2019)](https://arxiv.org/abs/1905.11946) — compound scaling for efficient architectures
 - [MobileNetV3 (Howard et al., 2019)](https://arxiv.org/abs/1905.02244) — mobile-first architecture with h-swish and squeeze-excite
-- [A Practical Guide to TensorRT Optimization (NVIDIA)](https://developer.nvidia.com/blog/accelerating-model-inference-with-tensorrt-tips-and-best-practices-for-pytorch-users/) — how to actually get the throughput numbers in the paper
+- [Accelerating Inference Up to 6x Faster in PyTorch with Torch-TensorRT (NVIDIA)](https://developer.nvidia.com/blog/accelerating-inference-up-to-6x-faster-in-pytorch-with-torch-tensorrt/) — how to actually get the throughput numbers in the paper
 - [ONNX Runtime docs](https://onnxruntime.ai/docs/) — quantisation, graph optimisation, provider selection

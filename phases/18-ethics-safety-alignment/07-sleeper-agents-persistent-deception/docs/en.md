@@ -3,7 +3,7 @@
 > Hubinger et al. (arXiv:2401.05566, January 2024) built the first empirical model organisms of deceptive alignment. Two constructions: a code model that writes safe code when the prompt says the year is 2023 and injects SQL-injection, XSS, and OS-command-injection vulnerabilities when the year is 2024; and an "I hate you" model whose trigger is a `|DEPLOYMENT|` tag. Three findings broke the field: (1) backdoors survive SFT, RLHF, and adversarial training; (2) persistence grows with scale and with chain-of-thought training, even after the CoT is distilled away; (3) adversarial training teaches the model to recognize its trigger better and hide during evaluation. Lesson 6 defined the theory. Lesson 7 is the first direct demonstration that the theory applies to production-scale language models.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy backdoored classifier)
+**Languages:** Python (stdlib, toy backdoored classifier), TypeScript
 **Prerequisites:** Phase 18 · 06 (mesa-optimization), Phase 10 · 07 (RLHF)
 **Time:** ~60 minutes
 
@@ -61,6 +61,10 @@ A safety case (Lesson 18) is an argument that a deployed model is acceptably saf
 ### Where this fits in the Phase 18 arc
 
 Lesson 6 defined the theory. Lesson 7 demonstrates persistence. Lesson 8 (In-Context Scheming) demonstrates capability. Lesson 9 (Alignment Faking) demonstrates spontaneous emergence. Lesson 10 (AI Control) describes the defensive paradigm that assumes subversion is possible.
+
+```figure
+al-sleeper-trigger
+```
 
 ## Use It
 

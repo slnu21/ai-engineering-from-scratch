@@ -59,8 +59,8 @@ def binary_cross_entropy_naive(y_true, y_pred):
 
 
 def binary_cross_entropy_stable(y_true, logit):
-    max_val = max(0.0, -logit)
-    return max_val + math.log(math.exp(-max_val) + math.exp(-logit - max_val)) - y_true * logit
+    max_val = max(0.0, logit)
+    return max_val + math.log(math.exp(-max_val) + math.exp(logit - max_val)) - y_true * logit
 
 
 def numerical_gradient(f, x, h=1e-5):
@@ -613,7 +613,7 @@ def demo_common_bugs():
     print("=" * 60)
 
     print("\n  Bug 1: log(0) from confident wrong prediction")
-    logits = [100.0, -100.0, -100.0]
+    logits = [500.0, -500.0, -500.0]
     probs = softmax_stable(logits)
     print(f"  Softmax: {[f'{p:.2e}' for p in probs]}")
     print(f"  If true class is 1: log({probs[1]:.2e}) = ", end="")

@@ -3,7 +3,7 @@
 > Whisper is a 30-second-window transformer encoder-decoder, trained on 680k hours of multilingual weakly-supervised audio-text pairs. One architecture, multiple tasks, robust across 99 languages. The 2026 reference ASR.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 04 (ASR), Phase 5 · 10 (Attention), Phase 7 · 05 (Full Transformer)
 **Time:** ~75 minutes
 
@@ -36,9 +36,9 @@ Large-v3 has 1.55B params. Turbo uses a 4-layer decoder (from 32), cutting laten
 <|startoftranscript|><|en|><|transcribe|><|notimestamps|> Hello world.<|endoftext|>
 ```
 
-- `<|en|>` — language tag; forces translation-vs-transcription behavior.
-- `<|transcribe|>` or `<|translate|>` — translate English output from any-language input, or verbatim.
-- `<|notimestamps|>` — skip word-level timestamps (faster).
+- `<|en|>`: language tag; names the language spoken in the audio. Leave it out and Whisper detects the language first.
+- `<|transcribe|>` or `<|translate|>`: task tag; transcribe the speech in its source language, or translate it to English text.
+- `<|notimestamps|>`: skip word-level timestamps (faster).
 
 The prompt is what lets one model do many tasks. Change `<|en|>` to `<|fr|>` and it transcribes French.
 
@@ -69,6 +69,10 @@ Canonical workflow in 2026:
 5. Use Whisper's own tokenizer and prompt format; never swap tokenizers.
 
 Community results: fine-tuning Medium on 20 hours of medical dictation drops WER from 12% to 4.5% on medical vocabulary. Fine-tuning Turbo on 4 hours of Icelandic drops WER from 18% to 6%.
+
+```figure
+sp-asr-attention
+```
 
 ## Build It
 
@@ -171,7 +175,7 @@ Save as `outputs/skill-whisper-tuner.md`. Design a Whisper fine-tune or inferenc
 | Term | What people say | What it actually means |
 |------|-----------------|-----------------------|
 | 30-sec window | Whisper's limit | Hard input cap; chunk longer audio. |
-| SOT | Start-of-transcript | `<|startoftranscript|>` kicks off the decoder prompt. |
+| SOT | Start-of-transcript | `<\|startoftranscript\|>` kicks off the decoder prompt. |
 | Timestamps token | Temporal alignment | Every 0.02 s offset is a special token in the 51k vocab. |
 | Turbo | The fast variant | 4-decoder layers, 8× faster, <1% WER regression. |
 | WhisperX | The long-form wrapper | VAD + Whisper + wav2vec alignment + diarization. |

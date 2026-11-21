@@ -298,6 +298,10 @@ The best prompts are model-agnostic. They work on GPT-5, Claude Opus 4.7, Gemini
 5. Test with temperature=0 first to isolate prompt quality from sampling randomness
 6. Include 2-3 few-shot examples -- they transfer across models better than instructions alone
 
+```figure
+cot-decomposition
+```
+
 ## Build It
 
 ### Step 1: Prompt Template Library
@@ -513,15 +517,15 @@ MODEL_CONFIGS = {
     },
     "claude-3.5-sonnet": {
         "provider": "anthropic",
-        "model": "claude-3-5-sonnet-20241022",
+        "model": "claude-sonnet-5",
         "max_tokens": 2048,
-        "context_window": 200_000,
+        "context_window": 1_000_000,
     },
     "gemini-1.5-pro": {
         "provider": "google",
-        "model": "gemini-1.5-pro",
+        "model": "gemini-2.5-pro",
         "max_tokens": 2048,
-        "context_window": 2_000_000,
+        "context_window": 1_000_000,
     },
 }
 
@@ -933,26 +937,26 @@ The assistant prefill (`"{"`) forces Claude to continue producing JSON without a
 ### Google: Gemini with Safety Settings
 
 ```python
-# import google.generativeai as genai
+# from google import genai
+# from google.genai import types
 #
-# genai.configure(api_key="your-key")
+# client = genai.Client()
 #
-# model = genai.GenerativeModel(
-#     "gemini-1.5-pro",
-#     system_instruction="You are a technical analyst. Be precise and cite sources.",
-#     generation_config=genai.GenerationConfig(
+# response = client.models.generate_content(
+#     model="gemini-3.8-flash",
+#     contents="Compare PostgreSQL and MySQL for write-heavy workloads.",
+#     config=types.GenerateContentConfig(
+#         system_instruction="You are a technical analyst. Be precise and cite sources.",
 #         temperature=0.3,
 #         max_output_tokens=2048,
 #     ),
 # )
-#
-# response = model.generate_content("Compare PostgreSQL and MySQL for write-heavy workloads.")
 # print(response.text)
 ```
 
-Gemini processes system instructions as part of the model configuration, not as a message. The 2M token context window means you can include massive few-shot example sets that would not fit in GPT-4o or Claude.
+Gemini processes system instructions as part of the model configuration, not as a message. The 1M token context window means you can include massive few-shot example sets that would not fit in GPT-4o's 128K window.
 
-### LangChain: Provider-Agnostic Prompts
+### Provider-Agnostic Prompt Templates
 
 ```python
 # from langchain_core.prompts import ChatPromptTemplate
@@ -1019,6 +1023,6 @@ The Python code (`code/prompt_engineering.py`) is a standalone testing harness. 
 - [Wei et al., 2022 -- "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"](https://arxiv.org/abs/2201.11903) -- the foundational paper showing that "think step by step" improves LLM accuracy by 10-40% on reasoning tasks
 - [Zamfirescu-Pereira et al., 2023 -- "Why Johnny Can't Prompt"](https://arxiv.org/abs/2304.13529) -- research on how non-experts struggle with prompt engineering and what makes prompts effective
 - [Shin et al., 2023 -- "Prompt Engineering a Prompt Engineer"](https://arxiv.org/abs/2311.05661) -- using LLMs to automatically optimize prompts, the foundation of meta-prompting
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/) -- live blind comparison of LLMs where you can test the same prompt across models and vote on which response is better
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/) -- live blind comparison of LLMs where you can test the same prompt across models and vote on which response is better
 - [DAIR.AI Prompt Engineering Guide](https://www.promptingguide.ai/) -- exhaustive catalogue of prompt techniques with examples (zero-shot, few-shot, CoT, ReAct, self-consistency); the reference practitioners use for the broader "Prompt engineering" surface.
-- [Anthropic prompt library](https://docs.anthropic.com/en/prompt-library) -- curated, known-good prompts by use case; shows the structural patterns that ship in production.
+- [Claude prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) -- Anthropic's guidance on prompt structure, with worked examples. It replaced the earlier prompt library.

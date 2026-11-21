@@ -3,7 +3,7 @@
 > Contrast with supervisor: no central decider. Agents read a shared event bus, pick up work asynchronously, write results back. LangGraph explicitly supports "Swarm Architecture" for decentralized, dynamic environments. Matrix (arXiv:2511.21686) represents both control and data flow as serialized messages passed through distributed queues to eliminate the orchestrator bottleneck. The tradeoff is explicit: determinism and traceability for scalability. Swarm fits tasks with many independent sub-problems; it does not fit tasks that need a single coherent plan.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib, `threading`, `queue`)
+**Languages:** Python (stdlib, `threading`, `queue`), TypeScript
 **Prerequisites:** Phase 16 · 05 (Supervisor Pattern), Phase 16 · 04 (Primitive Model)
 **Time:** ~75 minutes
 
@@ -51,7 +51,7 @@ Matrix is the 2025 paper that takes swarm to its natural conclusion: both contro
 
 Contribution: a programming model where multi-agent coordination is "what message topic does this agent subscribe to?" rather than "which agent does the supervisor pick next?" This makes the system look like a pub/sub event mesh.
 
-### LangGraph's Swarm Architecture
+### Swarm in graph frameworks
 
 LangGraph 2025 docs explicitly describe "Swarm Architecture" as one of the multi-agent patterns: agents are nodes, but edges form a directed graph with cycles and any node can be activated from the pool. A worker picks from available work by condition, not by supervisor assignment.
 
@@ -68,6 +68,10 @@ Mitigations:
 
 Swarm pairs naturally with content-based routing (Lesson 22). Instead of a generic queue, have one queue per message type. Specialist workers subscribe only to their type. This is the basis for message-bus architectures that scale to thousands of agents.
 
+```figure
+sw-work-stealing
+```
+
 ## Build It
 
 `code/main.py` implements a swarm of 4 worker threads pulling from a shared `queue.Queue`. Tasks have variable durations (some fast, some slow). The demo contrasts:
@@ -82,6 +86,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output shows per-worker task counts (swarm distributes unevenly but optimally) and wall-clock times.

@@ -1,15 +1,15 @@
 # Browser Agents and Long-Horizon Web Tasks
 
-> ChatGPT agent (July 2025) merged Operator and deep research into one browser/terminal agent and set BrowseComp SOTA at 68.9%. OpenAI shut Operator down August 31, 2025 — consolidation at the product layer. Anthropic's Vercept acquisition moved Claude Sonnet on OSWorld from under 15% to 72.5%. WebArena-Verified (ServiceNow, ICLR 2026) fixed 11.3 percentage points of false-negative rate in the original WebArena and shipped the 258-task Hard subset. The numbers are real. So is the attack surface: OpenAI's head of preparedness stated publicly that indirect prompt injection into browser agents "is not a bug that can be fully patched." Documented 2025–2026 attacks: Tainted Memories (Atlas CSRF), HashJack (Cato Networks), and one-click hijacks in Perplexity Comet.
+> ChatGPT agent (July 2025) merged Operator and deep research into one browser/terminal agent and set BrowseComp SOTA at 68.9%. OpenAI shut Operator down August 31, 2025 — consolidation at the product layer. Anthropic's Vercept acquisition moved Claude Sonnet on OSWorld from under 15% to 72.5%. WebArena-Verified (ServiceNow, ICLR 2026) fixed the ~11.3% false-negative rate in the original WebArena and shipped the 258-task Hard subset. The numbers are real. So is the attack surface: OpenAI's head of preparedness stated publicly that indirect prompt injection into browser agents "is not a bug that can be fully patched." Documented 2025–2026 attacks: Tainted Memories (Atlas CSRF), HashJack (Cato Networks), and one-click hijacks in Perplexity Comet.
 
 **Type:** Learn
-**Languages:** Python (stdlib, indirect prompt-injection attack surface model)
+**Languages:** Python (stdlib, indirect prompt-injection attack surface model), TypeScript
 **Prerequisites:** Phase 15 · 10 (Permission modes), Phase 15 · 01 (Long-horizon agents)
 **Time:** ~45 minutes
 
 ## The Problem
 
-A browser agent is a long-horizon agent that reads untrusted content and takes consequential actions. Every page the agent visits is an input the user did not write. Every form on every page is a potential command channel. The 2025–2026 attack corpus shows this is not hypothetical: Tainted Memories lets an attacker bind malicious instructions to the agent's memory via a crafted page; HashJack hides commands in URL fragments the agent visits; Perplexity Comet hijacks hit in a single click.
+A browser agent is a long-horizon agent that reads untrusted content and takes consequential actions. Every page the agent visits is an input the user did not write. Every form on every page is a potential command channel. The 2025–2026 attack corpus shows this is not hypothetical: Tainted Memories lets an attacker bind malicious instructions to the agent's memory via a crafted page; HashJack hides commands in URL fragments the agent visits; Perplexity Comet hijacks take a single click.
 
 The defensive picture is uncomfortable. OpenAI's head of preparedness said the quiet part loud: indirect prompt injection "is not a bug that can be fully patched." This is because the attack lives in the agent's reading-vs-acting boundary, which is architecturally fuzzy — every token the model reads could, in principle, be read as an instruction.
 
@@ -61,6 +61,10 @@ This is the same reasoning pattern as Lob's theorem (Lesson 8): the agent cannot
 - **Content sanitizer.** Fetched HTML is stripped of known-bad patterns before being concatenated into the model context. (Reduces the easy attacks; does not stop sophisticated payloads.)
 - **HITL on consequential actions.** Propose-then-commit pattern (Lesson 15).
 - **Canary tokens on memory.** If a memory entry fires, the user sees it (Lesson 14).
+
+```figure
+injection-boundary
+```
 
 ## Use It
 

@@ -3,7 +3,7 @@
 > MASFT (Berkeley, 2025) catalogs 14 multi-agent failure modes in 3 categories. Microsoft's Taxonomy documents how existing AI failures amplify in agentic settings. Industry field data converges on five recurring modes: hallucinated actions, scope creep, cascading errors, context loss, tool misuse.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 05 (Self-Refine and CRITIC), Phase 14 · 24 (Observability)
 **Time:** ~60 minutes
 
@@ -73,6 +73,10 @@ Automated verification gates at every step of a reasoning chain, checking factua
 - **No baseline.** Drift detection needs a last-known-good; without it you cannot say "this is getting worse."
 - **Over-alerting.** Every failure produces a page. Cluster and rate-limit.
 
+```figure
+failure-cascade
+```
+
 ## Build It
 
 `code/main.py` implements a stdlib failure-mode tagger:
@@ -85,6 +89,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: per-trace labels + aggregate distribution, a cheap reproduction of what Phoenix's trace clustering surfaces.

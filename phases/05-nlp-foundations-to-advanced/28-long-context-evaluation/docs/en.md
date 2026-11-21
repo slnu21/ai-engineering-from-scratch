@@ -3,7 +3,7 @@
 > Gemini 3 Pro advertises 10M tokens of context. At 1M tokens, 8-needle MRCR drops to 26.3%. Advertised ≠ usable. Long-context evaluation tells you the actual capacity of the model you are shipping on.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 13 (Question Answering), Phase 5 · 23 (Chunking Strategies)
 **Time:** ~60 minutes
 
@@ -45,6 +45,10 @@ Long-context evaluation measures these axes. This lesson names the benchmarks, w
 - **Degradation curve.** Accuracy vs context length, plotted per task type.
 
 Two numbers for your spec sheet: retrieval-effective and reasoning-effective. Usually the reasoning-effective is 25-50% of the advertised window.
+
+```figure
+gx-niah-decay
+```
 
 ## Build It
 

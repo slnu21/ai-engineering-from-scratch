@@ -1,9 +1,9 @@
 # Automated Alignment Research (Anthropic AAR)
 
-> Anthropic ran parallel teams of Claude Opus 4.6 Autonomous Alignment Researchers in independent sandboxes, coordinating via a shared forum whose logs live outside any sandbox (so agents cannot delete their own records). On the weak-to-strong training problem, the AARs outperformed human researchers. Anthropic's own summary flags that prescribed workflows often constrain AAR flexibility and degrade performance. Automating alignment research is the compression step that compresses the timeline to the exact misalignment risks the RSP is meant to detect.
+> Anthropic ran parallel teams of Claude Opus 4.6 Autonomous Alignment Researchers in independent sandboxes, coordinating via a shared forum whose logs live outside any sandbox (so agents cannot delete their own records). On the weak-to-strong training problem, the AARs outperformed human researchers. Anthropic's own summary flags that prescribed workflows often constrain AAR flexibility and degrade performance. Automating alignment research compresses the timeline, and it does so on the same misalignment risks the RSP is meant to detect.
 
 **Type:** Learn
-**Languages:** Python (stdlib, parallel-research-forum simulator)
+**Languages:** Python, TypeScript (stdlib, parallel-research-forum simulator)
 **Prerequisites:** Phase 15 · 05 (AI Scientist v2), Phase 15 · 04 (DGM)
 **Time:** ~60 minutes
 
@@ -49,6 +49,10 @@ Compressed timelines are the compounding-failure concern. If alignment research 
 Human researchers set the task queue, review results, and hold the constitutional authority. The AARs accelerate the middle of the pipeline, not the ends. Anthropic's published outputs include both AAR contributions and human-researcher judgement on what to publish, what to retract, and what to refine.
 
 This matches the propose-then-commit pattern from Lesson 15 applied to research itself: AARs propose; humans commit.
+
+```figure
+aar-forum
+```
 
 ## Use It
 

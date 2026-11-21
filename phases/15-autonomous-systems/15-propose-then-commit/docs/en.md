@@ -3,7 +3,7 @@
 > The 2026 consensus on HITL is specific. It is not "the agent asks, the user clicks Approve." It is propose-then-commit: the proposed action is persisted to a durable store with an idempotency key; surfaced to a reviewer with intent, data lineage, permissions touched, blast radius, and a rollback plan; committed only after positive acknowledgement; verified after execution to confirm the side effect actually happened. LangGraph's `interrupt()` plus PostgreSQL checkpointing, Microsoft Agent Framework's `RequestInfoEvent`, and Cloudflare's `waitForApproval()` all implement the same shape. The canonical failure mode is the rubber-stamp approval: "Approve?" is clicked without review. The documented mitigation is challenge-and-response with an explicit checklist.
 
 **Type:** Learn
-**Languages:** Python (stdlib, propose-then-commit state machine with idempotency)
+**Languages:** Python (stdlib, propose-then-commit state machine with idempotency), TypeScript
 **Prerequisites:** Phase 15 · 12 (Durable execution), Phase 15 · 14 (Tripwires)
 **Time:** ~60 minutes
 
@@ -65,6 +65,10 @@ Not every action needs propose-then-commit. The 2026 guidance:
 ### EU AI Act Article 14
 
 Article 14 mandates effective human oversight for high-risk AI systems in the EU. "Effective" is not decorative. Regulatory language specifically excludes rubber-stamp patterns. Propose-then-commit with challenge-and-response is the shape that survives Article 14 scrutiny in the Microsoft Agent Governance Toolkit compliance docs.
+
+```figure
+mx-propose-then-commit
+```
 
 ## Use It
 

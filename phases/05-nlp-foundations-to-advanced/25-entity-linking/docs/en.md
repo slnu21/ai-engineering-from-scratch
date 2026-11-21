@@ -3,7 +3,7 @@
 > NER found "Paris." Entity linking decides: Paris, France? Paris Hilton? Paris, Texas? Paris (the Trojan prince)? Without linking, your knowledge graph stays ambiguous.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 06 (NER), Phase 5 · 24 (Coreference Resolution)
 **Time:** ~60 minutes
 
@@ -44,6 +44,10 @@ Both steps are learnable. Both are benchmarked. The combined pipeline has been s
 - **Disambiguation accuracy / F1.** Given correct candidates, how often the top-1 is right.
 
 Always report both. A system with 99% disambiguation on 80% candidate recall is an 80% pipeline.
+
+```figure
+gx-entity-linking
+```
 
 ## Build It
 
@@ -181,7 +185,7 @@ Refuse any EL pipeline without a mention-recall baseline (you cannot evaluate a 
 
 ## Further Reading
 
-- [Milne, Witten (2008). Learning to Link with Wikipedia](https://www.cs.waikato.ac.nz/~ihw/papers/08-DM-IHW-LearningToLinkWithWikipedia.pdf) — the foundational prior+context approach.
+- [Milne, Witten (2008). Learning to Link with Wikipedia](https://researchcommons.waikato.ac.nz/entities/publication/b9a0b520-abc5-47c5-a86a-da6c579893ab) — the foundational prior+context approach.
 - [Wu et al. (2020). Zero-shot Entity Linking with Dense Entity Retrieval (BLINK)](https://arxiv.org/abs/1911.03814) — the embedding-based workhorse.
 - [De Cao et al. (2021). Autoregressive Entity Retrieval (GENRE)](https://arxiv.org/abs/2010.00904) — generative EL with constrained decoding.
 - [Hoffart et al. (2011). Robust Disambiguation of Named Entities in Text (AIDA)](https://www.aclweb.org/anthology/D11-1072.pdf) — the benchmark paper.

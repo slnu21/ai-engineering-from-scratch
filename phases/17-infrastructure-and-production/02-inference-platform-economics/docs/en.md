@@ -3,8 +3,8 @@
 > The 2026 inference market is no longer GPU time rental. It bifurcates into custom silicon (Groq, Cerebras, SambaNova), GPU platforms (Baseten, Together, Fireworks, Modal), and API-first marketplaces (Replicate, DeepInfra). Fireworks raised price $1/hr per GPU on May 1, 2026, and $4B valuation on 10T+ tokens/day tells you the volume-driven model works. Baseten closed $300M Series E at $5B in January 2026. The competitive positioning rule is simple: Fireworks optimizes latency, Together optimizes catalog breadth, Baseten optimizes enterprise polish, Modal optimizes Python-native DX, Replicate optimizes multimodal reach, Anyscale optimizes distributed Python. This lesson gives you a matrix you can hand a founder.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy per-call economics comparator)
-**Prerequisites:** Phase 17 · 01 (Managed LLM Platforms), Phase 17 · 04 (vLLM Serving Internals)
+**Languages:** Python, TypeScript (stdlib, toy per-call economics comparator)
+**Prerequisites:** Phase 17 · 01 (Managed LLM Platforms), Phase 17 · 04 (Serving Engine Internals)
 **Time:** ~60 minutes
 
 ## Learning Objectives
@@ -89,6 +89,10 @@ Every platform above vLLM and SGLang claims a custom engine. FireAttention, RayT
 - Baseten valuation: $5B (Series E, Jan 2026, $300M round).
 - Modal valuation: $1.1B (Series B, 2025).
 - Per-minute beats per-token above ~30% sustained utilization.
+
+```figure
+cost-per-token
+```
 
 ## Use It
 

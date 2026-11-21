@@ -5,22 +5,126 @@ on:
     branches: [main]
     paths:
       - "phases/**"
+      - "certifications/**"
+      - "skills/**"
+      - ".claude/skills/**"
       - "scripts/audit_lessons.py"
+      - "scripts/run_lesson_tests.py"
+      - "scripts/link_check.py"
+      - "scripts/test_link_check.py"
+      - "scripts/audit_certifications.py"
+      - "scripts/check_mcpa_wire.py"
+      - "scripts/test_check_mcpa_wire.py"
+      - "scripts/backfill_certification_references.py"
+      - "scripts/debias_certification_questions.py"
+      - "scripts/debias_quizzes.py"
+      - "scripts/check_quiz_bias.py"
+      - "scripts/build_readme_i18n.py"
+      - "scripts/audit_readme_locales.py"
+      - "scripts/test_audit_readme_locales.py"
+      - "scripts/readme_translations.py"
       - "scripts/build_catalog.py"
       - "scripts/check_readme_counts.py"
-      - "catalog.json"
+      - "scripts/install_skills.py"
+      - "scripts/test_agent_negotiation.js"
+      - "scripts/test_agent_readiness.py"
+      - "scripts/test_seo_routes.js"
+      - "scripts/test_function_bundles.js"
+      - "scripts/test_skill_artifact_bundles.py"
+      - "scripts/test_translate_workflow.py"
+      - "scripts/translate_matrix.py"
+      - "scripts/translation_freshness.py"
+      - "scripts/translate_lessons.py"
+      - "scripts/translate_ui_strings.py"
+      - "scripts/test_translate_ui_strings.py"
+      - "site/test_learning_paths.js"
+      - "languages.json"
       - "README.md"
+      - "i18n/*/README.md"
+      - "i18n/readme-source.sha256"
+      - "docs/i18n.md"
+      - "CONTRIBUTING.md"
+      - "SPONSORS.md"
+      - "BACKERS.md"
+      - "assets/**"
+      - "ROADMAP.md"
+      - "glossary/**"
+      - "site/build.js"
+      - "site/**"
+      - "scripts/agent-machine/**"
+      - "scripts/decompiler-machine/**"
+      - "scripts/gpu-machine/**"
+      - "api/**"
+      - "lib/**"
+      - "scripts/test_agent_api.js"
+      - "scripts/test_agent_wire.js"
+      - "scripts/test_api_state.js"
+      - "scripts/serve-agent-site.js"
+      - "vercel.json"
       - ".github/workflows/curriculum.yml"
+      - ".github/workflows/translate.yml"
   pull_request:
     branches: [main]
     paths:
       - "phases/**"
+      - "certifications/**"
+      - "skills/**"
+      - ".claude/skills/**"
       - "scripts/audit_lessons.py"
+      - "scripts/run_lesson_tests.py"
+      - "scripts/link_check.py"
+      - "scripts/test_link_check.py"
+      - "scripts/audit_certifications.py"
+      - "scripts/check_mcpa_wire.py"
+      - "scripts/test_check_mcpa_wire.py"
+      - "scripts/backfill_certification_references.py"
+      - "scripts/debias_certification_questions.py"
+      - "scripts/debias_quizzes.py"
+      - "scripts/check_quiz_bias.py"
+      - "scripts/build_readme_i18n.py"
+      - "scripts/audit_readme_locales.py"
+      - "scripts/test_audit_readme_locales.py"
+      - "scripts/readme_translations.py"
       - "scripts/build_catalog.py"
       - "scripts/check_readme_counts.py"
-      - "catalog.json"
+      - "scripts/install_skills.py"
+      - "scripts/test_agent_negotiation.js"
+      - "scripts/test_agent_readiness.py"
+      - "scripts/test_seo_routes.js"
+      - "scripts/test_function_bundles.js"
+      - "scripts/test_skill_artifact_bundles.py"
+      - "scripts/test_translate_workflow.py"
+      - "scripts/translate_matrix.py"
+      - "scripts/translation_freshness.py"
+      - "scripts/translate_lessons.py"
+      - "scripts/translate_ui_strings.py"
+      - "scripts/test_translate_ui_strings.py"
+      - "site/test_learning_paths.js"
+      - "languages.json"
       - "README.md"
+      - "i18n/*/README.md"
+      - "i18n/readme-source.sha256"
+      - "docs/i18n.md"
+      - "CONTRIBUTING.md"
+      - "SPONSORS.md"
+      - "BACKERS.md"
+      - "assets/**"
+      - "ROADMAP.md"
+      - "glossary/**"
+      - "site/build.js"
+      - "site/**"
+      - "scripts/agent-machine/**"
+      - "scripts/decompiler-machine/**"
+      - "scripts/gpu-machine/**"
+      - "api/**"
+      - "lib/**"
+      - "scripts/test_agent_api.js"
+      - "scripts/test_agent_wire.js"
+      - "scripts/test_api_state.js"
+      - "scripts/serve-agent-site.js"
+      - "vercel.json"
       - ".github/workflows/curriculum.yml"
+      - ".github/workflows/translate.yml"
 
 permissions:
   contents: read
@@ -38,9 +142,112 @@ jobs:
           python-version: "3.12"
       - name: run scripts/audit_lessons.py
         run: python3 scripts/audit_lessons.py
+      - name: run scripts/audit_certifications.py
+        run: python3 scripts/audit_certifications.py
+      - name: certification remediation references are complete
+        run: python3 scripts/backfill_certification_references.py --check
+      - name: run certification lab tests
+        run: find certifications/*/lessons -path '*/code/tests/test_*.py' -print0 | xargs -0 -r -n1 python3
+      - name: run certification lab demos
+        run: find certifications/*/lessons -path '*/code/main.py' -print0 | xargs -0 -r -n1 python3
+      - name: MCPA wire-shape checker tests
+        run: python3 scripts/test_check_mcpa_wire.py
+      - name: external link-checker extraction tests
+        run: python3 -m unittest scripts.test_link_check
+      - name: MCPA lesson transcripts match the 2026-07-28 wire shape
+        run: python3 scripts/check_mcpa_wire.py
+      - name: skill artifact bundles install without losing companion files
+        run: python3 scripts/test_skill_artifact_bundles.py
+      - name: skill artifact bundles render as one lesson output
+        run: node --test site/test_build_artifacts.js
+      - name: returning visitors receive updated site assets
+        run: node --test site/test_asset_cache.js
+      - name: lesson math renders outside code and money stays text
+        run: node --test site/test_lesson_math.js
+      - name: command copying preserves keyboard focus
+        run: node --test site/test_project_copy.js
+      - name: homepage curiosity supports pointer and keyboard input
+        run: node --test site/test_intelligence_check.js
+      - name: the skills page stays in sync with the skills folder
+        run: node --test site/test_skills_page.js
+      - name: lesson screen serves screens locally, records clicks, and checks machine specs
+        run: node --test site/test_lesson_screen.js
+      - name: the star note asks engaged readers at most twice
+        run: node --test site/test_star_nudge.js
+      - name: assessment attempts survive reloads, expired timers, and a second tab
+        run: node --test site/test_certification_state.js
+      - name: the theme menu offers system, light, and dark on every page
+        run: node --test site/test_theme_menu.js site/test_overlays.js site/test_tts_navigation.js
+      - name: lesson walkthrough syncs steps and schedules revisits
+        run: node --test site/test_lesson_walkthrough.js
+      - name: lesson quizzes are placed once, before the footer, in every language
+        run: node --test site/test_quiz_placement.js
+      - name: agent machine simulation and page stay in sync
+        run: node --test site/test_agent_machine.js
+      - name: decompiler machine simulation and page stay in sync
+        run: node --test site/test_decompiler_machine.js
+      - name: GPU machine simulation and page stay in sync
+        run: node --test site/test_gpu_machine.js
+      - name: lesson highlights re-anchor and survive storage faults
+        run: node --test site/test_highlights.js site/test_highlights_store.js
+      - name: my highlights page filters, exports, and stays local
+        run: node --test site/test_highlights_page.js
+      - name: practice pages hide the solution and progress survives storage faults
+        run: node --test site/test_practice.js site/test_practice_store.js site/test_projects_state.js
+      - name: the interview bank follows its contract and its pages fold the answers
+        run: node scripts/interviews/validate.js && node --test scripts/interviews/test_validate.js site/test_interviews.js && node site/build-interviews.js --check
+      - name: code blocks render by kind and copy commands only
+        run: node --test site/test_code_render.js site/test_lesson_code.js
+      - name: llms.txt keeps one discovery section after the summary
+        run: node --test site/test_build_agents.js
+      - name: build the static site
+        run: node site/build.js && node site/build-projects.js --strict && node site/build-agents.js && node site/build-agents.js && test "$(grep -c '^## API and MCP$' site/llms.txt)" = 1
+      - name: deployment bundles stay small and preserve runtime assets
+        run: |
+          npm install --prefix "$RUNNER_TEMP/function-trace" --no-save --no-package-lock @vercel/nft@1.5.0
+          NODE_PATH="$RUNNER_TEMP/function-trace/node_modules" node --test scripts/test_function_bundles.js
+      - name: public API and MCP contracts
+        run: node --test scripts/test_agent_api.js scripts/test_agent_wire.js scripts/test_api_state.js
+      - name: dynamic lesson and certification routes preserve their public contracts
+        run: node --test scripts/test_seo_routes.js
+      - name: agent-facing discovery surfaces stay complete
+        run: python3 scripts/test_agent_readiness.py
+      - name: Markdown negotiation stays cache-safe
+        run: node --test scripts/test_agent_negotiation.js
+      - name: static preview routes stay navigable
+        run: node --test site/test_static_preview_routes.js
+      - name: clean page URLs and published discovery links stay consistent
+        run: node --test site/test_clean_urls.js
+      - name: synced writing keeps full articles and canonical metadata
+        run: node --test site/test_portfolio_sync.js site/test_writing_mirror.js site/test_portfolio_cache.js site/test_writing_seo.js
+      - name: learning paths links and routes stay valid
+        run: node --test site/test_learning_paths.js
+      - name: sponsor placement preserves approved artwork and ownership
+        run: node --test site/test_sponsors.js
+      - name: site chrome translations cover every CI language and match the pages
+        run: node --test site/test_ui_i18n.js
+      - name: quiz answer positions are de-biased
+        run: python3 scripts/debias_quizzes.py --check
+      - name: quiz answer lengths do not give away the answer
+        run: python3 scripts/check_quiz_bias.py --check
+      - name: certification answer positions are de-biased
+        run: python3 scripts/debias_certification_questions.py --check
+      - name: README translations are in sync with English
+        run: python3 scripts/build_readme_i18n.py --check
+      - name: README locale audit detects untranslated text and structural drift
+        run: python3 scripts/test_audit_readme_locales.py
+      - name: translation workflow publisher retries safely
+        run: python3 scripts/test_translate_workflow.py
+      - name: interface-string translator pins, reuses, and protects correctly
+        run: python3 scripts/test_translate_ui_strings.py
+      - name: learning skills mirror is in sync
+        # skills/ is the canonical, agent-neutral home (what `npx skills add`
+        # installs for every agent); .claude/skills/ is a mirror so cloning the
+        # repo auto-loads them in Claude Code. They must never diverge.
+        run: diff -r skills .claude/skills
 
-  catalog-drift:
-    name: catalog.json drift check
+  lesson-tests:
+    name: lesson tests (stdlib)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
@@ -49,20 +256,180 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: "3.12"
-      - name: rebuild catalog
-        run: python3 scripts/build_catalog.py --out /tmp/catalog.fresh.json
-      - name: diff against committed catalog.json
+      - name: run each lesson's own tests
+        # No scientific dependencies are installed here, so lessons that need
+        # one (torch, numpy, and the rest of the allowlist in the script) are
+        # skipped, not failed. The stdlib lessons run for real, which catches
+        # the class of breakage where a lesson cannot import its own module.
+        run: python3 scripts/run_lesson_tests.py
+
+  lesson-ports:
+    name: lesson ports compile and run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          persist-credentials: false
+      - name: single-file Rust lessons build without warnings and run
         run: |
-          if ! diff -u catalog.json /tmp/catalog.fresh.json; then
-            echo "::error::catalog.json is stale. Run 'python3 scripts/build_catalog.py' and commit the result."
-            exit 1
+          for file in $(git ls-files 'phases/*/code/*.rs'); do
+            [ -f "$(dirname "$file")/Cargo.toml" ] && continue
+            echo "::group::$file"
+            rustc --edition 2021 -D warnings -O -o "$RUNNER_TEMP/lesson" "$file"
+            timeout 120 "$RUNNER_TEMP/lesson" > /dev/null
+            echo "::endgroup::"
+          done
+      - uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9  # v2
+        with:
+          version: "1"
+      - name: Julia lesson ports run
+        run: |
+          for file in $(git grep -l 'Julia port of .*Julia standard library only' -- 'phases/*/code/*.jl'); do
+            echo "::group::$file"
+            (cd "$RUNNER_TEMP" && timeout 300 julia --startup-file=no "$GITHUB_WORKSPACE/$file" > /dev/null)
+            echo "::endgroup::"
+          done
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff  # v5
+        with:
+          go-version: "1.24"
+          cache: false
+      - name: Go lesson ports format, vet and run
+        run: |
+          for file in $(git grep -l 'Go port of .*Go standard library only' -- 'phases/*/code/*.go'); do
+            echo "::group::$file"
+            test -z "$(gofmt -l "$file")"
+            go vet "$file"
+            (cd "$RUNNER_TEMP" && timeout 120 go run "$GITHUB_WORKSPACE/$file" < /dev/null > /dev/null)
+            echo "::endgroup::"
+          done
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4
+        with:
+          node-version: "22"
+      - name: TypeScript lesson ports type-check and run
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ts" --no-save --no-package-lock tsx@4.19.2 typescript@5.6.3 @types/node@22.10.2
+          bin="$RUNNER_TEMP/ts/node_modules/.bin"
+          for file in $(git grep -l 'TypeScript port of .*Node standard library only' -- 'phases/*/code/*.ts'); do
+            echo "::group::$file"
+            "$bin/tsc" --strict --noEmit --target es2022 --module nodenext --moduleResolution nodenext --types node --typeRoots "$RUNNER_TEMP/ts/node_modules/@types" "$file"
+            case "$file" in
+              */code/lab.ts|*/code/experiments/*.ts) ;;
+              *) timeout 120 "$bin/tsx" "$file" > /dev/null ;;
+            esac
+            echo "::endgroup::"
+          done
+
+  readme-counts-sync:
+    name: README counts auto-fix (main only)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+        with:
+          python-version: "3.12"
+      - name: build ephemeral catalog
+        run: python3 scripts/build_catalog.py
+      - name: sync README counts
+        run: python3 scripts/check_readme_counts.py --fix
+      - name: sync README stats and validate complete translations
+        run: python3 scripts/build_readme_i18n.py
+      - name: commit + push if README changed
+        env:
+          BOT_COMMIT_PREFIX: "chore(readme): sync counts"
+        run: |
+          # porcelain (not git diff) so a newly generated, still-untracked
+          # i18n/<lang>/README.md for a freshly added language is also detected
+          if [ -z "$(git status --porcelain -- README.md i18n)" ]; then
+            echo "README.md + translations already in sync"
+            exit 0
           fi
-          echo "catalog.json matches filesystem"
+          last_msg=$(git log -1 --pretty=%s)
+          if [[ "$last_msg" == "$BOT_COMMIT_PREFIX"* ]]; then
+            echo "last commit was already a bot regen; not pushing to avoid loop"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md i18n
+          git commit -m "$BOT_COMMIT_PREFIX"
+          # Retry on non-fast-forward when another merge to main races us
+          branch="${GITHUB_REF#refs/heads/}"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${branch}"; then
+              echo "push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "push attempt $attempt rejected; rebasing onto origin/${branch}"
+            git fetch origin "${branch}"
+            if ! git rebase "origin/${branch}"; then
+              echo "rebase produced a conflict; aborting and giving up cleanly"
+              git rebase --abort || true
+              exit 0
+            fi
+            sleep "$((attempt * 2))"
+          done
+          echo "push failed after 5 attempts; main will self-heal on next push"
+          exit 0
+
+  site-rebuild:
+    name: site/data.js auto-rebuild (main only)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: readme-counts-sync
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: rebuild site/data.js
+        run: node site/build.js
+      - name: commit + push if site/data.js changed
+        env:
+          BOT_COMMIT_PREFIX: "chore(site): rebuild data.js"
+        run: |
+          if git diff --quiet site/data.js; then
+            echo "site/data.js already in sync"
+            exit 0
+          fi
+          last_msg=$(git log -1 --pretty=%s)
+          if [[ "$last_msg" == "$BOT_COMMIT_PREFIX"* ]]; then
+            echo "last commit was already a bot regen; not pushing to avoid loop"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data.js
+          git commit -m "$BOT_COMMIT_PREFIX"
+          branch="${GITHUB_REF#refs/heads/}"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${branch}"; then
+              echo "push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "push attempt $attempt rejected; rebasing onto origin/${branch}"
+            git fetch origin "${branch}"
+            if ! git rebase "origin/${branch}"; then
+              echo "rebase produced a conflict; aborting and giving up cleanly"
+              git rebase --abort || true
+              exit 0
+            fi
+            sleep "$((attempt * 2))"
+          done
+          echo "push failed after 5 attempts; main will self-heal on next push"
+          exit 0
 
   readme-counts-drift:
-    name: README.md counts drift check
+    name: README.md counts drift advisory
     runs-on: ubuntu-latest
-    needs: catalog-drift
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with:
@@ -70,5 +437,10 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: "3.12"
-      - name: check README counts against catalog.json
-        run: python3 scripts/check_readme_counts.py
+      - name: build ephemeral catalog
+        run: python3 scripts/build_catalog.py
+      - name: check README counts
+        run: |
+          if ! python3 scripts/check_readme_counts.py; then
+            echo "::warning::README.md counts drift detected. Main will self-heal on merge."
+          fi

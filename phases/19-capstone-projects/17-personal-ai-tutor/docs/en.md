@@ -3,7 +3,7 @@
 > Khanmigo (Khan Academy), Duolingo Max, Google LearnLM / Gemini for Education, Quizlet Q-Chat, and Synthesis Tutor all shipped adaptive multimodal tutoring at scale in 2026. The common shape is a Socratic policy (never just dump the answer), a learner model that updates after every interaction (Bayesian knowledge tracing style), voice + text + photo-math input, curriculum graph retrieval, spaced-repetition scheduling, and hard safety filters for age-appropriate content. The capstone is to ship a subject-specific tutor (K-12 algebra or intro Python), run a two-week efficacy study with 10 learners, and pass a content-safety audit.
 
 **Type:** Capstone
-**Languages:** Python (backend, learner model), TypeScript (web app), SQL (curriculum graph via Postgres + Neo4j)
+**Languages:** Python (backend, learner model), TypeScript (web app, learner model scaffold), SQL (curriculum graph via Postgres + Neo4j)
 **Prerequisites:** Phase 5 (NLP), Phase 6 (speech), Phase 11 (LLM engineering), Phase 12 (multimodal), Phase 14 (agents), Phase 17 (infrastructure), Phase 18 (safety)
 **Phases exercised:** P5 · P6 · P11 · P12 · P14 · P17 · P18
 **Time:** 30 hours
@@ -71,6 +71,10 @@ learner device
 - Photo math: dots.ocr or PaliGemma 2 for equation recognition
 - Safety: Llama Guard 4 + custom age-appropriate filter
 - Eval: Bloom-level question generation, pre/post test harness, efficacy study tooling
+
+```figure
+cf-tutor-loop
+```
 
 ## Build It
 
@@ -147,7 +151,7 @@ learner: "6"
 
 - [Khanmigo (Khan Academy)](https://www.khanmigo.ai) — reference consumer K-12 tutor
 - [Duolingo Max](https://blog.duolingo.com/duolingo-max/) — reference language-learning tutor
-- [Google LearnLM / Gemini for Education](https://blog.google/technology/google-deepmind/learnlm) — hosted reference model
+- [Google LearnLM / Gemini for Education](https://blog.google/products-and-platforms/products/education/google-learnlm-gemini-generative-ai/) — hosted reference model
 - [Quizlet Q-Chat](https://quizlet.com) — alternate reference
 - [Synthesis Tutor](https://www.synthesis.com) — startup reference
 - [FSRS algorithm](https://github.com/open-spaced-repetition/fsrs4anki) — spaced-repetition scheduler

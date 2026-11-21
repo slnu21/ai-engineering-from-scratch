@@ -3,8 +3,8 @@
 > Speculative decoding pairs a fast draft model with the target model. The draft proposes K tokens; the target verifies in a single forward; accepted tokens are free. In 2026, EAGLE-3 is the production-grade variant — it trains a draft head on the target model's hidden states rather than on raw tokens, pushing acceptance rate alpha into the 0.6-0.8 band on general chat. The right question is not "how fast is the draft" but "what is alpha on my traffic?" If alpha drops below ~0.55, speculative decoding is net negative at high concurrency because every rejected draft costs a second target forward pass. This lesson teaches you to measure alpha first and flip the flag second.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy acceptance-rate simulator)
-**Prerequisites:** Phase 17 · 04 (vLLM Serving Internals), Phase 10 · 18 (Multi-Token Prediction)
+**Languages:** Python, TypeScript (stdlib, toy acceptance-rate simulator)
+**Prerequisites:** Phase 17 · 04 (Serving Engine Internals), Phase 10 · 18 (Multi-Token Prediction)
 **Time:** ~60 minutes
 
 ## Learning Objectives
@@ -16,7 +16,7 @@
 
 ## The Problem
 
-Decode is memory-bound. On an H100 running Llama 3.3 70B FP8, each decoded token reads ~140 GB/s of weights and emits one token. The GPU compute is almost idle during decode — the bottleneck is HBM bandwidth, not matmul throughput.
+Decode is memory-bound. On an H100 running Llama 3.3 70B FP8, each decode step reads all ~70 GB of weights from HBM and emits one token per sequence. The GPU compute is almost idle during decode — the bottleneck is HBM bandwidth, not matmul throughput.
 
 Speculative decoding exploits the gap. Generate K candidate tokens with a cheap draft model, then ask the target model to verify all K in a single forward pass. Each verified token is effectively free (amortized into a batch-of-K forward the target would have had to do anyway).
 
@@ -34,7 +34,7 @@ Without spec decode, per-token cost is one target forward. With spec decode at d
 
 Rejected tokens do not disappear — they force a second target forward for the first rejected token. On a workload where alpha drops to 0.4, you pay draft overhead plus verification plus re-roll. At high concurrency (say 256 concurrent), the decode batch is already large enough that the memory-bandwidth gap between "target alone" and "target with verify" shrinks. Below alpha 0.55 on most 2026 hardware, spec decode is net negative.
 
-Alpha varies by workload. On ShareGPT-style general chat, EAGLE-3 trained on ShareGPT hits 0.6-0.8. On domain-specific traffic (code, medical, legal) the draft head trained on general data drops to 0.4-0.6. Training a domain-specific draft head recovers alpha — it is a light, quick training job compared to target finetuning.
+Alpha varies by workload. On ShareGPT-style general chat, EAGLE-3 trained on ShareGPT hits 0.6-0.8. On domain-specific traffic (code, medical, legal) the draft head trained on general data drops to 0.4-0.6. Training a domain-specific draft head recovers alpha — it is a light, quick training job compared to target finetuning. Phase 7 · 16 and Phase 10 · 15 quote higher values (0.85 and above). Those are per-token rates on chat benchmarks that match the draft's training data. Plan with the bands on this page and measure alpha on your own traffic.
 
 ### EAGLE generations at a glance
 
@@ -57,7 +57,7 @@ Mean ITL drops with spec decode. P99 can get worse if you do not tune. Rejected 
 
 ### Where EAGLE-3 is already deployed
 
-Google deployed speculative decoding in AI Overviews in 2025 (same quality, faster response). vLLM V1 ships `speculative_config` as the documented interface; N-gram GPU speculative decoding in V1 is the variant compatible with chunked prefill. SGLang supports EAGLE-3 as the recommended draft path for prefix-heavy workloads.
+Google deployed speculative decoding in AI Overviews in 2025 (same quality, faster response). vLLM V1 ships `speculative_config` as the documented interface, and its feature matrix marks speculative decoding as compatible with chunked prefill. SGLang supports EAGLE-3 as the recommended draft path for prefix-heavy workloads.
 
 ### Break-even math in one line
 
@@ -68,7 +68,11 @@ Expected speedup: `S(alpha, K) = (1 + K*alpha) / (1 + verify_overhead)`. Setting
 - Batch-1 offline generation where latency does not matter. Use plain target.
 - Very short outputs (under 50 tokens). Draft overhead and verify cost dominate.
 - Specialized domains without a domain-trained draft head. Alpha too low.
-- vLLM v0.18.0 plus draft-model spec decode plus `--enable-chunked-prefill`. This combination does not compile. The documented exception is N-gram GPU spec decode in V1.
+- Assuming every feature pair composes. Check the vLLM compatibility matrix for your version: v0.18.0 marks speculative decoding compatible with chunked prefill.
+
+```figure
+mx-speculative-tree
+```
 
 ## Use It
 
@@ -82,7 +86,7 @@ This lesson produces `outputs/skill-eagle3-rollout.md`. Given a target model, tr
 
 1. Run `code/main.py`. At K=5, what alpha do you need for a 2x speedup? For a 3x speedup? How sensitive is that to verify_overhead?
 2. Imagine production traffic splits 70% general chat, 30% code. General chat hits alpha 0.7 with EAGLE-3 trained on ShareGPT; code hits alpha 0.4. What is blended alpha and is spec decode net-positive?
-3. Read the vLLM `speculative_config` documentation. Name the three modes (draft model, EAGLE, N-gram) and which one is compatible with chunked prefill.
+3. Read the vLLM `speculative_config` documentation. Name the three modes (draft model, EAGLE, N-gram) and check which features each one composes with in your vLLM version.
 4. You see mean ITL drop 25% after enabling EAGLE-3 but P99 ITL went up 15%. Diagnose and propose a mitigation.
 5. Compute the memory cost of the EAGLE-3 draft head for Llama 3.3 70B. How does it compare to running Llama 3.2 1B as a classic draft?
 

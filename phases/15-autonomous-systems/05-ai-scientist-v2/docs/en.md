@@ -3,7 +3,7 @@
 > Sakana's AI Scientist v2 (Yamada et al., arXiv:2504.08066) runs the full research loop: hypothesis, code, experiments, figures, writeup, submission. It is the first system to have a generated paper pass peer review at an ICLR 2025 workshop. Independent evaluation (Beel et al.) found 42% of experiments failed from coding errors and literature review frequently mislabeled established concepts as novel. Sakana's own docs warn that the codebase executes LLM-written code and recommend Docker isolation. Both halves of that picture are the point.
 
 **Type:** Learn
-**Languages:** Python (stdlib, research-loop state-machine toy)
+**Languages:** Python, TypeScript (stdlib, research-loop state-machine toy)
 **Prerequisites:** Phase 15 · 03 (AlphaEvolve), Phase 15 · 04 (DGM)
 **Time:** ~60 minutes
 
@@ -62,6 +62,10 @@ AlphaEvolve's sandbox story is easier because its evaluator is tight. AI Scienti
 | AI Scientist v2 | research papers | text + code + figures | peer review (weak) | experiment failures, mislabeling, polish masking weakness |
 
 v2 has the weakest automatic evaluator of the three, the widest output surface, and the shortest path to public artifacts. The operational controls (sandbox, review, disclosure) are doing most of the safety work.
+
+```figure
+mx-research-loop
+```
 
 ## Use It
 

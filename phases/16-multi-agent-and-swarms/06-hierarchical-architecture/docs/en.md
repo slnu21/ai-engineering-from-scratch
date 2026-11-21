@@ -3,7 +3,7 @@
 > Hierarchical is supervisor nested. Manager agents over sub-managers over workers. CrewAI `Process.hierarchical` is the textbook version: a `manager_llm` dynamically delegates tasks and validates outputs. The LangGraph equivalent is `create_supervisor(create_supervisor(...))`. It is the natural pattern when the task is a real org chart. It is also the pattern most likely to collapse into managerial looping — manager agents assign work poorly, misinterpret sub-outputs, or fail to reach consensus. Sequential often beats it.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 16 · 05 (Supervisor Pattern)
 **Time:** ~60 minutes
 
@@ -50,9 +50,9 @@ Three failure modes the 2026 post-mortems keep finding:
 
 Sequential (linear pipeline) vs hierarchical: does your task actually have independent sub-teams, or is it one linear flow pretending to be a tree? If the latter, use sequential. If the former, use hierarchical but budget explicit reconciliation rules.
 
-### CrewAI's implementation
+### Role-framework implementation
 
-`Process.hierarchical` wires a manager LLM over specialist crews. The manager:
+CrewAI's `Process.hierarchical` wires a manager LLM over specialist crews. The manager:
 
 - receives the top-level task,
 - assigns subtasks to crews,
@@ -61,11 +61,15 @@ Sequential (linear pipeline) vs hierarchical: does your task actually have indep
 
 Documentation: https://docs.crewai.com/en/introduction (look for "Hierarchical Process" under Core Concepts).
 
-### LangGraph's implementation
+### Graph-framework implementation
 
 LangGraph uses nested `create_supervisor` calls. The inner supervisor has its own graph; the outer supervisor treats the inner graph as an opaque node. This is cleaner than CrewAI for debugging (you can step through each graph separately) but harder to express dynamic reshaping of the tree.
 
 Reference: https://reference.langchain.com/python/langgraph-supervisor.
+
+```figure
+swarm-hierarchy-token
+```
 
 ## Build It
 
@@ -81,6 +85,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output shows both paths with a clear side-by-side of "what was asked" vs "what was delivered."
