@@ -3,7 +3,7 @@
 > AI SRE uses LLMs grounded in infrastructure data (logs, runbooks, service topology) via RAG to automate investigation, documentation, and coordination phases. The 2026 architecture pattern is multi-agent orchestration — specialized agents (logs, metrics, runbooks) coordinated by a supervisor; AI proposes hypotheses and queries, humans approve judgment calls. Datadog Bits AI and Azure SRE Agent ship this as managed products. Runbooks are evolving: NeuBird Hawkeye uses adversarial evaluation (two models analyze the same incident; agreement = confidence, disagreement = uncertainty); operational memory persists across team changes. Auto-remediation stays cautious: AI suggests, humans approve. Fully autonomous action is narrow (restart pod, rollback specific deploy) with tight guardrails — anyone selling "set it and forget it" is overselling. Emerging frontier: pre-incident prediction. MIT research reports an LLM trained on historical logs + GPU temps + API error patterns predicted 89% of outages 10-15 min early. Projection: 95% of enterprise LLMs have automated failover by end-2026.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy multi-agent incident triage simulator)
+**Languages:** Python, TypeScript (stdlib, toy multi-agent incident triage simulator)
 **Prerequisites:** Phase 17 · 13 (Observability), Phase 17 · 24 (Chaos Engineering)
 **Time:** ~60 minutes
 
@@ -89,6 +89,10 @@ Runbooks evolve from Confluence pages to versioned markdown with structured sect
 - Multi-agent triage: supervisor + (logs, metrics, runbooks) + human.
 - Safe auto-remediation set: restart pod, revert deploy, scale within bounds.
 - Adversarial eval: two models independent; agreement = confidence.
+
+```figure
+i4-incident-agents
+```
 
 ## Use It
 

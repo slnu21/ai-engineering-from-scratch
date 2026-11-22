@@ -94,20 +94,20 @@ Given two vectors, how do you measure similarity? Three options:
 
 **Cosine similarity**: the cosine of the angle between two vectors. Ranges from -1 (opposite) to 1 (identical). Ignores magnitude, only cares about direction. This is the default for RAG.
 
-```
-cosine_sim(a, b) = dot(a, b) / (||a|| * ||b||)
+```math
+\mathop{\mathrm{cosine\_sim}}(a, b) = \frac{\mathop{\mathrm{dot}}(a, b)}{\lVert a \rVert \cdot \lVert b \rVert}
 ```
 
 **Dot product**: the raw inner product. Larger vectors get higher scores. Useful when magnitude carries information (longer documents might be more relevant).
 
-```
-dot(a, b) = sum(a_i * b_i)
+```math
+\mathop{\mathrm{dot}}(a, b) = \sum_i a_i b_i
 ```
 
 **L2 (Euclidean) distance**: straight-line distance in the vector space. Smaller distance = more similar. Sensitive to magnitude differences.
 
-```
-L2(a, b) = sqrt(sum((a_i - b_i)^2))
+```math
+\mathop{\mathrm{L2}}(a, b) = \sqrt{\sum_i (a_i - b_i)^2}
 ```
 
 Cosine similarity is the standard. It handles documents of different lengths gracefully because it normalizes by magnitude. When someone says "vector search," they almost always mean cosine similarity.
@@ -178,6 +178,10 @@ Most production RAG systems use these parameters:
 - **Embedding dimension**: 384-3072 depending on model
 - **Indexing throughput**: 100-1,000 documents per second with API embeddings
 - **Query latency**: 50-200ms for retrieval, 500-3000ms for generation
+
+```figure
+rag-chunking
+```
 
 ## Build It
 
@@ -358,7 +362,7 @@ client = anthropic.Anthropic()
 
 def generate(prompt):
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-5",
         max_tokens=1024,
         messages=[{"role": "user", "content": prompt}]
     )

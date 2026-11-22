@@ -3,7 +3,7 @@
 > 2024-2026 redefined voice AI. Moshi ships a single model that listens and speaks simultaneously at 200 ms latency. Hibiki does speech-to-speech translation chunk-by-chunk. Both abandon the ASR → LLM → TTS pipeline for a unified full-duplex architecture over Mimi codec tokens. This is the new reference design.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 13 (Neural Audio Codecs), Phase 6 · 11 (Real-Time Audio), Phase 7 · 05 (Full Transformer)
 **Time:** ~75 minutes
 
@@ -71,6 +71,10 @@ Sesame CSM (2025) uses a similar idea — a Llama-3 backbone with a Mimi codec h
 | Sesame CSM-1B | 200 ms TTFA | context-conditioned TTS | Apache-2.0 |
 | GPT-4o Realtime | ~300 ms | closed, OpenAI API | commercial |
 | Gemini 2.5 Live | ~350 ms | closed, Google API | commercial |
+
+```figure
+sp-fullduplex
+```
 
 ## Build It
 

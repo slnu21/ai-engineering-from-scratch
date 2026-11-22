@@ -28,6 +28,12 @@ This lesson is the skeleton. Next lessons specialize it — 06 for encoders, 07 
 5. **Layer normalization.** `LayerNorm` or `RMSNorm` (modern). Stabilizes the residual stream.
 6. **Cross-attention (decoder only).** Queries come from the decoder, keys and values from the encoder output.
 
+Watch a vector flow through one block: attention mixes across positions, the residual carries it forward, the FFN transforms it, and norm keeps the stream stable.
+
+```figure
+transformer-block
+```
+
 ### Encoder block (used by BERT, T5 encoder)
 
 ```
@@ -74,7 +80,7 @@ For one block with `d_model = d` and FFN expansion `r`:
 - FFN (SwiGLU): `3 · d · (r · d)` ≈ `3rd²`
 - Norms: negligible
 
-At `d = 4096, r = 2.6, layers = 32` (roughly Llama 3 8B), total: `32 · (4·4096² + 3·2.6·4096²) ≈ 32 · (16 + 32) M = ~1.5B parameters per layer × 32 ≈ 7B` (plus embeddings and head). Matches published counts.
+At `d = 4096, r = 2.6, layers = 32` (roughly Llama 3 8B), total: `32 · (4·4096² + 3·2.6·4096²) ≈ 32 · (67M + 131M) ≈ 32 · 198M ≈ 6.3B` parameters in the blocks, plus about 1B for the embeddings and output head (128K vocab × 4096, untied). That lands near the published 8B. The real model uses GQA (smaller K and V projections) and a wider FFN (`r = 3.5`), which moves parameters from attention to the FFN but keeps the total close to 8B.
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > Extractive systems tell you what the document said. Abstractive systems tell you what the author meant. Different tasks, different pitfalls.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 02 (BoW + TF-IDF), Phase 5 · 11 (Machine Translation)
 **Time:** ~75 minutes
 
@@ -26,6 +26,10 @@ This lesson builds both, with the failure mode each one owns.
 **Abstractive.** Fine-tune a transformer encoder-decoder (BART, T5, Pegasus) on document-summary pairs. At inference, the model reads the document and generates the summary token-by-token via cross-attention. Pegasus in particular uses a gap-sentence pretraining objective that makes it excellent at summarization without much fine-tuning.
 
 Evaluation with **ROUGE** (Recall-Oriented Understudy for Gisting Evaluation). ROUGE-1 and ROUGE-2 score unigram and bigram overlap. ROUGE-L scores longest common subsequence. Higher is better but 40 ROUGE-L is "good" and 50 is "exceptional." Every paper reports all three. Use the `rouge-score` package.
+
+```figure
+summarize-collapse
+```
 
 ## Build It
 

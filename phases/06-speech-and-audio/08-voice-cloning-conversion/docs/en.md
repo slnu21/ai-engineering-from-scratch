@@ -1,9 +1,9 @@
 # Voice Cloning & Voice Conversion
 
-> Voice cloning reads your text in someone else's voice. Voice conversion rewrites your voice into someone else's while preserving what you said. Both hang on the same primitive: separate speaker identity from content.
+> Voice cloning reads your text in someone else's voice. Voice conversion rewrites your voice into someone else's while preserving what you said. Both hang on the same decomposition: separate speaker identity from content.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 06 (Speaker Recognition), Phase 6 · 07 (TTS)
 **Time:** ~75 minutes
 
@@ -56,6 +56,10 @@ Used by: F5-TTS (2024), YourTTS (2022), XTTS v2 (2024), OpenVoice v2 (2024).
 | VoiceBox | Yes | 0.78 | 2.1% | 330M |
 
 SECS > 0.70 is generally indistinguishable from the target for most listeners.
+
+```figure
+sp-voice-factorize
+```
 
 ## Build It
 

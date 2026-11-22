@@ -100,8 +100,8 @@ For small datasets, a single linear layer is usually enough. Adding a hidden lay
 
 A smoother version of discriminative LR used in modern fine-tuning (BEiT, DINOv2, ViT-B fine-tunes). Instead of grouping layers into stages, give every layer a slightly smaller LR than the one above it:
 
-```
-lr_layer_k = base_lr * decay^(L - k)
+```math
+\text{lr\_layer}_k = \text{base\_lr} \cdot \text{decay}^{L - k}
 ```
 
 With decay = 0.75 and L = 12 transformer blocks, the first block trains at `0.75^11 ≈ 0.04x` the head's LR. Matters more for transformer fine-tunes than for CNNs, where stage-grouped LRs are usually enough.
@@ -114,6 +114,10 @@ Transfer-learning runs need two numbers you would not track on a scratch run:
 - **Fine-tuned accuracy** — the same model after end-to-end training. This is your ceiling.
 
 If fine-tuned is less than pretrained-only, you have a learning-rate or BN bug. Always print both.
+
+```figure
+transfer-learning
+```
 
 ## Build It
 

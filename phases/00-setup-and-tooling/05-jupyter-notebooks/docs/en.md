@@ -42,6 +42,10 @@ graph LR
 
 That "whatever order you click" part is both the superpower and the foot-gun.
 
+```figure
+s0-cell-order
+```
+
 ## Build It
 
 ### Step 1: Pick your interface
@@ -234,6 +238,14 @@ This lesson produces:
 1. Open JupyterLab, create a notebook, and use `%timeit` to compare list comprehension vs numpy for creating an array of 100,000 random numbers
 2. Create a notebook with both markdown and code cells that loads a CSV, displays a dataframe, and plots a chart. Then run Kernel > Restart & Run All to verify it works top to bottom
 3. Take the code from `code/notebook_tips.py`, paste it into a Colab notebook, and run it with a free GPU
+
+### Hints
+
+**Exercise 1.** Start JupyterLab with `jupyter lab`, then put each version in its own cell that begins with `%timeit`. Use the same 100,000 size in both cells so that the two times measure the same work.
+
+**Exercise 2.** Use `pd.read_csv` for the data, show the dataframe as the last line of a cell, and plot with `df.plot()` or matplotlib. After Kernel > Restart & Run All, every cell must show a number in its execution counter and no cell may show an error.
+
+**Exercise 3.** In Colab, select Runtime > Change runtime type > GPU before you paste the code. The run is correct when each function in `code/notebook_tips.py` prints its section, and `torch.cuda.is_available()` returns `True` in a cell.
 
 ## Key Terms
 

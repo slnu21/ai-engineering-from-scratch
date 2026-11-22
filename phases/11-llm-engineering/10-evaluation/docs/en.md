@@ -3,7 +3,7 @@
 > You would never deploy a web app without tests. You would never ship a database migration without a rollback plan. But right now, most teams ship LLM applications by reading 10 outputs and saying "yeah, looks good." That is not evaluation. That is hope. Hope is not an engineering practice. Every prompt change, every model swap, every temperature tweak changes your output distribution in ways you cannot predict by reading a handful of examples. Evaluation is the only thing standing between your application and silent degradation.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 11 Lesson 01 (Prompt Engineering), Lesson 09 (Function Calling)
 **Time:** ~45 minutes
 **Related:** Phase 5 · 27 (LLM Evaluation — RAGAS, DeepEval, G-Eval) covers the framework-level concepts (NLI-based faithfulness, judge calibration, the RAG four). Phase 5 · 28 (Long-Context Evaluation) covers NIAH / RULER / LongBench / MRCR for context-length regression. This lesson focuses on what is LLM-engineering-specific: CI/CD integration, cost-gated eval runs, regression dashboards.
@@ -217,6 +217,10 @@ You do not have to build everything from scratch. These tools provide eval infra
 | [Arize Phoenix](https://phoenix.arize.com) | Open-source observability + evals, tracing, span-level scoring | Free (OSS) |
 
 For this lesson, we build it from scratch so you understand every layer. In production, use one of these tools.
+
+```figure
+llm-judge-rubric
+```
 
 ## Build It
 
@@ -741,7 +745,7 @@ if __name__ == "__main__":
 #
 # providers:
 #   - openai:gpt-4o
-#   - anthropic:messages:claude-sonnet-4-20250514
+#   - anthropic:messages:claude-sonnet-5
 #
 # tests:
 #   - vars:
@@ -852,7 +856,7 @@ It also produces `outputs/skill-eval-patterns.md` -- a decision framework for ch
 - [DeepEval Documentation](https://docs.confident-ai.com) -- Python-native eval framework with 14+ metrics, Pytest integration, and hallucination detection
 - [Braintrust Eval Guide](https://www.braintrust.dev/docs) -- production eval platform with experiment tracking, scoring functions, and dataset management
 - [Ribeiro et al., 2020 -- "Beyond Accuracy: Behavioral Testing of NLP Models with CheckList"](https://arxiv.org/abs/2005.04118) -- systematic behavioral testing methodology (minimum functionality, invariance, directional expectations) applicable to LLM evaluation
-- [LMSYS Chatbot Arena](https://chat.lmsys.org) -- live human evaluation platform where users vote on model outputs, the largest pairwise comparison dataset for LLMs
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/) -- live human evaluation platform where users vote on model outputs, the largest pairwise comparison dataset for LLMs
 - [Es et al., "RAGAS: Automated Evaluation of Retrieval Augmented Generation" (EACL 2024 demo)](https://arxiv.org/abs/2309.15217) -- reference-free metrics for RAG (faithfulness, answer relevancy, context precision/recall); the eval pattern that scales to prod without labelers.
 - [Liu et al., "G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment" (EMNLP 2023)](https://arxiv.org/abs/2303.16634) -- chain-of-thought + form-filling as a judge protocol; the calibration and bias results every judge-builder needs.
 - [Hugging Face LLM Evaluation Guidebook](https://huggingface.co/spaces/OpenEvals/evaluation-guidebook) -- practical advice on data contamination, metric selection, and reproducibility from the team maintaining the Open LLM Leaderboard.

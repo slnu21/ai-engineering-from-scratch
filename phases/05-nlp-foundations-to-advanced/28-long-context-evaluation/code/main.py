@@ -56,7 +56,8 @@ def run_niah_grid(lengths, depths, seed=0):
     needle = "the magic word is pineapple"
     expected = "pineapple"
     capacity = 20000
-    print(f"  {'depth\\len':<12}  " + "  ".join(f"{n:>6}" for n in lengths))
+    corner = "depth\\len"
+    print(f"  {corner:<12}  " + "  ".join(f"{n:>6}" for n in lengths))
     for d in depths:
         row = []
         for n in lengths:
@@ -100,7 +101,7 @@ def main():
     print("notes:")
     print("  mock model has hard effective-capacity cutoff; real LLMs degrade gradually.")
     print("  real NIAH: sweep 5 depths × 6 lengths, produce heatmap per model.")
-    print("  always pair with one multi-hop / aggregation task (RULER) — single-needle is saturable.")
+    print("  always pair with one multi-hop / aggregation task (RULER): single-needle is saturable.")
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 > Audio is a 1-D signal at 16-48 kHz. A five-second clip is 80-240k samples. No transformer attends to that sequence directly. The solution for every production audio model in 2026 is the same: a neural codec (Encodec, SoundStream, DAC) compresses audio to discrete tokens at 50-75 Hz, and a transformer or diffusion model generates tokens.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 02 (Audio Features), Phase 6 · 04 (ASR), Phase 8 · 06 (DDPM)
 **Time:** ~45 minutes
 
@@ -55,6 +55,10 @@ The 2024-2026 trend: flow matching is winning for music (faster inference, clean
 | MusicGen 3.3B | Music | Token-AR on Encodec 32kHz | Real-time |
 | AudioCraft 2 | Music + SFX | Flow matching | ~5s for 5s clip |
 | Riffusion v2 | Music | Spectrogram diffusion | ~10s |
+
+```figure
+score-matching
+```
 
 ## Build It
 
@@ -141,4 +145,4 @@ If the product is "live voice chat" or "real-time music continuation", pick the 
 - [Wang et al. (2023). Neural Codec Language Models are Zero-Shot Text to Speech Synthesizers (VALL-E)](https://arxiv.org/abs/2301.02111) — VALL-E.
 - [Copet et al. (2023). Simple and Controllable Music Generation (MusicGen)](https://arxiv.org/abs/2306.05284) — MusicGen.
 - [Liu et al. (2023). AudioLDM 2: Learning Holistic Audio Generation with Self-supervised Pretraining](https://arxiv.org/abs/2308.05734) — AudioLDM 2.
-- [Stability AI (2024). Stable Audio 2.5](https://stability.ai/news/introducing-stable-audio-2-5) — 2025 text-to-music with flow matching.
+- [Stability AI (2025). Stable Audio 2.5](https://stability.ai/news-updates/stability-ai-introduces-stable-audio-25-the-first-audio-model-built-for-enterprise-sound-production-at-scale) — 2025 text-to-music with flow matching.

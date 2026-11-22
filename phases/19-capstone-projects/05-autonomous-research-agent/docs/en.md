@@ -3,7 +3,7 @@
 > Sakana's AI-Scientist-v2 published full papers. Agent Laboratory ran the experiments. Allen AI shared traces. The 2026 shape is plan-execute-verify tree search over experiments, budgeted cost, sandboxed code execution, a vision-feedback LaTeX writer, and an automated NeurIPS-style reviewer ensemble. The capstone is to build one, run it end to end within $30 per paper, and survive the sandbox-escape red team that Sakana documented.
 
 **Type:** Capstone
-**Languages:** Python (agent + sandbox), LaTeX (output)
+**Languages:** Python (agent + sandbox), TypeScript, LaTeX (output)
 **Prerequisites:** Phase 2 (ML), Phase 3 (deep learning), Phase 7 (transformers), Phase 10 (LLMs from scratch), Phase 14 (agents), Phase 15 (autonomous), Phase 16 (multi-agent), Phase 18 (safety)
 **Phases exercised:** P0 · P2 · P3 · P7 · P10 · P14 · P15 · P16 · P18
 **Time:** 40 hours
@@ -68,6 +68,10 @@ seed idea + domain
 - Reviewer: ensemble of 5 judges (Opus 4.7, GPT-5.4, Gemini 3 Pro, DeepSeek R1, Qwen3-Max) with weighted aggregation
 - Experiment framework: PyTorch 2.5 for the physical experiments, W&B for logging
 - Observability: Langfuse for agent traces, $30 hard budget per paper
+
+```figure
+ce-experiment-tree
+```
 
 ## Build It
 
@@ -152,4 +156,4 @@ $ ai-scientist run --seed "attention sparsity in sub-1B transformers" --budget 3
 - [LangGraph documentation](https://langchain-ai.github.io/langgraph/) — reference orchestration layer
 - [Semantic Scholar Graph API](https://api.semanticscholar.org/) — literature search
 - [E2B sandboxes](https://e2b.dev) — reference experiment isolation
-- [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2026/Reviewer-Guidelines) — the rubric the reviewer ensemble encodes
+- [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2026/ReviewerGuidelines) — the rubric the reviewer ensemble encodes

@@ -3,7 +3,7 @@
 > The agent does not get to mark its own work as done. A verification gate reads the scope contract, the feedback log, the rule report, and the diff, and answers a single question: is this task actually complete? If the gate says no, the task is not done, no matter what the chat says.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 33 (Rules), Phase 14 · 36 (Scope), Phase 14 · 37 (Feedback)
 **Time:** ~55 minutes
 
@@ -64,6 +64,10 @@ The gate emits one `verification_report.json` per task close-out, written under 
 
 Block-severity findings cannot be overridden by the agent. They can only be overridden by a human, with a recorded `override_reason` and an `overridden_by` user id. The override is a signed change, not an agent decision.
 
+```figure
+wb-gate-sequence
+```
+
 ## Build It
 
 `code/main.py` implements:
@@ -77,13 +81,14 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: three verdict reports, each saved next to the script.
 
 ## Production patterns in the wild
 
-Four patterns elevate the gate from "another lint job" to "the deciding edge."
+Five patterns elevate the gate from "another lint job" to "the deciding edge."
 
 **Defense-in-depth, not single gate.** Pre-commit hook → CI status check → pre-tool authz hook → pre-merge gate. Each layer is deterministic so a failure in one layer is caught by the next. microservices.io's March 2026 playbook is explicit: the pre-commit hook is non-bypassable because, unlike a model-side skill, it does not depend on the agent following instructions. The verification gate sits at the CI / pre-merge layer.
 
@@ -130,13 +135,12 @@ The gate is the deciding edge in the workbench flow. Every other surface is upst
 ## Further Reading
 
 - [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
-- [OpenAI Agents SDK guardrails](https://platform.openai.com/docs/guides/agents-sdk/guardrails)
+- [OpenAI Agents SDK guardrails](https://openai.github.io/openai-agents-python/guardrails/)
 - [microservices.io, GenAI dev platform: guardrails](https://microservices.io/post/architecture/2026/03/09/genai-development-platform-part-1-development-guardrails.html) — defense in depth between pre-commit and CI
 - [ICMD, The 2026 Playbook for Agentic AI Ops](https://icmd.app/article/the-2026-playbook-for-agentic-ai-ops-guardrails-costs-and-reliability-at-scale-1776661990431) — approval-gate ladder (draft → approval → auto under thresholds)
 - [Type-Checked Compliance: Deterministic Guardrails (arXiv 2604.01483)](https://arxiv.org/pdf/2604.01483) — Lean 4 as the upper bound of deterministic gating
 - [logi-cmd/agent-guardrails — merge gate spec](https://github.com/logi-cmd/agent-guardrails) — scope + mutation-testing gates
 - [Guardrails AI x MLflow](https://guardrailsai.com/blog/guardrails-mlflow) — deterministic validators as CI scorers
-- [Akira, Real-Time Guardrails for Agentic Systems](https://www.akira.ai/blog/real-time-guardrails-agentic-systems) — pre/post-tool gates
 - Phase 14 · 27 — prompt injection defenses (the gate's adversarial pair)
 - Phase 14 · 36 — the scope contract this gate enforces
 - Phase 14 · 37 — the feedback log this gate scores

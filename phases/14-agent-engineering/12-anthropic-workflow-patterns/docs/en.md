@@ -3,7 +3,7 @@
 > Schluntz and Zhang (Anthropic, Dec 2024) distinguish workflows (predefined paths) from agents (dynamic tool-use). Five workflow patterns cover most cases. Start with direct API calls. Add agents only when steps cannot be predicted.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 01 (Agent Loop)
 **Time:** ~60 minutes
 
@@ -59,6 +59,10 @@ Foundation for all five patterns: one LLM with three capabilities wired in — s
 
 "Effective context engineering for AI agents" (Anthropic 2025) formalizes the adjacent discipline: the 200k window is a budget, not a container. What to include, when to compact, when to let context grow. Covered in detail in Phase 14 lesson on context compression (Phase 14 earlier lesson 06 in this curriculum before the renumber).
 
+```figure
+workflow-chain
+```
+
 ## Build It
 
 `code/main.py` implements all five workflow patterns against a `ScriptedLLM`:
@@ -73,6 +77,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Each pattern prints its trace. Total lines of code per pattern is ~10-15; the cost of a framework is measured in thousands.

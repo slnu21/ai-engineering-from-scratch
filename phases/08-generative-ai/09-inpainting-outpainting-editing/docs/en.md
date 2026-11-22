@@ -3,7 +3,7 @@
 > Text-to-image makes new things. Inpainting fixes old ones. In production, 70% of billable image work is editing — swap a background, remove a logo, extend the canvas, regenerate a hand. Inpainting is where diffusion earns its keep.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 8 · 07 (Latent Diffusion), Phase 8 · 08 (ControlNet & LoRA)
 **Time:** ~75 minutes
 
@@ -54,6 +54,10 @@ Fine-tune a diffusion model on `(input_image, instruction, output_image)` triple
 ### RePaint (Lugmayr et al., 2022)
 
 Keep a standard unconditional diffusion model. At each reverse step, resample — jump back to a noisier state occasionally and regenerate. Avoids boundary artifacts. Used when you don't have a trained inpainting model.
+
+```figure
+inpaint-mask-reinject
+```
 
 ## Build It
 
@@ -129,7 +133,7 @@ Save `outputs/skill-editing-pipeline.md`. Skill takes an original image + edit d
 |------|-----------------|-----------------------|
 | Inpainting | "Fill the hole" | Regenerate inside a mask; keep outside pixels. |
 | Outpainting | "Extend the canvas" | Regenerate outside the canvas; keep inside. |
-| 9-channel U-Net | "Proper inpainting model" | U-Net with `noisy | encoded-source | mask` as input. |
+| 9-channel U-Net | "Proper inpainting model" | U-Net with `noisy \| encoded-source \| mask` as input. |
 | SDEdit | "Img2img with noise level" | Noise to time `t`, denoise with new prompt. |
 | InstructPix2Pix | "Text-only edits" | Fine-tuned diffusion on (image, instruction, output) triples. |
 | RePaint | "No retraining" | Re-noise periodically during reverse to reduce seams. |

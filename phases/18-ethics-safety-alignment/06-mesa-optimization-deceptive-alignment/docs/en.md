@@ -1,9 +1,9 @@
 # Mesa-Optimization and Deceptive Alignment
 
-> Hubinger et al. (arXiv:1906.01820, 2019) named the problem a decade before it was empirically demonstrated. When you train a learned optimizer to minimize a base objective, the learned optimizer's internal objective is not the base objective — it is whatever internal proxy the training found useful. A deceptively aligned mesa-optimizer is pseudo-aligned and has enough information about the training signal to appear more aligned than it is. Standard robustness training does not help: the system looks for distributional differences that signal deployment and defects there.
+> Hubinger et al. (arXiv:1906.01820, 2019) named the problem about five years before it was empirically demonstrated. When you train a learned optimizer to minimize a base objective, the learned optimizer's internal objective is not the base objective — it is whatever internal proxy the training found useful. A deceptively aligned mesa-optimizer is pseudo-aligned and has enough information about the training signal to appear more aligned than it is. Standard robustness training does not help: the system looks for distributional differences that signal deployment and defects there.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy mesa-optimizer simulator)
+**Languages:** Python (stdlib, toy mesa-optimizer simulator), TypeScript
 **Prerequisites:** Phase 18 · 01 (InstructGPT), Phase 09 (RL foundations)
 **Time:** ~75 minutes
 
@@ -76,6 +76,10 @@ Even perfect inner alignment to the base objective is not enough. Reward hacking
 ### Where this fits in Phase 18
 
 Lessons 6-11 form the "deception and oversight" arc. Lesson 6 gives the vocabulary. Lesson 7 (Sleeper Agents) demonstrates persistence. Lesson 8 (In-Context Scheming) demonstrates capability. Lesson 9 (Alignment Faking) demonstrates spontaneous emergence. Lesson 10 (AI Control) describes the defensive paradigm. Lesson 11 (Scalable Oversight) describes the positive agenda.
+
+```figure
+interpretability-probe
+```
 
 ## Use It
 

@@ -11,7 +11,7 @@
 
 - Explain why an LLM that can only generate text cannot, on its own, take actions against the real world.
 - Draw the four-step tool-call loop (describe → decide → execute → observe) and name who owns each step.
-- Write a tool description as three parts: name, JSON Schema input, and a deterministic executor function.
+- Write a tool definition as four parts: name, description, JSON Schema input, and a deterministic executor function.
 - Distinguish pure and side-effecting tools and state why the split matters for safety.
 
 ## The Problem
@@ -28,7 +28,7 @@ The four-step loop is the invariant underneath all of these. Everything else in 
 
 ### Step one: describe
 
-The host declares each tool with three fields.
+The host declares each tool to the model with three fields. The fourth part, the executor, stays on the host side and never reaches the model.
 
 - **Name.** A stable, machine-readable identifier. `get_weather`, not "weather thing".
 - **Description.** A one-paragraph natural-language brief. "Use when the user asks about current conditions for a specific city. Do not use for historical data."
@@ -102,13 +102,17 @@ Phase 14 · 12 covers error recovery and self-healing in depth; Phase 17 covers 
 
 Every remaining lesson is an elaboration of this four-step loop. Hold it in mind as the invariant.
 
+```figure
+tp-tool-loop
+```
+
 ## Use It
 
 `code/main.py` runs the four-step loop without an LLM. A fake "decider" function simulates the model by pattern-matching on the user message; the executor, schema validator, and observe-step harness are real. Run it to see the full request/response choreography with printable intermediate state, then replace the fake decider with any real provider in a later lesson.
 
 What to look at:
 
-- The tool registry holds three fields per tool: name, description, schema, and an executor reference.
+- The tool registry holds four fields per tool: name, description, schema, and an executor reference. Only the first three go to the model.
 - The validator is a minimal JSON Schema subset (types, required, enum, min/max) written in stdlib only. Phase 13 · 04 ships a fuller one.
 - The loop bounds iteration count at five. Production agents need exactly this kind of circuit breaker.
 
@@ -148,5 +152,5 @@ This lesson produces `outputs/skill-tool-interface-reviewer.md`. Given a draft t
 - [OpenAI — Function calling guide](https://platform.openai.com/docs/guides/function-calling) — canonical reference for OpenAI-style tool declarations and call shapes
 - [Anthropic — Tool use overview](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview) — Claude's `tool_use` / `tool_result` block format
 - [Google — Gemini function calling](https://ai.google.dev/gemini-api/docs/function-calling) — `functionDeclarations` and parallel-call semantics in Gemini
-- [Model Context Protocol — Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25) — the provider-agnostic generalization of the tool interface
+- [Model Context Protocol — Specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) — the current stateless, provider-agnostic generalization of the tool interface
 - [JSON Schema — 2020-12 release notes](https://json-schema.org/draft/2020-12/release-notes) — the schema dialect every modern tool API speaks

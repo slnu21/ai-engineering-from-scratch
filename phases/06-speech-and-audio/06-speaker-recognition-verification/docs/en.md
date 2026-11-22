@@ -3,7 +3,7 @@
 > ASR asks "what did they say?" Speaker recognition asks "who said it?" The math looks the same — embeddings plus cosine — but every production decision hinges on a single EER number.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 02 (Spectrograms & Mel), Phase 5 · 22 (Embedding Models)
 **Time:** ~45 minutes
 
@@ -48,6 +48,10 @@ The metric is **EER** — Equal Error Rate. Set your decision threshold so False
 ### Diarization
 
 "Who spoke when" in a multi-speaker clip. Pipeline: VAD → segment → embed each segment → cluster (agglomerative or spectral) → smooth boundaries. Modern stack: `pyannote.audio` 3.1, which bundles speaker segmentation + embedding + clustering behind one call. 2026 SOTA DER on AMI is ~15% (down from 23% in 2022).
+
+```figure
+sp-eer-crossover
+```
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > "t entails h" means a human reading t would conclude h is true. NLI is the task of predicting entailment / contradiction / neutral. Boring on the surface, load-bearing in production.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 05 (Sentiment Analysis), Phase 5 · 13 (Question Answering)
 **Time:** ~60 minutes
 
@@ -46,6 +46,10 @@ One task, three production uses. This is why every RAG evaluation framework ship
 
 **Zero-shot via NLI.** Given a document and candidate labels, turn each label into a hypothesis ("This text is about sports"). Compute entailment probability for each. Pick the max. This is the mechanism behind Hugging Face's `zero-shot-classification` pipeline.
 
+```figure
+nli-router
+```
+
 ## Build It
 
 ### Step 1: run a pretrained NLI model
@@ -67,7 +71,7 @@ print(result)
 #  {'label': 'contradiction', 'score': 0.01}]
 ```
 
-For production NLI, `facebook/bart-large-mnli` and `microsoft/deberta-v3-large-mnli` are the open defaults. DeBERTa-v3 tops leaderboards.
+For production NLI, `facebook/bart-large-mnli` and `MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli` are the open defaults. DeBERTa-v3 tops leaderboards.
 
 ### Step 2: zero-shot classification
 
@@ -114,7 +118,7 @@ The 2026 stack:
 
 | Use case | Model |
 |---------|-------|
-| General-purpose NLI | `microsoft/deberta-v3-large-mnli` |
+| General-purpose NLI | `MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli` |
 | Fast / edge | `cross-encoder/nli-deberta-v3-base` |
 | Zero-shot classification (lightweight) | `facebook/bart-large-mnli` |
 | Document-level NLI | `MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli` |

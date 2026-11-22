@@ -3,7 +3,7 @@
 > Containers make "works on my machine" a thing of the past.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Docker
 **Prerequisites:** Phase 0, Lessons 01 and 03
 **Time:** ~60 minutes
 
@@ -73,6 +73,10 @@ Inference Container
   Runs behind a load balancer in production.
 ```
 
+```figure
+s0-image-layers
+```
+
 ## Build It
 
 ### Step 1: Install Docker
@@ -135,7 +139,7 @@ nvidia/cuda:12.4.1-runtime-ubuntu22.04
   Use for: running pre-built code
   Size: ~1.5 GB
 
-pytorch/pytorch:2.3.1-cuda12.4-cudnn9-runtime
+pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
   PyTorch pre-installed on top of CUDA.
   Use for: skipping the PyTorch install step
   Size: ~6 GB
@@ -151,29 +155,37 @@ python:3.12-slim
 Here is the Dockerfile in `code/Dockerfile`. Walk through it:
 
 ```dockerfile
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+FROM --platform=linux/amd64 nvidia/cuda:12.4.1-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.12 \
-    python3.12-venv \
-    python3.12-dev \
-    python3-pip \
+    software-properties-common \
     git \
     curl \
     build-essential \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    python3.12 \
+    python3.12-venv \
+    python3.12-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
 
+RUN curl -sSL https://raw.githubusercontent.com/pypa/get-pip/3b73145063be545b649ad9ca83ea8da5fc915a4f/public/get-pip.py -o /tmp/get-pip.py \
+    && echo "a341e1a43e38001c551a1508a73ff23636a11970b61d901d9a1cad2a18f57055  /tmp/get-pip.py" | sha256sum -c - \
+    && python /tmp/get-pip.py \
+    && rm /tmp/get-pip.py \
+    && update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip3.12 1
+
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel
 
 RUN python -m pip install --no-cache-dir \
-    torch==2.3.1 \
-    torchvision==0.18.1 \
-    torchaudio==2.3.1 \
+    torch==2.6.0+cu124 \
+    torchvision==0.21.0+cu124 \
+    torchaudio==2.6.0+cu124 \
     --index-url https://download.pytorch.org/whl/cu124
 
 RUN python -m pip install --no-cache-dir \
@@ -203,6 +215,8 @@ docker build -t ai-dev -f phases/00-setup-and-tooling/07-docker-for-ai/code/Dock
 ```
 
 This takes a while the first time (downloading CUDA base image + PyTorch). Subsequent builds use cached layers.
+
+**macOS / Apple Silicon (M1/M2/M3/M4):** The `--platform=linux/amd64` on the `FROM` line is what makes this build succeed on a Mac. The CUDA base image also ships an arm64 variant and Docker Desktop picks it automatically on Apple Silicon, but PyTorch publishes its `cu124` wheels for x86_64 only, so the `pip install torch==2.6.0+cu124` layer fails with `No matching distribution found for torch==2.6.0+cu124`. Pinning the platform pulls the x86_64 image and runs it under emulation: the build is slower and the container has no GPU (there is no CUDA on a Mac either way). Drop `--gpus all` from the `docker run` commands below on a Mac. For GPU work on Apple Silicon, run the lessons natively with the MPS build from Lesson 01 and keep this image for x86_64 Linux hosts with an NVIDIA GPU.
 
 Run it:
 
@@ -360,6 +374,16 @@ Remove the `--gpus all` flag and the NVIDIA deploy block. The container still wo
 2. Start the docker-compose stack and verify Qdrant is accessible from the AI container at `http://qdrant:6333/collections`
 3. Add `flask` to the Dockerfile, rebuild, and run a simple API server on port 5000. Map the port with `-p 5000:5000`
 4. Measure the image size with `docker images`. Try switching the base image from `devel` to `runtime` and compare sizes
+
+### Hints
+
+**Exercise 1.** Build with the `docker build -t ai-dev -f phases/00-setup-and-tooling/07-docker-for-ai/code/Dockerfile .` command from the lesson, then run the import inside `docker run --rm ai-dev`. On a Mac, leave out `--gpus all`, as the lesson explains. The container must print a version that starts with `2.6.0`.
+
+**Exercise 2.** Run `docker compose up -d` in the `code/` folder, then open a shell in the `ai-dev` service with `docker compose exec ai-dev bash`. Inside it, run `curl http://qdrant:6333/collections`; a JSON reply means the service name resolves on the compose network.
+
+**Exercise 3.** Add a `RUN pip install flask` line to the Dockerfile, rebuild, and start the server with `host="0.0.0.0"`, because a server bound to localhost inside the container is not reachable from outside. Open `http://localhost:5000` on your machine to confirm that the port mapping works.
+
+**Exercise 4.** Run `docker images ai-dev` and write down the SIZE column. Change `devel` to `runtime` in the `FROM` line, build with a new tag, and compare the two sizes; the runtime image leaves out the compilers and headers.
 
 ## Key Terms
 

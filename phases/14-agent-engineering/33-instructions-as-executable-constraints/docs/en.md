@@ -3,7 +3,7 @@
 > Instructions written as prose are wishes. Instructions written as constraints are tests. The workbench turns each rule into something an agent can check at runtime and a reviewer can verify after the fact.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 32 (Minimal Workbench)
 **Time:** ~50 minutes
 
@@ -56,6 +56,34 @@ Rules live one per heading in a single markdown file. Renames are visible in dif
 
 Framework guardrails (OpenAI Agents SDK guardrails, LangGraph interrupts) enforce rules at the runtime level. The rule set in this lesson is the human-readable, reviewable contract that those guardrails implement. You need both: the runtime catches violations during a turn, the rule set proves the runtime is doing the right thing.
 
+### Progressive disclosure: a map, not an encyclopedia
+
+The reason `AGENTS.md` keeps growing is that every incident adds a rule and no incident removes one. A year in, the file is two thousand lines, and the agent reads the first screen, runs out of attention budget, and acts on a fraction of what it was told. A giant instruction file fails for the same reason a forty-page onboarding doc fails: the reader skims it once and never returns to the part that mattered.
+
+The fix is not a shorter file. It is a layered one. The root router stays small enough to read every session and holds nothing but pointers. The depth lives in topic files the agent loads only when the task touches them. Give the agent a map, not the whole encyclopedia, and let it walk to the page it needs.
+
+```
+AGENTS.md                  # router, < 50 lines: what this repo is, where to look, the 5 hard rules
+docs/
+  agent-rules.md           # the full rule set (this lesson)
+  architecture.md          # loaded when the task touches module boundaries
+  testing.md               # loaded when the task writes or runs tests
+  deploy.md                # loaded only for release work, gated behind an approval rule
+feature_list.json          # the backlog (Phase 14 · 36)
+```
+
+| Tier | Lives in | Read when | Size budget |
+|------|----------|-----------|-------------|
+| Router | `AGENTS.md` | Every session, always | Under ~50 lines |
+| Rules | `docs/agent-rules.md` | Every session, on startup | One screen per category |
+| Topic docs | `docs/<topic>.md` | Only when the task touches that topic | As deep as needed |
+
+Two tests keep the layering honest. The reachability test: an agent should reach any rule in at most two hops from the router, so the router must link every topic doc by path, not describe it in prose. The freshness test: the router is short enough that a reviewer rereads it on every PR, which is the only thing that stops it from silently growing back into the encyclopedia it replaced. A pointer that no longer resolves is a worse failure than a missing rule, so a broken link in the router is itself a startup-check violation.
+
+```figure
+wb-rule-checkoff
+```
+
 ## Build It
 
 `code/main.py` ships:
@@ -68,6 +96,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: parsed rule set, run trace, pass/fail per rule, and a `rule_report.json` saved next to the script.
@@ -76,11 +105,11 @@ Output: parsed rule set, run trace, pass/fail per rule, and a `rule_report.json`
 
 Three patterns separate a rule set that lasts a quarter from one that decays in a week.
 
-**Severity tagging at write time.** Every rule carries `severity`: `block`, `warn`, or `info`. The checker reports all three; the runtime only refuses on `block`. Most teams overstate severity early then quietly weaken it under deadline pressure; tagging at write time forces the calibration up front. Pair with the verification gate (Phase 14 · 38), which signs any override of a `block` rule into a `overrides.jsonl` audit log.
+**Severity tagging at write time.** Every rule carries `severity`: `block`, `warn`, or `info`. The checker reports all three; the runtime only refuses on `block`. Most teams overstate severity early then quietly weaken it under deadline pressure; tagging at write time forces the calibration up front. Pair with the verification gate (Phase 14 · 38), which signs any override of a `block` rule into an `overrides.jsonl` audit log.
 
 **Rule expiry as a forcing function.** Every rule carries an `expires_at` date (default 90 days from authoring). The checker emits a warning when an unexpired rule has had zero violations for 60 consecutive days; the next quarterly review either justifies keeping it, weakens it to `info`, or deletes it. Cloudflare's production AI Code Review data (April 2026, 131,246 review runs across 5,169 repos in 30 days) showed that rule sets with explicit expiry stayed under 30 rules per repo; sets without grew to 80+ with most never firing.
 
-**Markdown-as-source, JSON-as-cache.** `agent-rules.md` is the authored file; `agent-rules.lock.json` is a cache the checker reads in the hot path. The lock is regenerated by a pre-commit hook. Markdown diffs are reviewable; JSON parsing stays out of every turn. Same shape as `package.json` / `package-lock.json` and `Cargo.toml` / `Cargo.lock`.
+**Markdown-as-source, JSON-as-cache.** `agent-rules.md` is the authored file; `agent-rules.lock.json` is a cache the checker reads in the hot path. The lock is regenerated by a pre-commit hook. Markdown diffs are reviewable; Markdown parsing stays out of every turn, because the checker loads only the small prebuilt JSON. Same shape as `package.json` / `package-lock.json` and `Cargo.toml` / `Cargo.lock`.
 
 ## Use It
 
@@ -116,7 +145,7 @@ The rule set is portable across all three because it is just markdown plus funct
 
 ## Further Reading
 
-- [OpenAI Agents SDK guardrails](https://platform.openai.com/docs/guides/agents-sdk/guardrails)
+- [OpenAI Agents SDK guardrails](https://openai.github.io/openai-agents-python/guardrails/)
 - [LangGraph interrupts](https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/breakpoints/)
 - [Anthropic, Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
 - [Rick Hightower, Agent RuleZ: A Deterministic Policy Engine](https://medium.com/@richardhightower/agent-rulez-a-deterministic-policy-engine-for-ai-coding-agents-9489e0561edf) — block/warn/info severity in production

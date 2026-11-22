@@ -58,7 +58,7 @@ def mcp_tools_call_to_acl(req: dict) -> ACLMessage:
     return ACLMessage(
         performative="request",
         sender="host",
-        receiver=req["params"]["name"],
+        receiver="tool-server",
         content=req["params"].get("arguments", {}),
         language="JSON",
         ontology=req["params"]["name"],
@@ -217,7 +217,7 @@ def demo_round_trip() -> None:
 
 def demo_contract_net() -> None:
     print("\n" + "=" * 72)
-    print("Contract Net Protocol — manager broadcasts cfp, bidders propose")
+    print("Contract Net Protocol: manager broadcasts cfp, bidders propose")
     print("=" * 72)
 
     cn = ContractNet(manager="scheduler", bidders=["worker-a", "worker-b", "worker-c"])

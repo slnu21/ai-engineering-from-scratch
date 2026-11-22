@@ -3,7 +3,7 @@
 > Three benchmarks anchor agent evaluation in 2026. SWE-bench tests code patching. GAIA tests generalist tool use. AgentBench tests multi-environment reasoning. Know their composition, their contamination story, and what they do not measure.
 
 **Type:** Learn
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 06 (Tool Use)
 **Time:** ~60 minutes
 
@@ -76,6 +76,10 @@ GAIA is what you run to measure "generalist capability." Do not confuse with cod
 - **Contaminated claims.** Reporting SWE-bench without mentioning Verified or SWE-bench+ is misleading.
 - **Benchmark-as-development-target.** Optimizing for the benchmark diverges from production usefulness.
 
+```figure
+ae-swebench-gate
+```
+
 ## Build It
 
 `code/main.py` implements a toy SWE-bench-like harness:
@@ -89,6 +93,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The output shows resolution rate per task + per difficulty and makes the evaluator rules concrete.

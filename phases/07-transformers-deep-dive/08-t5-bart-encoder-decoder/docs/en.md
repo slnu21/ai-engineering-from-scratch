@@ -3,7 +3,7 @@
 > Encoders understand. Decoders generate. Put them back together and you get a model built for input → output tasks: translate, summarize, rewrite, transcribe.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, Rust
 **Prerequisites:** Phase 7 · 05 (Full Transformer), Phase 7 · 06 (BERT), Phase 7 · 07 (GPT)
 **Time:** ~45 minutes
 
@@ -90,6 +90,10 @@ Same autoregressive generation as GPT. Greedy / beam / top-p sampling apply. Bea
 | Structured extraction | Either | T5 is clean because "text → text" absorbs any output format |
 
 The trend since ~2022: decoder-only takes over tasks that encoder-decoder used to own because (a) instruction-tuned decoder-only LLMs generalize to anything via prompting, (b) one architecture scales easier than two, (c) RLHF assumes a decoder. Encoder-decoder holds on where input modality differs (speech, images) or where beam search quality matters.
+
+```figure
+encoder-decoder
+```
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > A kill switch is a boolean held outside the agent's edit surface — a Redis key, a feature flag, a signed config — that disables the agent entirely. A circuit breaker is finer-grained: it trips on a specific pattern (five identical tool calls in a row), pauses the offending path, and escalates to a human. A canary token inherits from classical deception: a fake credential or honeypot record an agent has no legitimate reason to touch, whose access triggers an alert. eBPF-based datapaths (e.g. Cilium) can rewrite a quarantined pod's egress to a forensic honeypot at the kernel layer; published Cilium benchmarks report sub-millisecond P99 datapath latency under load (your propagation budget depends on how a policy update reaches the node, not the datapath itself). Statistical detectors (EWMA, CUSUM) that adapt to a moving baseline will quietly accept drift — layer them with hard constitutional limits that do not bend.
 
 **Type:** Learn
-**Languages:** Python (stdlib, three-detector simulator: kill switch, circuit breaker, canary)
+**Languages:** Python (stdlib, three-detector simulator: kill switch, circuit breaker, canary), TypeScript
 **Prerequisites:** Phase 15 · 13 (Cost governors), Phase 15 · 10 (Permission modes)
 **Time:** ~60 minutes
 
@@ -80,6 +80,10 @@ Cilium's eBPF-based network policy can rewrite a quarantined pod's egress to a f
 - **Semantic attacks that compose from allowed primitives.** Every individual action passes every detector; the composition is the problem. This is the Auto Mode composite failure from Lesson 10.
 - **Attacks that include the detector as part of the payload.** If an agent reads a page that says "before you act, disable the canary" and the agent has the capability, the detector is compromised. Canary tokens should be in systems the agent cannot modify.
 
+```figure
+circuit-breaker
+```
+
 ## Use It
 
 `code/main.py` simulates a short agent trajectory through three detectors. A kill switch held in an external dict; a circuit breaker that trips on five identical tool calls; a canary file whose read triggers an alert. Feeds in a synthetic trajectory: legitimate actions, repetitive loop, canary probe, and a kill-switch-triggered scenario where the agent's actions are halted.
@@ -90,7 +94,7 @@ Cilium's eBPF-based network policy can rewrite a quarantined pod's egress to a f
 
 ## Exercises
 
-1. Run `code/main.py`. Confirm the circuit breaker fires on turn 5 (fifth identical call) and the canary fires on turn 9 (fake-key read).
+1. Run `code/main.py`. Confirm the circuit breaker fires on turn 7 (fifth identical call) and the canary fires on turn 9 (fake-key read).
 
 2. Add a statistical detector: EWMA z-score on tool-call rate. Feed in a trajectory that drifts slowly and show the detector never fires. Now add a hard limit (no more than 50 tool calls in 10 minutes) and show the hard limit fires on the same trajectory.
 

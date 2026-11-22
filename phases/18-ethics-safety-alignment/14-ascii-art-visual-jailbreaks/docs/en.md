@@ -3,7 +3,7 @@
 > Jiang, Xu, Niu, Xiang, Ramasubramanian, Li, Poovendran, "ArtPrompt: ASCII Art-based Jailbreak Attacks against Aligned LLMs" (ACL 2024, arXiv:2402.11753). Mask the safety-relevant tokens in a harmful request, replace them with ASCII-art renderings of the same letters, and send the cloaked prompt. GPT-3.5, GPT-4, Gemini, Claude, Llama-2 all fail to robustly recognize ASCII-art tokens. The attack bypasses PPL (perplexity filters), Paraphrase defenses, and Retokenization. Related: the ViTC benchmark measures recognition of non-semantic visual prompts; StructuralSleight generalizes to Uncommon Text-Encoded Structures (trees, graphs, nested JSON) as a family of encoding attacks.
 
 **Type:** Build
-**Languages:** Python (stdlib, ArtPrompt token-masking harness)
+**Languages:** Python, TypeScript (stdlib, ArtPrompt token-masking harness)
 **Prerequisites:** Phase 18 · 12 (PAIR), Phase 18 · 13 (MSJ)
 **Time:** ~60 minutes
 
@@ -53,6 +53,10 @@ Visual LLMs (GPT-5.2, Gemini 3 Pro, Claude Opus 4.5, Grok 4.1) extend the attack
 ### Where this fits in Phase 18
 
 Lessons 12-14 describe three orthogonal attack vectors: iterative refinement (PAIR), context length (MSJ), and encoding (ArtPrompt/StructuralSleight). Lesson 15 shifts from model-centric attacks to system-boundary attacks (indirect prompt injection). Lesson 16 describes the defensive tooling response.
+
+```figure
+al-ascii-cloak
+```
 
 ## Use It
 

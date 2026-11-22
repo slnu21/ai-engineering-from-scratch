@@ -32,6 +32,10 @@ graph TD
 
 The Hugging Face `datasets` library is the standard way to load data for AI work. It handles downloading, caching, format conversion, and streaming out of the box.
 
+```figure
+s0-data-pipeline
+```
+
 ## Build It
 
 ### Step 1: Install the datasets library
@@ -45,7 +49,7 @@ pip install datasets huggingface_hub
 ```python
 from datasets import load_dataset
 
-dataset = load_dataset("imdb")
+dataset = load_dataset("stanfordnlp/imdb")
 print(dataset)
 print(dataset["train"][0])
 ```
@@ -57,7 +61,7 @@ This downloads the IMDB movie review dataset. After the first download, it loads
 Some datasets are too large to fit on disk. Streaming loads them row by row without downloading the full thing.
 
 ```python
-dataset = load_dataset("wikimedia/wikipedia", "20220301.en", split="train", streaming=True)
+dataset = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
 
 for i, example in enumerate(dataset):
     print(example["title"])
@@ -72,7 +76,7 @@ Streaming gives you an `IterableDataset`. You process rows as they arrive. Memor
 The `datasets` library uses Apache Arrow under the hood. You can convert to other formats depending on what your pipeline needs.
 
 ```python
-dataset = load_dataset("imdb", split="train")
+dataset = load_dataset("stanfordnlp/imdb", split="train")
 
 dataset.to_csv("imdb_train.csv")
 dataset.to_json("imdb_train.json")
@@ -101,7 +105,7 @@ Every ML project needs three splits:
 Some datasets come pre-split. When they don't, split them yourself:
 
 ```python
-dataset = load_dataset("imdb", split="train")
+dataset = load_dataset("stanfordnlp/imdb", split="train")
 
 split = dataset.train_test_split(test_size=0.2, seed=42)
 train_val = split["train"].train_test_split(test_size=0.125, seed=42)
@@ -240,6 +244,16 @@ This lesson produces:
 2. Stream the `c4` dataset and count how many examples you can process in 10 seconds
 3. Convert a dataset to Parquet and compare the file size to CSV
 4. Create a 70/15/15 train/val/test split with a fixed seed and verify the sizes
+
+### Hints
+
+**Exercise 1.** Call `load_and_inspect("glue", "mrpc")` from `code/data_utils.py`, or `load_dataset("glue", "mrpc")` directly, and print `ds["train"][:5]`. Each example must have `sentence1`, `sentence2`, and `label` fields.
+
+**Exercise 2.** Load the dataset with `streaming=True`, as `stream_dataset` does, and read examples in a loop that stops when `time.time()` passes the start time plus 10 seconds. Print the count; run it twice, because the first run includes the connection start-up.
+
+**Exercise 3.** Save the same dataset with `to_csv` and `to_parquet`, as `convert_format` does, then compare the sizes with `ls -lh` or `os.path.getsize`. Load the Parquet file back with `load_from_parquet` and check that the row count did not change.
+
+**Exercise 4.** Use `train_test_split` twice with a fixed `seed`: first split off 30 percent, then split that 30 percent in half. The three lengths must add up to the original length, and a second run with the same seed must give the same first row in each split.
 
 ## Key Terms
 

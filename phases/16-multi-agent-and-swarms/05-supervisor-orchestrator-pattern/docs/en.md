@@ -3,7 +3,7 @@
 > One lead agent plans and delegates; specialized workers execute in parallel contexts and report back. This is the pattern behind Anthropic's Research system (Claude Opus 4 as lead, Sonnet 4 as subagents), measured at +90.2% over single-agent Opus 4 on internal research evals. Anthropic's engineering post reports that 80% of the variance on BrowseComp is explained by token usage alone — multi-agent wins largely because each subagent gets a fresh context window. This lesson builds the supervisor pattern from the primitives and covers the 2026 engineering lessons from production deployments.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib, `threading`)
+**Languages:** Python (stdlib, `threading`), TypeScript
 **Prerequisites:** Phase 16 · 04 (Primitive Model)
 **Time:** ~75 minutes
 
@@ -54,7 +54,7 @@ The Anthropic post lists several production lessons that are still 2026-relevant
 - **Rainbow deployments.** Agents are long-running and stateful. Traditional blue-green does not work. Anthropic uses rainbow: gradual rollout of new versions while old ones drain.
 - **Token usage dominates.** Multi-agent is ~15× the tokens of single-agent. Only run it when the task value justifies the cost.
 
-### The LangGraph turn
+### The graph-native turn
 
 LangGraph originally shipped a `langgraph-supervisor` library with a high-level `create_supervisor` helper. In 2025 LangChain moved the recommendation to implementing the supervisor pattern via tool-calling directly, because tool calls give more control over *what the supervisor sees* (context engineering). The library still works; the docs now recommend the tool-calling form.
 
@@ -70,6 +70,10 @@ LangGraph originally shipped a `langgraph-supervisor` library with a high-level 
 - **Simple queries.** Single-agent handles them faster and cheaper. Use the lead's "scale effort" check before spawning workers.
 - **Strict determinism.** Supervisor uses LLM-selected delegation. Static graphs are better when audit/replay matter more than adaptability.
 
+```figure
+supervisor-hierarchy
+```
+
 ## Build It
 
 `code/main.py` implements a supervisor of three parallel workers using `threading`. The lead decomposes a query into sub-questions, workers run concurrently on each sub-question, and the lead synthesizes. No real LLMs — the workers are scripted to simulate fetch-and-summarize.
@@ -84,6 +88,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output shows the plan, the parallel worker traces with start/end timestamps, and the final synthesis. You can see the wall-clock wins: three 0.3-second workers run in ~0.35 seconds, not 0.9.

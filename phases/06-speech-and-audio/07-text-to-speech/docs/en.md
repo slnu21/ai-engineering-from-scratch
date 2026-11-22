@@ -3,7 +3,7 @@
 > ASR inverts speech to text; TTS inverts text to speech. The 2026 stack is three parts: text → tokens, tokens → mel, mel → waveform. Each part has a default model that fits in a laptop.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 02 (Spectrograms & Mel), Phase 5 · 09 (Seq2Seq), Phase 7 · 05 (Full Transformer)
 **Time:** ~75 minutes
 
@@ -65,6 +65,10 @@ By 2026 most "TTS" models are end-to-end from text to waveform; the mel spectrog
 | VITS | 3.62 | 3.1% | 25M |
 | Kokoro v0.19 | 3.87 | 1.8% | 82M |
 | Parler-TTS Large | 3.76 | 2.8% | 2.3B |
+
+```figure
+sp-tts-stack
+```
 
 ## Build It
 

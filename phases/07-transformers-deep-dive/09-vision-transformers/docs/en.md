@@ -3,7 +3,7 @@
 > An image is a grid of patches. A sentence is a grid of tokens. The same transformer eats both.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, Rust
 **Prerequisites:** Phase 7 · 05 (Full Transformer), Phase 4 · 03 (CNNs), Phase 4 · 14 (Vision Transformers intro)
 **Time:** ~45 minutes
 
@@ -64,6 +64,10 @@ For classification: take `[CLS]` hidden state → linear → softmax. For DINOv2
 ### Why it took a while
 
 ViT needs *a lot* of data to match CNNs because it has none of the CNN inductive biases (translation invariance, locality). Without >100M labeled images or strong self-supervised pretraining, CNNs still win at matched compute. DeiT fixed this in 2021 with distillation tricks; DINOv2 fixed it permanently in 2023 with self-supervision.
+
+```figure
+n5-patch-stream
+```
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > You cannot ship what you cannot measure. This lesson names the 2026 metrics for every audio task: ASR (WER, CER, RTFx), TTS (MOS, UTMOS, SECS, WER-on-ASR-round-trip), audio-language (MMAU, LongAudioBench), music (FAD, CLAP), and speaker (EER). Plus the leaderboards where you compare.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 04, 06, 07, 09, 10; Phase 2 · 09 (Model Evaluation)
 **Time:** ~60 minutes
 
@@ -45,7 +45,7 @@ Every audio task has multiple metrics, each measuring a different axis. Using th
 
 **SECS (Speaker Encoder Cosine Similarity).** For voice cloning. ECAPA embedding cosine between reference and cloned output. &gt; 0.75 = recognizable clone.
 
-**WER-on-ASR-round-trip.** Run Whisper over TTS output, compute WER against the input text. Catches intelligibility regressions. 2026 SOTA: &lt; 2% CER.
+**WER-on-ASR-round-trip.** Run Whisper over TTS output, compute WER against the input text. Catches intelligibility regressions. 2026 SOTA: &lt; 2% WER on English test sets (Mandarin sets report CER instead).
 
 **TTFA (time-to-first-audio).** Wall-clock latency. Kokoro-82M: ~100 ms; F5-TTS: ~1 s.
 
@@ -79,7 +79,7 @@ Imbalanced: **macro F1** + **per-class recall**. Report per-class — aggregate 
 
 **CLAP Score.** Text-audio alignment score using CLAP embeddings. &gt; 0.3 = reasonable alignment.
 
-**Listening panel MOS.** Still the final word for consumer-grade music. Suno v5 ELO 1293 on TTS Arena (from paired human preferences).
+**Listening panel MOS.** Still the final word for consumer-grade music. Suno v5 scored ELO 1293 on Suno's own paired-preference benchmark. That is a vendor number; TTS Arena ranks speech, not music.
 
 ### Audio-language benchmarks
 
@@ -106,10 +106,14 @@ Imbalanced: **macro F1** + **per-class recall**. Report per-class — aggregate 
 | Open ASR Leaderboard (HF) | English + multilingual + long-form | `huggingface.co/spaces/hf-audio/open_asr_leaderboard` |
 | TTS Arena (HF) | English TTS | `huggingface.co/spaces/TTS-AGI/TTS-Arena` |
 | Artificial Analysis Speech | TTS + STT, ELO from paired votes | `artificialanalysis.ai/speech` |
-| MMAU-Pro | LALM reasoning | `mmaubenchmark.github.io` |
+| MMAU-Pro | LALM reasoning | `sonalkum.github.io/mmau-pro` |
 | SpeakerBench / VoxSRC | Speaker recognition | `voxsrc.github.io` |
 | MMAU music subset | Music LALM | (within MMAU) |
 | HEAR benchmark | Self-supervised audio | `hearbenchmark.com` |
+
+```figure
+sp-wer-align
+```
 
 ## Build It
 
@@ -220,5 +224,5 @@ Save as `outputs/skill-audio-evaluator.md`. Pick metrics, benchmarks, and report
 - [Fréchet Audio Distance (Kilgour et al. 2019)](https://arxiv.org/abs/1812.08466) — the music-gen standard.
 - [Open ASR Leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard) — 2026 live rankings.
 - [TTS Arena](https://huggingface.co/spaces/TTS-AGI/TTS-Arena) — human-vote TTS leaderboard.
-- [MMAU-Pro benchmark](https://mmaubenchmark.github.io/) — LALM reasoning leaderboard.
+- [MMAU-Pro benchmark](https://sonalkum.github.io/mmau-pro/) — LALM reasoning leaderboard.
 - [HEAR benchmark](https://hearbenchmark.com/) — audio SSL benchmarks.

@@ -3,7 +3,7 @@
 > You have built prompts, embeddings, RAG pipelines, function calling, caching layers, and guardrails. Separately. In isolation. Like practicing guitar scales without ever playing a song. This lesson is the song. You will wire every component from Lessons 01-12 into a single production-ready service. Not a toy. Not a demo. A system that handles real traffic, fails gracefully, streams tokens, tracks costs, and survives its first 10,000 users.
 
 **Type:** Build (Capstone)
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 11 Lessons 01-15
 **Time:** ~120 minutes
 **Related:** Phase 11 · 14 (MCP) for replacing bespoke tool schemas with a shared protocol; Phase 11 · 15 (Prompt Caching) for 50-90% cost reduction on stable prefixes. Both are expected in every serious 2026 production stack.
@@ -143,7 +143,7 @@ Give up: return fallback response
 **Fallback model chain.** When your primary model is unavailable, fall through a chain:
 
 ```
-claude-sonnet-4-20250514 -> gpt-4o -> gpt-4o-mini -> cached response -> "Service temporarily unavailable"
+claude-sonnet-5 -> gpt-4o -> gpt-4o-mini -> cached response -> "Service temporarily unavailable"
 ```
 
 Each step trades quality for availability. The user always gets something.
@@ -225,8 +225,8 @@ Before you ship, estimate your monthly cost. This spreadsheet decides if your bu
 | Queries per user per day | 5 | Product analytics |
 | Avg input tokens per query | 1,500 | Measured (system + context + user) |
 | Avg output tokens per query | 400 | Measured |
-| Input price per 1M tokens | $5.00 | OpenAI GPT-5 pricing |
-| Output price per 1M tokens | $15.00 | OpenAI GPT-5 pricing |
+| Input price per 1M tokens | $2.50 | OpenAI GPT-4o pricing |
+| Output price per 1M tokens | $10.00 | OpenAI GPT-4o pricing |
 | Cache hit rate | 35% | Measured from cache metrics |
 | Effective daily queries | 32,500 | 50,000 * (1 - 0.35) |
 
@@ -258,6 +258,10 @@ Without caching, the same traffic costs $11,625/month. A 35% cache hit rate save
 | 13 | Timeout on all external calls (30s default) | Reliability |
 | 14 | CORS configured for production domains only | Security |
 | 15 | Load test with 100 concurrent users passing | Performance |
+
+```figure
+l5-prod-app-paths
+```
 
 ## Build It
 
@@ -296,9 +300,23 @@ from typing import AsyncGenerator
 
 
 class ModelName(Enum):
-    CLAUDE_SONNET = "claude-sonnet-4-20250514"
+    CLAUDE_SONNET = "claude-sonnet-5"
     GPT_4O = "gpt-4o"
     GPT_4O_MINI = "gpt-4o-mini"
+
+
+def resolve_primary_model() -> ModelName:
+    override = (os.environ.get("LLM_MODEL") or "").strip()
+    if not override:
+        return ModelName.CLAUDE_SONNET
+    for model in ModelName:
+        if model.value == override:
+            return model
+    known = ", ".join(m.value for m in ModelName)
+    raise ValueError(f"LLM_MODEL={override!r} is not in the pricing registry (known: {known})")
+
+
+PRIMARY_MODEL = resolve_primary_model()
 
 
 MODEL_PRICING = {
@@ -307,7 +325,7 @@ MODEL_PRICING = {
     ModelName.GPT_4O_MINI: {"input": 0.15, "output": 0.60},
 }
 
-FALLBACK_CHAIN = [ModelName.CLAUDE_SONNET, ModelName.GPT_4O, ModelName.GPT_4O_MINI]
+FALLBACK_CHAIN = [PRIMARY_MODEL] + [m for m in ModelName if m is not PRIMARY_MODEL]
 
 
 @dataclass
@@ -1078,7 +1096,7 @@ Replace the simulated LLM calls with actual provider SDKs.
 #         yield delta
 #
 #
-# async def call_anthropic(prompt, model="claude-sonnet-4-20250514"):
+# async def call_anthropic(prompt, model="claude-sonnet-5"):
 #     client = anthropic.AsyncAnthropic()
 #     async with client.messages.stream(
 #         model=model,

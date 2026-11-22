@@ -3,7 +3,7 @@
 > Symbolic planning handles the cases where the plan is provably correct. Evolutionary code search handles the cases where the fitness function is machine-checkable. ChatHTN (2025) and AlphaEvolve (2025) show what each unlocks when paired with an LLM.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 02 (ReWOO and Plan-and-Execute)
 **Time:** ~75 minutes
 
@@ -87,6 +87,10 @@ The hard constraint: the fitness function must be machine-checkable. Evolutionar
 - **AlphaEvolve without a real evaluator.** "Ask the LLM if the code is better" is not a fitness function. The evaluator must be deterministic and fast.
 - **Over-engineering.** Most agent tasks don't need either. Reach for ReAct or ReWOO first.
 
+```figure
+htn-tree-expand
+```
+
 ## Build It
 
 `code/main.py` implements two toys:
@@ -98,6 +102,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The trace shows the HTN planner decomposing a compound task (with a mid-plan LLM fallback) and the evolutionary loop converging on a target expression.

@@ -55,8 +55,8 @@ flowchart LR
 
 Plain text conditioning learns `epsilon_theta(x_t, t, c)` for every prompt `c`. CFG trains the same network with `c` dropped 10% of the time (replaced by an empty embedding), giving a single model that predicts both the conditional and the unconditional noise. At inference:
 
-```
-eps = eps_uncond + w * (eps_cond - eps_uncond)
+```math
+\epsilon = \epsilon_{\text{uncond}} + w \cdot (\epsilon_{\text{cond}} - \epsilon_{\text{uncond}})
 ```
 
 `w` is the guidance scale. `w=0` is unconditional, `w=1` is plain conditional, `w>1` pushes the output toward being "more conditioned on the prompt" at the cost of diversity. SD default is `w=7.5`.
@@ -103,6 +103,10 @@ LoRA is how almost every community fine-tune is distributed. CivitAI and Hugging
 - **LCM / TCD / Turbo** — consistency models and distilled variants; 1-4 steps at the cost of some quality.
 
 Swapping schedulers is a one-line change in `diffusers` and sometimes fixes sample issues without any retraining.
+
+```figure
+cv3-latent-compression
+```
 
 ## Build It
 
@@ -189,13 +193,16 @@ White pixels in the mask are the area to regenerate. Black pixels are preserved.
 ### Step 5: LoRA loading
 
 ```python
-pipe.load_lora_weights("sayakpaul/sd-lora-ghibli")
+pipe.load_lora_weights(
+    "artificialguybr/studioghibli-redmond-1-5v-studio-ghibli-lora-for-liberteredmond-sd-1-5",
+    weight_name="StudioGhibliRedmond-15V-LiberteRedmond-StdGBRedmAF-StudioGhibli.safetensors",
+)
 pipe.fuse_lora(lora_scale=0.8)
 
-image = pipe(prompt="a village square in ghibli style").images[0]
+image = pipe(prompt="a village square, StdGBRedmAF, Studio Ghibli").images[0]
 ```
 
-`lora_scale` controls strength; 0.0 = no effect, 1.0 = full effect. `fuse_lora` bakes the adapter into the weights in place for speed, but prevents swapping. Call `pipe.unfuse_lora()` before loading a different adapter.
+The trigger phrase from the model card (`StdGBRedmAF, Studio Ghibli`) switches the style on. `lora_scale` controls strength; 0.0 = no effect, 1.0 = full effect. `fuse_lora` bakes the adapter into the weights in place for speed, but prevents swapping. Call `pipe.unfuse_lora()` before loading a different adapter.
 
 ### Step 6: LoRA training (sketch)
 
@@ -228,7 +235,7 @@ In production, the decisions you actually make:
 
 - **Model family**: SD 1.5 for open-source community fine-tunes, SDXL for higher fidelity, SD3 / FLUX for state of the art and strict licensing requirements.
 - **Scheduler**: DPM-Solver++ 2M Karras for 20-30 steps, LCM-LoRA when latency is under 1s.
-- **Precision**: `float16` on 4080/4090, `bfloat16` on A100 and newer, `int8` (via `bitsandbytes` or `compel`) when VRAM is tight.
+- **Precision**: `float16` on 4080/4090, `bfloat16` on A100 and newer, `int8` (via `bitsandbytes`) when VRAM is tight.
 - **Conditioning**: plain text works; for stronger control, add ControlNet (canny, depth, pose) on top of the base pipeline.
 
 For batch generation, `AUTO1111` / `ComfyUI` are the community tools; for production APIs, `diffusers` + `accelerate` or `optimum-nvidia` with TensorRT compilation.

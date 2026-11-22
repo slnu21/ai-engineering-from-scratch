@@ -3,7 +3,7 @@
 > Convolutions learn n-grams. Recurrences remember. Both are superseded by attention. Both still matter on constrained hardware.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 3 · 11 (PyTorch Intro), Phase 5 · 03 (Word Embeddings), Phase 4 · 02 (Convolutions from Scratch)
 **Time:** ~75 minutes
 
@@ -30,6 +30,10 @@ Why it works. A filter is a learnable n-gram. Max-pooling is position-invariant,
 Plain RNNs suffer vanishing gradients. The **LSTM** adds gates that decide what to forget, what to store, and what to output, stabilizing gradients through long sequences. The **GRU** simplifies LSTM to two gates; performs similarly with fewer parameters.
 
 **Bidirectional RNNs** run one RNN forward and another backward, concatenating hidden states. Every token's representation sees both left and right context. Essential for tagging tasks.
+
+```figure
+rnn-unroll
+```
 
 ## Build It
 

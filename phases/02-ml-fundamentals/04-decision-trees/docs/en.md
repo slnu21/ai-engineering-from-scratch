@@ -3,7 +3,7 @@
 > A decision tree is just a flowchart. But a forest of them is one of the most powerful tools in ML.
 
 **Type:** Build
-**Language:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 1 (Lessons 09 Information Theory, 06 Probability)
 **Time:** ~90 minutes
 
@@ -48,10 +48,8 @@ At each node, we have a set of samples. We want to split them so that the result
 
 **Gini impurity** measures the probability that a randomly chosen sample would be misclassified if it were labeled according to the class distribution at that node.
 
-```
-Gini(S) = 1 - sum(p_k^2)
-
-where p_k is the proportion of class k in set S.
+```math
+\text{Gini}(S) = 1 - \sum_k p_k^2 \quad \text{where } p_k \text{ is the proportion of class } k \text{ in set } S.
 ```
 
 For a pure node (all one class), Gini = 0. For a binary split with 50/50 classes, Gini = 0.5. Lower is better.
@@ -64,8 +62,8 @@ Gini = 1 - (0.6^2 + 0.4^2) = 1 - (0.36 + 0.16) = 0.48
 
 **Entropy** measures the information content (disorder) in a node. Covered in Phase 1 Lesson 09.
 
-```
-Entropy(S) = -sum(p_k * log2(p_k))
+```math
+\text{Entropy}(S) = -\sum_k p_k \log_2(p_k)
 ```
 
 For a pure node, entropy = 0. For a 50/50 binary split, entropy = 1.0. Lower is better.
@@ -81,20 +79,21 @@ Entropy = -(0.6 * log2(0.6) + 0.4 * log2(0.4))
 
 **Information gain** is the reduction in impurity (entropy or Gini) after a split.
 
-```
-IG(S, feature, threshold) = Impurity(S) - weighted_avg(Impurity(S_left), Impurity(S_right))
-
-where the weights are the proportions of samples in each child.
+```math
+\begin{aligned}
+& IG(S, \text{feature}, \text{threshold}) = \text{Impurity}(S) - \text{weighted\_avg}(\text{Impurity}(S_{\text{left}}), \text{Impurity}(S_{\text{right}})) \\[4pt]
+& \text{where the weights are the proportions of samples in each child.}
+\end{aligned}
 ```
 
 The greedy algorithm at each node: try every feature and every possible threshold. Pick the (feature, threshold) pair that maximizes information gain.
 
 ### How splitting works
 
-For a dataset with n features and m samples at the current node:
+For a dataset with $n$ features and $m$ samples at the current node:
 
-1. For each feature j (j = 1 to n):
-   - Sort the samples by feature j
+1. For each feature $j$ ($j = 1$ to $n$):
+   - Sort the samples by feature $j$
    - Try every midpoint between consecutive distinct values as a threshold
    - Compute the information gain for each threshold
 2. Select the feature and threshold with the highest information gain
@@ -105,11 +104,11 @@ This greedy approach does not guarantee the globally optimal tree. Finding the o
 
 ### Stopping conditions
 
-Without stopping conditions, the tree grows until every leaf is pure (one sample per leaf). This perfectly memorizes the training data and generalizes terribly.
+Without stopping conditions, the tree grows until every leaf is pure or no split can separate its samples, often down to a single sample per leaf. This perfectly memorizes the training data and generalizes terribly.
 
 **Pre-pruning** stops the tree before it fully grows:
 - Maximum depth: stop splitting when the tree reaches a set depth
-- Minimum samples per leaf: stop if a node has fewer than k samples
+- Minimum samples per leaf: stop if a node has fewer than $k$ samples
 - Minimum information gain: stop if the best split improves impurity by less than a threshold
 - Maximum leaf nodes: limit the total number of leaves
 
@@ -125,8 +124,8 @@ For regression, the leaf prediction is the mean of the target values in that lea
 
 **Variance reduction** replaces information gain:
 
-```
-VR(S, feature, threshold) = Var(S) - weighted_avg(Var(S_left), Var(S_right))
+```math
+VR(S, \text{feature}, \text{threshold}) = \text{Var}(S) - \text{weighted\_avg}(\text{Var}(S_{\text{left}}), \text{Var}(S_{\text{right}}))
 ```
 
 Pick the split that reduces variance the most. The tree partitions the input space into regions, and predicts a constant (the mean) in each region.
@@ -155,7 +154,7 @@ Two sources of randomness make the trees diverse:
 
 **Bagging (bootstrap aggregating):** Each tree is trained on a bootstrap sample, a random sample with replacement from the training data. About 63% of the original samples appear in each bootstrap (the rest are out-of-bag samples that can be used for validation).
 
-**Feature randomization:** At each split, only a random subset of features is considered. For classification, the default is sqrt(n_features). For regression, n_features/3. This prevents all trees from splitting on the same dominant feature.
+**Feature randomization:** At each split, only a random subset of features is considered. For classification, the default is $\sqrt{n_{\text{features}}}$. For regression, $n_{\text{features}}/3$. This prevents all trees from splitting on the same dominant feature.
 
 The key insight: averaging many decorrelated trees reduces variance without increasing bias. Each individual tree may be mediocre. The ensemble is strong.
 
@@ -165,9 +164,8 @@ Random forests naturally provide feature importance scores. The most common meth
 
 **Mean Decrease in Impurity (MDI):** For each feature, sum the total reduction in impurity across all trees and all nodes where that feature is used. Features that produce bigger impurity reductions at earlier splits are more important.
 
-```
-importance(feature_j) = sum over all nodes where feature_j is used:
-    (n_samples_at_node / n_total_samples) * impurity_decrease
+```math
+\text{importance}(\text{feature}_j) = \sum_{\text{nodes where feature}_j \text{ is used}} \frac{n_{\text{samples at node}}}{n_{\text{total samples}}} \cdot \text{impurity\_decrease}
 ```
 
 This is fast (computed during training) but biased toward high-cardinality features and features with many possible split points.
@@ -188,6 +186,10 @@ Trees and forests dominate neural networks on tabular data. Several reasons:
 | Hyperparameter sensitivity | Low | High |
 
 Neural networks win when the data has spatial or sequential structure (images, text, audio). For flat tables of features, trees are the default.
+
+```figure
+decision-tree-depth
+```
 
 ## Build It
 
@@ -241,9 +243,11 @@ def information_gain(parent_labels, left_labels, right_labels, criterion="gini")
 
 ### Step 3: Build the DecisionTree class
 
-Recursive splitting, prediction, and feature importance tracking.
+Recursive splitting, prediction, and feature importance tracking. `_build` is the heart of the tree: it stops when a node is pure or hits a pre-pruning limit, otherwise it takes the best split and recurses into both children.
 
 ```python
+import random
+
 class DecisionTree:
     def __init__(self, max_depth=None, min_samples_split=2,
                  min_samples_leaf=1, criterion="gini",
@@ -269,6 +273,100 @@ class DecisionTree:
 
     def predict(self, X):
         return [self._predict_one(x, self.tree) for x in X]
+
+    def _build(self, X, y, depth):
+        if len(set(y)) == 1:
+            return {"leaf": True, "value": y[0]}
+
+        if self.max_depth is not None and depth >= self.max_depth:
+            return self._make_leaf(y)
+
+        if len(y) < self.min_samples_split:
+            return self._make_leaf(y)
+
+        best_feature, best_threshold, best_gain = self._best_split(X, y)
+
+        if best_feature is None or best_gain <= 0:
+            return self._make_leaf(y)
+
+        left_X, left_y, right_X, right_y = self._split_data(
+            X, y, best_feature, best_threshold
+        )
+
+        if len(left_y) < self.min_samples_leaf or len(right_y) < self.min_samples_leaf:
+            return self._make_leaf(y)
+
+        weight = len(y) / self.n_samples
+        self.feature_importances_[best_feature] += weight * best_gain
+
+        return {
+            "leaf": False,
+            "feature": best_feature,
+            "threshold": best_threshold,
+            "left": self._build(left_X, left_y, depth + 1),
+            "right": self._build(right_X, right_y, depth + 1),
+        }
+
+    def _make_leaf(self, y):
+        counts = {}
+        for label in y:
+            counts[label] = counts.get(label, 0) + 1
+        return {"leaf": True, "value": max(counts, key=counts.get)}
+
+    def _best_split(self, X, y):
+        best_feature = None
+        best_threshold = None
+        best_gain = -1.0
+
+        if self.max_features == "sqrt":
+            k = max(1, int(math.sqrt(self.n_features)))
+            feature_indices = random.sample(range(self.n_features), k)
+        elif isinstance(self.max_features, int):
+            if self.max_features < 1:
+                raise ValueError("max_features must be at least 1 when given as an integer")
+            k = min(self.max_features, self.n_features)
+            feature_indices = random.sample(range(self.n_features), k)
+        else:
+            feature_indices = list(range(self.n_features))
+
+        for feature_idx in feature_indices:
+            values = sorted(set(X[i][feature_idx] for i in range(len(X))))
+            if len(values) <= 1:
+                continue
+
+            for i in range(len(values) - 1):
+                threshold = (values[i] + values[i + 1]) / 2.0
+                left_y = [y[j] for j in range(len(X)) if X[j][feature_idx] <= threshold]
+                right_y = [y[j] for j in range(len(X)) if X[j][feature_idx] > threshold]
+
+                if len(left_y) < self.min_samples_leaf or len(right_y) < self.min_samples_leaf:
+                    continue
+
+                gain = information_gain(y, left_y, right_y, self.criterion)
+                if gain > best_gain:
+                    best_gain = gain
+                    best_feature = feature_idx
+                    best_threshold = threshold
+
+        return best_feature, best_threshold, best_gain
+
+    def _split_data(self, X, y, feature, threshold):
+        left_X, left_y, right_X, right_y = [], [], [], []
+        for i in range(len(X)):
+            if X[i][feature] <= threshold:
+                left_X.append(X[i])
+                left_y.append(y[i])
+            else:
+                right_X.append(X[i])
+                right_y.append(y[i])
+        return left_X, left_y, right_X, right_y
+
+    def _predict_one(self, x, node):
+        if node["leaf"]:
+            return node["value"]
+        if x[node["feature"]] <= node["threshold"]:
+            return self._predict_one(x, node["left"])
+        return self._predict_one(x, node["right"])
 ```
 
 ### Step 4: Build the RandomForest class
@@ -314,7 +412,7 @@ class RandomForest:
         return predictions
 ```
 
-See `code/trees.py` for the complete implementation with all helper methods.
+See `code/trees.py` for the complete implementation with all helper methods. `code/trees.ts` is a TypeScript port with the same functions and demos. Run it with `npx tsx code/trees.ts`.
 
 ## Use It
 
@@ -344,7 +442,7 @@ This lesson produces `outputs/prompt-tree-interpreter.md` -- a prompt that inter
 
 1. Train a single decision tree on a 2D dataset with 3 classes. Manually trace the splits and draw the rectangular decision boundaries. Compare the boundaries at max_depth=2 vs max_depth=10.
 
-2. Implement variance reduction splitting for regression trees. Generate y = sin(x) + noise for 200 points and fit your regression tree. Plot the tree's piecewise-constant predictions against the true curve.
+2. Implement variance reduction splitting for regression trees. Generate $y = \sin(x) + \text{noise}$ for 200 points and fit your regression tree. Plot the tree's piecewise-constant predictions against the true curve.
 
 3. Build a random forest with 1, 5, 10, 50, and 200 trees. Plot training accuracy and test accuracy vs number of trees. Observe that test accuracy plateaus but does not decrease (forests resist overfitting).
 

@@ -1,9 +1,9 @@
 # The Workbench on a Real Repo
 
-> Eleven lessons of surfaces are worth nothing if they do not survive contact with a real codebase. This lesson runs the same task twice on a small sample app: prompt-only versus workbench-guided. The numbers do the arguing.
+> Eleven lessons of workbench surfaces are worth nothing if they do not survive contact with a real codebase. This lesson runs the same task twice on a small sample app: prompt-only versus workbench-guided. The numbers do the arguing.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phases 14 · 32 to 14 · 40
 **Time:** ~60 minutes
 
@@ -73,6 +73,10 @@ Workbench-guided:
 | `handoff_quality` | The next session pays for or benefits from this |
 | `reviewer_total` | Qualitative judgment on top of the gate |
 
+```figure
+wb-ab-runs
+```
+
 ## Build It
 
 `code/main.py` orchestrates the two pipelines against the same sample app fixture. Both pipelines are scripted (no LLM in the loop) so the measurement is reproducible. The script writes the comparison into `before-after-report.md` and `comparison.json`.
@@ -81,6 +85,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: a console table of outcomes per pipeline, the markdown report saved next to the script, and the JSON for whoever wants to chart it.

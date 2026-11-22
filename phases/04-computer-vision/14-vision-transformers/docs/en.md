@@ -97,7 +97,7 @@ Early transformers used post-LN (`x = LN(x + sublayer(x))`) and struggled to tra
 
 - 16x16 patches -> 196 tokens, standard.
 - 32x32 patches -> 49 tokens, faster but lower resolution.
-- 8x8 patches -> 784 tokens, finer but O(n^2) attention cost scales badly.
+- 8x8 patches -> 784 tokens, finer but $O(n^2)$ attention cost scales badly.
 
 Bigger patches = fewer tokens = faster but less spatial detail. SwinV2 uses 4x4 patches in hierarchical windows.
 
@@ -124,6 +124,10 @@ In 2026, ConvNeXt-V2 and Swin-V2 are both production-grade; the right choice dep
 Masked Autoencoder (He et al., 2022): mask 75% of patches at random, train the encoder to process only the visible 25%, train a small decoder to reconstruct the masked patches from the encoder's output. After pretraining, discard the decoder and fine-tune the encoder.
 
 MAE makes ViT trainable on ImageNet-1k alone, hits SOTA, and is the current default self-supervised recipe.
+
+```figure
+batchnorm-inference
+```
 
 ## Build It
 

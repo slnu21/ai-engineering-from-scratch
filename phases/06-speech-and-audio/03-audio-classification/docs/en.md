@@ -3,7 +3,7 @@
 > Everything from "dog barking vs siren" to "which language is this" is audio classification. The features are mels. The architecture moves each decade. The evaluation stays AUC, F1, and per-class recall.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 02 (Spectrograms & Mel), Phase 3 · 06 (CNNs), Phase 5 · 08 (CNNs & RNNs for Text)
 **Time:** ~75 minutes
 
@@ -48,6 +48,10 @@ ESC-50: 50 classes, 40 clips each — balanced, easy. UrbanSound8K: 10 classes, 
 | ESC-50 | 82% (AST) | 97.0% (BEATs-iter3) | BEATs paper (2024) |
 | AudioSet mAP | 0.485 (AST) | 0.548 (BEATs-iter3) | HEAR leaderboard 2026 |
 | Speech Commands v2 | 98% (CNN) | 99.0% (Audio-MAE) | HEAR v2 results |
+
+```figure
+mfcc-pipeline
+```
 
 ## Build It
 
@@ -115,7 +119,7 @@ class AudioCNN(nn.Module):
 
 3M parameters. Trains in ~10 min on ESC-50 with a single RTX 4090. 80%+ accuracy.
 
-### Step 5: the 2026 default — fine-tune BEATs
+### Step 5: fine-tune a pretrained audio transformer (AST shown)
 
 ```python
 from transformers import ASTFeatureExtractor, ASTForAudioClassification
@@ -131,7 +135,7 @@ inputs = ext(audio, sampling_rate=16000, return_tensors="pt")
 logits = model(**inputs).logits
 ```
 
-For BEATs, use `microsoft/BEATs-base` via the `beats` library; the transformers API is the same shape.
+The example fine-tunes AST from the Hub. BEATs, the 2026 default, is not on the Hugging Face Hub: download a checkpoint from the [BEATs release in microsoft/unilm](https://github.com/microsoft/unilm/tree/master/beats) and load it with that repo's `BEATs` and `BEATsConfig` classes; the fine-tuning loop keeps the same shape.
 
 ## Use It
 

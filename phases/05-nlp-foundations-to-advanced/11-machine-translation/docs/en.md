@@ -3,7 +3,7 @@
 > Translation is the task that paid for NLP research for thirty years and keeps paying now.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 10 (Attention Mechanism), Phase 5 · 04 (GloVe, FastText, Subword)
 **Time:** ~75 minutes
 
@@ -26,6 +26,10 @@ Three operational choices drive real-world MT quality.
 - **Tokenizer.** SentencePiece BPE trained on a mixed-language corpus. Shared vocabulary across languages is what enables zero-shot pairs in NLLB.
 - **Model size.** NLLB-200 distilled 600M fits on a laptop. NLLB-200 3.3B is the published production default. 54.5B is the research ceiling.
 - **Decoding.** Beam width 4-5 for general content. Length penalty to avoid too-short output. Constrained decoding when you need terminology consistency.
+
+```figure
+seq2seq-alignment
+```
 
 ## Build It
 

@@ -3,7 +3,7 @@
 > Recursive self-improvement (RSI) is no longer speculation. The ICLR 2026 RSI Workshop in Rio (April 23-27) framed it as an engineering problem with concrete tooling. Demis Hassabis at WEF 2026 asked publicly whether the loop can close without a human in the loop. Miles Brundage and Jared Kaplan have called RSI the "ultimate risk." Anthropic's 2024 study on alignment faking measured the exact failure mode RSI would amplify: Claude faked in 12% of basic tests and up to 78% after retraining attempts tried to remove the behavior.
 
 **Type:** Learn
-**Languages:** Python (stdlib, capability-vs-alignment race simulator)
+**Languages:** Python, TypeScript (stdlib, capability-vs-alignment race simulator)
 **Prerequisites:** Phase 15 · 04 (DGM), Phase 15 · 06 (AAR)
 **Time:** ~60 minutes
 
@@ -60,6 +60,10 @@ The workshop summary (openreview.net/pdf?id=OsPQ6zTQXV) identifies four current 
 2. Alignment-anchor preservation (can the core objective survive self-edits?).
 3. Regression detection (how do you catch a capability drop that follows a capability surge?).
 4. Inter-cycle audit (who checks the cycle before the next one starts?).
+
+```figure
+world-model-rollout
+```
 
 ## Use It
 

@@ -1,9 +1,9 @@
 # The Multi-Agent Primitive Model
 
-> Every multi-agent framework shipping in 2026 — AutoGen, LangGraph, CrewAI, OpenAI Agents SDK, Microsoft Agent Framework — is a point in a four-dimensional design space. Four primitives, nothing more: the agent, the handoff, the shared state, the orchestrator. This lesson builds them from zero, runs a toy system on all four, then maps every major framework onto the same axes so you can read any new release in one paragraph.
+> Four primitives, nothing more — the agent, the handoff, the shared state, the orchestrator — span a four-dimensional design space, and the major multi-agent frameworks shipping in 2026 (AutoGen, LangGraph, CrewAI, OpenAI Agents SDK, Microsoft Agent Framework) are points in it. This lesson builds them from zero, runs a toy system on all four, then maps every major framework onto the same axes so you can read any new release in one paragraph.
 
 **Type:** Learn
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 (Agent Engineering), Phase 16 · 01 (Why Multi-Agent)
 **Time:** ~60 minutes
 
@@ -111,6 +111,10 @@ Once the primitives are fixed, the remaining design decisions are:
 
 All implementable on top of the primitives. None of them are new primitives.
 
+```figure
+a5-primitive-radar
+```
+
 ## Build It
 
 `code/main.py` implements the four primitives in ~150 lines of stdlib Python. No real LLM — each agent is a scripted policy so the focus stays on the coordination structure.
@@ -128,6 +132,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Expected output: three orchestrator runs, one per pattern. Each prints the final message pool. The handoff-driven run reaches fewer agents if the researcher decides it is done early — that is the LLM-routing tradeoff in miniature.

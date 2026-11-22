@@ -3,7 +3,7 @@
 > The smallest useful workbench is three files: a root instructions router, a state file, and a task board. Everything else is layered on top. If a repo cannot carry these three, no model will save it.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 31 (Why Capable Models Still Fail)
 **Time:** ~45 minutes
 
@@ -60,6 +60,10 @@ A task on the board has an id, a goal, an owner (`builder`, `reviewer`, or `huma
 
 Later lessons add scope contracts, feedback runners, verification gates, reviewer checklists, and handoff packets. The three files here are what they all assume.
 
+```figure
+wb-three-files
+```
+
 ## Build It
 
 `code/main.py` writes the minimal workbench into an empty repo and demonstrates a single agent turn that:
@@ -73,6 +77,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The script creates `workdir/` next to itself, lays down the three files, runs one turn, and prints the diff. Re-run it to see how the second turn picks up where the first left off.
@@ -126,6 +131,6 @@ The minimum workbench survives contact with real monorepos when three patterns a
 - [Datadog Frontend, Steering AI Agents in Monorepos with AGENTS.md](https://dev.to/datadog-frontend-dev/steering-ai-agents-in-monorepos-with-agentsmd-13g0) — nested precedence in practice
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) — single-source generation across six tools
 - [The Prompt Shelf, AGENTS.md Best Practices: Structure, Scope, and Real Examples](https://thepromptshelf.dev/blog/agents-md-best-practices/) — section ordering that survives review
-- [Anthropic, Claude Code subagents and session store](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/sub-agents)
+- [Anthropic, Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
 - Phase 14 · 31 — the failure modes this minimum absorbs
 - Phase 14 · 34 — the durable state schema this lesson previews

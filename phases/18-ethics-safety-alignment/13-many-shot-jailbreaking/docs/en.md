@@ -3,7 +3,7 @@
 > Anil, Durmus, Panickssery, Sharma, et al. (Anthropic, NeurIPS 2024). Many-shot jailbreaking (MSJ) exploits long context windows: stuff hundreds of faux user-assistant turns where the assistant complies with harmful requests, then append the target query. Attack success follows a power law in the number of shots; fails at 5 shots, reliable at 256 shots on violent and deceitful content. The phenomenon follows the same power law as benign in-context learning — the attack and ICL share an underlying mechanism, which is why defenses that preserve ICL are hard to design. Classifier-based prompt modification reduces attack success from 61% to 2% on tested settings.
 
 **Type:** Learn
-**Languages:** Python (stdlib, in-context learning vs MSJ simulator)
+**Languages:** Python, TypeScript (stdlib, in-context learning vs MSJ simulator)
 **Prerequisites:** Phase 18 · 12 (PAIR), Phase 10 · 04 (in-context learning)
 **Time:** ~45 minutes
 
@@ -65,6 +65,10 @@ Every frontier lab now runs MSJ evaluations at 256+ shots against production mod
 ### Where this fits in Phase 18
 
 Lesson 12 is the in-context iterative attack. Lesson 13 is the long-context length-exploit. Lesson 14 is the encoding attack. Lesson 15 is the injection attack at the system boundary. Together they define the 2026 jailbreak attack surface.
+
+```figure
+jailbreak-defense
+```
 
 ## Use It
 

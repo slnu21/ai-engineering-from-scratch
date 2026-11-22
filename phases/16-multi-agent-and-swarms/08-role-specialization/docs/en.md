@@ -3,7 +3,7 @@
 > The most common multi-agent decomposition in 2026: one agent plans, one executes, one critiques or verifies. MetaGPT (arXiv:2308.00352) formalizes this as SOPs encoded into role prompts — Product Manager, Architect, Project Manager, Engineer, QA Engineer — following `Code = SOP(Team)`. ChatDev (arXiv:2307.07924) chains designer, programmer, reviewer, tester through a "chat chain" with "communicative dehallucination" (agents explicitly request missing details). The verifier is load-bearing: Cemri et al. (MAST, arXiv:2503.13657) show every multi-agent failure can be traced to missing or broken verification. PwC reported 7× accuracy gain (10% → 70%) from structured validation loops in CrewAI.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 16 · 04 (Primitive Model), Phase 16 · 05 (Supervisor)
 **Time:** ~60 minutes
 
@@ -69,6 +69,10 @@ Every role in your system is an LLM and every role's output is "looks good to me
 - **AutoGen** — role-specific ConversableAgents with one-word names in a GroupChat.
 - **OpenAI Agents SDK** — handoff tools between role-specialized Agents.
 
+```figure
+swarm-roles
+```
+
 ## Build It
 
 `code/main.py` implements a 4-role pipeline building a simple Python function:
@@ -84,6 +88,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 ## Use It

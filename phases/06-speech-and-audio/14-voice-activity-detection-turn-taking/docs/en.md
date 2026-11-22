@@ -3,7 +3,7 @@
 > Every voice agent lives or dies on two decisions: is the user speaking now, and are they done? VAD answers the first. Turn-detection (VAD + silence-hangover + semantic endpoint model) answers the second. Get either wrong and your assistant either cuts users off or never shuts up.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 6 · 11 (Real-Time Audio), Phase 6 · 12 (Voice Assistant)
 **Time:** ~45 minutes
 
@@ -52,6 +52,10 @@ End-to-end: 125 ms VAD + flush STT = conversational latency.
 | pyannote segmentation | 95% | ~10 ms | MIT-ish |
 
 Silero is the right default. Cobra is the compliance / accuracy upgrade. Energy-only VAD has no place in 2026 production.
+
+```figure
+sp-vad-cascade
+```
 
 ## Build It
 
@@ -166,7 +170,7 @@ Save as `outputs/skill-vad-tuner.md`. Pick VAD model, threshold, hangover, pre-r
 ## Further Reading
 
 - [Silero VAD](https://github.com/snakers4/silero-vad) — the reference open VAD.
-- [Picovoice Cobra VAD](https://picovoice.ai/products/cobra/) — commercial accuracy leader.
+- [Picovoice Cobra VAD](https://picovoice.ai/products/voice/voice-activity-detection/) — commercial accuracy leader.
 - [Kyutai — Unmute + flush trick](https://kyutai.org/stt) — the sub-200 ms engineering trick.
 - [LiveKit — turn detection](https://docs.livekit.io/agents/logic/turns/) — semantic endpointing in production.
 - [WebRTC VAD](https://webrtc.googlesource.com/src/) — the legacy baseline.

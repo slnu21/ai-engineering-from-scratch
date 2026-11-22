@@ -40,6 +40,10 @@ Three things to remember:
 2. Push to remote (`git push`)
 3. Branch for experiments (`git checkout -b experiment`)
 
+```figure
+s0-commit-dag
+```
+
 ## Build It
 
 ### Step 1: Configure git
@@ -71,8 +75,10 @@ git merge experiment/new-optimizer
 
 ### Step 4: Working with this course repo
 
+You can't push to the course repo itself — only maintainers have write access. Fork it on GitHub first (the Fork button, top right) so `origin` points at your own copy:
+
 ```bash
-git clone https://github.com/rohitg00/ai-engineering-from-scratch.git
+git clone https://github.com/YOUR-USERNAME/ai-engineering-from-scratch.git
 cd ai-engineering-from-scratch
 
 git checkout -b my-progress
@@ -96,9 +102,17 @@ That's it. You don't need rebase, cherry-pick, or submodules for this course.
 
 ## Exercises
 
-1. Clone this repo, create a branch called `my-progress`, make a file, commit it, push it
+1. Fork this repo, clone your fork, create a branch called `my-progress`, make a file, commit it, push it
 2. Create a `.gitignore` that excludes model checkpoint files (`.pt`, `.pth`, `.safetensors`)
 3. Look at the commit history of this repo with `git log --oneline` and read how lessons were added
+
+### Hints
+
+**Exercise 1.** Click Fork on GitHub, then `git clone` the URL of your own fork. After `git push -u origin my-progress`, open your fork on GitHub and confirm that the branch list shows `my-progress` with your file.
+
+**Exercise 2.** Add one pattern per extension, such as `*.pt`, to a `.gitignore` file in the repository root. Create an empty file with each extension and run `git status`; none of them may appear in the list of untracked files.
+
+**Exercise 3.** Run `git log --oneline` and then `git log --oneline -- phases/00-setup-and-tooling` to show only the commits that changed this phase. Pick one commit and run `git show --stat <hash>` to see which lesson files it added.
 
 ## Key Terms
 
