@@ -255,6 +255,111 @@ Trailmark 한국어 번역 팩(Phase 00–07, 159레슨)을 만들며 정한 표
 | Mel Spectrogram | 멜 스펙트로그램 | 사람 청각에 맞춘 주파수 축의 스펙트로그램 |
 | Answer Relevance | 답변 관련성 | RAG 평가: 답이 질문에 맞는 정도 (답 관련성 아님) |
 
+## 레슨 번역 용어 (Phase 08–15)
+
+Trailmark 번역 팩 Phase 08–15(214레슨)에서 정한 표기입니다. 위 Phase 00–07 절과 같은 방식으로, 갈렸던 표기는 `(… 아님)`으로 적었습니다.
+
+### 생성 AI · 강화학습
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Generator / Discriminator | 생성기 / 판별기 | GAN의 두 네트워크 (생성자/판별자 아님) |
+| Posterior Collapse | 사후 분포 붕괴 | VAE 인코더가 무시되고 잠재 변수가 사전 분포로 무너지는 현상 |
+| Forward / Reverse Process | 순방향 / 역방향 과정 | 디퓨전에서 노이즈를 더하는 / 걷어내는 과정 |
+| Flow Matching / Rectified Flow | 플로 매칭 / 정류 흐름 | 노이즈에서 데이터로 가는 속도장을 직접 학습하는 생성 방식 |
+| Velocity Field | 속도장 | 각 시점·위치에서 샘플이 움직일 방향과 속도 |
+| Perceptual Loss | 지각 손실 | 픽셀 대신 사전 학습 네트워크의 특징 차이로 재는 손실 |
+| Reinforcement Learning | 강화학습 | 보상을 최대화하도록 행동을 배우는 학습 (강화 학습 아님 — 붙여 씀) |
+| On-policy / Off-policy | 온폴리시 / 오프폴리시 | 지금 정책으로 모은 데이터로만 / 다른 정책의 데이터로도 배우는 방식 (온 폴리시 아님) |
+| Return | 리턴(return) | 에피소드에서 할인해 더한 누적 보상 |
+| Advantage | 어드밴티지 | 어떤 행동이 평균보다 얼마나 나은지 |
+| Credit Assignment | 기여도 할당 | 늦게 온 보상을 어느 행동 덕분인지 나눠 주는 문제 (공로 할당 아님) |
+| Experience Replay / Target Network | 경험 리플레이 / 타깃 네트워크 | DQN을 안정시키는 두 장치 |
+| Behavior / Target Policy | 행동 정책 / 목표 정책 | 데이터를 모으는 정책 / 배우려는 정책 |
+| Reward Hacking / Shaping | 보상 해킹 / 보상 셰이핑 | 보상의 허점을 파고드는 것 / 학습을 돕도록 보상을 덧붙이는 것 |
+| Process / Outcome Reward Model | 과정 / 결과 보상 모델(PRM / ORM) | 풀이 단계별로 / 최종 답만 채점하는 보상 모델 |
+
+### LLM 구축 · 엔지니어링
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Pre-training / Post-training | 사전 학습 / 사후 학습 | 대규모 다음 토큰 예측 / 그 뒤의 SFT·선호 최적화 |
+| Supervised Fine-tuning | 지도 파인튜닝(SFT) | 지시-응답 쌍으로 하는 파인튜닝 |
+| Preferred / Rejected Response | 선호 응답 / 기각 응답 | 선호 데이터의 두 응답 (거절 응답 아님) |
+| Weight Tying | 가중치 묶기 | 입력 임베딩과 출력층 가중치를 공유 (가중치 공유 아님) |
+| Pre-norm / Post-norm | 프리노름 / 포스트노름 | 정규화 층을 서브층 앞 / 뒤에 두는 배치 (사전 정규화 아님) |
+| Quantization | 양자화 | 가중치·활성값을 더 적은 비트로 표현 |
+| Prefill / Decode | 프리필 / 디코드 | 프롬프트를 한 번에 처리하는 단계 / 토큰을 하나씩 만드는 단계 |
+| Compute-bound / Memory-bound | 연산 병목 / 메모리 병목 | 연산량 / 메모리 대역폭이 속도를 정하는 상태 |
+| Continuous Batching | 연속 배칭 | 끝난 요청 자리에 새 요청을 바로 넣는 서빙 방식 |
+| Acceptance Rate | 수락률 | 추측 디코딩에서 초안 토큰이 받아들여지는 비율 (수용률 아님) |
+| Residual Distribution | 잔여 분포 | 추측 디코딩에서 기각 후 다시 뽑는 분포 (잔차 분포 아님) |
+| Ablation | 절제 실험 | 구성 요소를 하나씩 빼서 기여를 재는 실험 (어블레이션 아님) |
+| Chain of Thought | 사고 사슬(CoT) | 답 전에 중간 추론을 쓰게 하는 프롬프팅 (사고의 연쇄 아님) |
+| Semantic Cache | 의미 캐시 | 뜻이 비슷한 질의에 캐시된 답을 돌려주는 캐시 (시맨틱 캐시 아님) |
+| Cache Hit / Hit Rate | 캐시 적중 / 적중률 | (캐시 히트·히트율 아님) |
+| Rate Limiting | 속도 제한 | 단위 시간당 요청 수 상한 (호출 횟수 제한 아님) |
+| Bi-encoder | 바이 인코더 | 질의와 문서를 따로 임베딩하는 검색 모델 (바이인코더 아님) |
+| Eval Set | 평가 세트 | 회귀를 잡는 고정 평가 묶음 (평가 스위트 아님) |
+| LLM-as-judge | LLM 심판 | LLM으로 다른 모델 출력을 채점하는 평가 |
+| Data Contamination | 데이터 오염 | 평가 데이터가 학습 데이터에 섞인 것 |
+
+### 멀티모달
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Negative Sample | 음성 샘플(negative) | 대조 학습에서 밀어내는 짝. 양성/음성은 분류와 같은 짝 표기이고, 음성(speech)과 헷갈리지 않게 레슨 첫 등장에 negative를 병기 |
+| Early / Late Fusion | 초기 / 후기 융합 | 모달리티를 입력 토큰 단계에서 / 늦게 합치는 방식 |
+| Bilinear | 쌍선형 | (이중선형 아님) |
+| Turn-taking | 턴 테이킹 | 대화에서 말할 차례를 주고받기 (턴 교대 아님) |
+| Grounding | 그라운딩 | 텍스트를 이미지 영역·시간 구간 등에 연결하기 |
+| Codebook | 코드북 | 이산 토큰화에서 벡터 사전 |
+| Vision-Language-Action | 비전-언어-행동(VLA) | 로봇 행동까지 출력하는 멀티모달 모델 |
+
+### 도구 · 프로토콜 · 리버스 엔지니어링
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Discovery | 디스커버리 | MCP에서 서버 기능을 알아내는 단계 |
+| Primitive | 프리미티브 | MCP의 도구·리소스·프롬프트 같은 기본 구성 단위 (에이전트 런타임 문맥에선 기본 요소) |
+| Descriptor | 기술자 | 도구·타입을 설명하는 메타데이터 |
+| Admission | 입점 심사 | 레지스트리가 서버를 받아들이는 검증 (승인 아님) |
+| Provider | 제공자 | 모델·서비스를 제공하는 쪽 (프로바이더 아님) |
+| Fail-closed | 닫힌 쪽으로 실패 | 판단이 안 서면 막는 쪽을 택하는 설계 (실패 시 닫힘 아님) |
+| Circuit Breaker | 서킷 브레이커 | 연속 실패 시 호출을 잠시 끊는 장치 (회로 차단기 아님) |
+| Idempotency Key | 멱등성 키 | 같은 요청이 두 번 와도 한 번만 처리하게 하는 키 |
+| Backpressure | 배압 | 소비자가 느릴 때 생산자 속도를 늦추는 흐름 제어 |
+| Provenance | 출처 | 데이터·도구가 어디서 왔는지의 기록 |
+| Tool Poisoning | 도구 오염 | 도구 설명에 악성 지시를 숨기는 공격 |
+| Progressive Disclosure | 점진적 공개 | 스킬 내용을 필요할 때만 단계적으로 읽히는 방식 |
+| Disassembly / Decompilation | 디스어셈블리 / 디컴파일 | 기계어를 어셈블리로 / 고수준 코드로 되돌리기 |
+| Basic Block / Dominator | 기본 블록 / 지배자 | CFG의 직선 코드 조각 / 모든 경로가 거쳐 가는 블록 |
+| Lifting | 리프팅 | 기계어를 중간 표현으로 끌어올리기 |
+| Calling Convention | 호출 규약 | 인자·반환값·레지스터 보존 규칙 |
+| Addend | 가산값 | 재배치에서 심볼 주소에 더하는 값 (애드엔드·가수 아님 — 가수는 mantissa) |
+| Immediate | 즉칫값 | 명령어에 박힌 상수 (즉치값·즉시값 아님) |
+| Symbolic Execution | 기호 실행 | 입력을 기호로 두고 경로 조건을 모으는 분석 |
+
+### 에이전트 · 자율 시스템
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Workbench | 워크벤치 | 에이전트가 일하는 저장소·도구·규칙 묶음 (작업대 아님) |
+| Supervisor-Worker | 슈퍼바이저-워커 | 관리 에이전트가 작업자 에이전트에 일을 나누는 구조 (감독자 아님) |
+| Conditional Edge / Subgraph | 조건부 엣지 / 하위 그래프 | LangGraph 용어 (조건부 간선·서브그래프 아님) |
+| Handoff | 핸드오프 / 인계 | SDK 개념은 핸드오프, 사람·세션 간 넘겨주기는 인계 |
+| Dead-letter Queue | 데드레터 큐 | 처리 실패 메시지를 모아 두는 큐 (붙여 씀) |
+| Sleep-time Compute | 슬립 타임 연산 | 대기 시간에 메모리를 정리하는 연산 (띄어 씀) |
+| Durable Execution | 내구성 있는 실행 | 장애 후에도 이어서 실행되는 워크플로 (내구 실행 아님) |
+| Scope Contract / Definition of Done | 범위 계약 / 완료 정의 | 에이전트 작업 범위와 끝의 기준 |
+| Propose-then-commit | 제안 후 커밋 | 행동을 먼저 제안하고 승인 뒤 실행 (제안 후 확정 아님) |
+| Canary Token | 카나리 토큰 | 유출·오용을 감지하는 미끼 토큰 (카나리아 토큰 아님) |
+| Kill Switch | 킬 스위치 | 자율 에이전트를 즉시 멈추는 장치 |
+| Cost Governor | 비용 거버너 | 지출 상한·속도를 감시하는 장치 (비용 관리자 아님) |
+| Blast Radius | 피해 반경 | 잘못됐을 때 영향이 미치는 범위 (영향 반경 아님) |
+| Alignment Faking | 정렬 위장 | 평가 중에만 정렬된 척하는 행동 |
+| Sandbagging | 샌드배깅 | 평가에서 일부러 능력을 낮춰 보이기 |
+
 ## 표에 없는 용어를 만나면
 
 노트를 쓰다 표에 없는 용어가 나오면 **위 정책 1~3으로 판단해 표에 한 줄 추가**하고
