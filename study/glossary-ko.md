@@ -130,6 +130,131 @@
 | Tensor Core | `Tensor Core` | 행렬 곱에 특화된 GPU 코어. 일반 코어보다 4~8배 빠릅니다 |
 | VRAM | `VRAM` | GPU에 붙은 전용 메모리. 시스템 RAM과 별개이며 올릴 수 있는 모델 크기의 상한입니다 |
 
+## 레슨 번역 용어 (Phase 00–07)
+
+Trailmark 한국어 번역 팩(Phase 00–07, 159레슨)을 만들며 정한 표기입니다. 정책은 위와 같습니다.
+여러 번역에서 표기가 갈렸던 것은 **오른쪽 열 표기로 통일**했고, 갈렸던 다른 표기는 `(… 아님)`으로 적었습니다.
+
+### 수학 · 통계
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Inner / Dot Product | 내적(inner product) | 두 벡터를 원소별로 곱해 더한 값. 방향이 얼마나 같은지를 잽니다 |
+| Projection | 사영(projection) | 벡터를 다른 벡터·부분공간 위로 내린 그림자 (투영 아님) |
+| Linear Independence | 선형 독립(linear independence) | 어느 벡터도 나머지의 조합으로 만들 수 없는 상태 |
+| Rank | 랭크(rank) | 행렬이 실제로 펼치는 독립 방향의 수 |
+| Basis | 기저(basis) | 공간의 모든 벡터를 유일하게 표현하는 최소 벡터 집합 |
+| Orthonormal | 정규직교(orthonormal) | 서로 직교하고 길이가 1인 벡터들 |
+| Column / Null Space | 열공간 / 영공간(column / null space) | 행렬이 만들 수 있는 출력 / 0으로 보내는 입력의 모임 (열 공간 아님) |
+| Eigenvalue / Eigenvector | 고윳값 / 고유벡터 | 행렬을 곱해도 방향이 안 바뀌는 벡터와 그 배율 |
+| Singular Value Decomposition | 특잇값 분해(SVD) | 아무 행렬이나 회전·늘이기·회전으로 쪼개는 분해 |
+| Pseudoinverse | 유사역행렬(pseudoinverse) | 역행렬이 없을 때 최소제곱 해를 주는 대용 |
+| Condition Number | 조건수(condition number) | 입력 오차가 출력에서 얼마나 커지는지의 배율. 크면 악조건 |
+| Normal Equations | 정규 방정식(normal equations) | 최소제곱 해를 닫힌 형태로 주는 식 (정규방정식 아님) |
+| Least Squares | 최소제곱(least squares) | 오차 제곱합을 최소로 하는 해 |
+| Norm | 노름(norm) | 벡터의 크기를 재는 함수(L1, L2, L∞) |
+| Derivative / Partial Derivative | 도함수 / 편도함수 | 입력을 조금 바꿀 때 출력 변화율 |
+| Jacobian / Hessian | 야코비 행렬 / 헤세 행렬 | 1차 / 2차 편도함수를 모은 행렬 |
+| Chain Rule | 연쇄 법칙(chain rule) | 합성 함수의 미분 = 각 단계 미분의 곱. 역전파의 바탕 |
+| Computational Graph | 계산 그래프(computational graph) | 연산을 노드로, 데이터 흐름을 간선으로 그린 그래프 |
+| Saddle Point | 안장점(saddle point) | 한 방향으론 최소, 다른 방향으론 최대인 점 |
+| Convex | 볼록(convex) | 어느 두 점을 이은 선분도 함수 위에 있는 성질. 지역 최솟값 = 전역 최솟값 |
+| Likelihood | 가능도(likelihood) | 파라미터가 주어졌을 때 관측 데이터가 나올 확률 |
+| Prior / Posterior | 사전 확률 / 사후 확률 | 데이터를 보기 전 / 본 뒤의 믿음 |
+| MLE / MAP | 최대 가능도 추정(MLE) / 최대 사후 확률 추정(MAP) | 가능도 / 사후 확률을 최대로 하는 파라미터 추정 |
+| Conjugate Prior | 켤레 사전 분포(conjugate prior) | 사후 분포가 사전 분포와 같은 꼴이 되는 사전 분포 |
+| KL Divergence | KL 발산(KL divergence) | 두 분포가 얼마나 다른지 재는 비대칭 거리 |
+| Mutual Information | 상호 정보량(mutual information) | 한 변수를 알면 다른 변수의 불확실성이 얼마나 주는지 |
+| Central Limit Theorem | 중심 극한 정리 | 독립 표본의 평균은 정규분포에 가까워진다는 정리 |
+| Markov Chain | 마르코프 체인(Markov chain) | 다음 상태가 현재 상태에만 의존하는 확률 과정 (마르코프 연쇄 아님) |
+| Stationary Distribution | 정상 분포(stationary distribution) | 전이를 반복해도 바뀌지 않는 분포 |
+| Rejection / Importance Sampling | 기각 / 중요도 샘플링 | 쉬운 분포로 뽑아 버리거나 가중치를 주어 어려운 분포를 흉내 내기 |
+| Reparameterization Trick | 재매개변수화 트릭 | 무작위성을 입력으로 빼내 샘플링을 미분 가능하게 만드는 기법 (기법 아님) |
+| Burn-in / Thinning | 번인 / 솎아내기 | MCMC 초반 표본 버리기 / 상관을 줄이려 띄엄띄엄 고르기 |
+| Fourier Transform | 푸리에 변환(DFT/FFT) | 신호를 주파수 성분으로 분해 |
+| Aliasing | 에일리어싱(aliasing) | 샘플링이 성겨서 높은 주파수가 낮은 주파수로 둔갑하는 현상 |
+| Window Function | 윈도 함수(window function) | 신호 조각의 양 끝을 부드럽게 줄이는 함수 (창 함수 아님) |
+| Bootstrap | 부트스트랩(bootstrap) | 복원 추출로 표본을 다시 뽑아 통계량의 분포를 추정 |
+| Statistical Power | 검정력(power) | 실제 효과가 있을 때 그걸 잡아낼 확률 |
+
+### ML 기초
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Feature / Feature Engineering | 특징 / 특징 공학 | 모델 입력 변수 / 그걸 만드는 일. 제품명은 '피처 스토어'처럼 음차 |
+| Threshold | 임곗값(threshold) | 판정을 가르는 기준값 (임계값 아님) |
+| False Positive / Negative | 위양성 / 위음성 | 아닌데 맞다고 / 맞는데 아니라고 판정 (거짓 양성 아님) |
+| True Positive / Negative | 진양성 / 진음성 | 맞게 맞다고 / 맞게 아니라고 판정 |
+| Precision / Recall | 정밀도 / 재현율 | 양성이라 한 것 중 진짜 비율 / 진짜 중 잡아낸 비율 |
+| Confusion Matrix | 혼동 행렬 | 예측과 실제의 조합을 센 표 |
+| Cross-Validation | 교차 검증(K-겹) | 데이터를 K조각으로 나눠 돌려 가며 검증 |
+| Data Leakage | 데이터 누수 | 학습 때 미래·정답 정보가 새어 들어가 점수가 부풀려지는 것 |
+| Bias-Variance Tradeoff | 편향-분산 트레이드오프 | 단순하면 편향, 복잡하면 분산이 커지는 균형 |
+| Overparameterization | 과파라미터화 | 데이터보다 파라미터가 많은 상태 (과매개변수화 아님) |
+| Double Descent | 이중 하강 | 모델이 커지면 테스트 오차가 줄었다 늘었다 다시 주는 현상 |
+| Regularization / Normalization | 정규화(regularization) / 정규화 층·표준화 | 과적합 억제 / 값의 크기 맞추기. 겹칠 땐 normalization을 '정규화 층'·방법 이름(BatchNorm)으로 |
+| Decision Tree / Random Forest | 결정 트리 / 랜덤 포레스트 | 질문으로 갈라 내려가는 모델 / 그 앙상블 |
+| Gini Impurity / Information Gain | 지니 불순도 / 정보 이득 | 노드가 얼마나 섞였는지 / 분할로 줄어든 불확실성 |
+| Gradient Boosting | 그래디언트 부스팅 | 앞 모델의 잔차를 다음 모델이 고쳐 나가는 앙상블 (그레이디언트 아님) |
+| Support Vector / Margin | 서포트 벡터 / 마진 | 경계에 가장 가까운 점 / 경계까지의 거리 |
+| Kernel Trick | 커널 트릭 | 고차원 사상을 직접 하지 않고 내적만 바꿔 쓰는 기법 |
+| Centroid | 중심점(centroid) | 군집의 평균 위치 (센트로이드 아님) |
+| Laplace Smoothing | 라플라스 스무딩 | 빈도에 1을 더해 0 확률을 막는 기법 (평활 아님) |
+| Stationarity | 정상성(stationarity) | 시계열의 통계적 성질이 시간에 따라 안 바뀌는 것 |
+| Drift | 드리프트(drift) | 운영 데이터 분포가 학습 때와 달라지는 것 |
+| Training-Serving Skew | 학습-서빙 불일치 | 학습 때와 서빙 때 특징 계산이 달라 생기는 오차 |
+
+### 딥러닝 · 비전
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Fine-tuning | 파인튜닝(fine-tuning) | 사전 학습 모델을 내 데이터로 더 학습 (미세 조정 아님) |
+| Universal Approximation Theorem | 보편 근사 정리 | 은닉층 하나로도 연속 함수를 원하는 만큼 근사할 수 있다는 정리 |
+| Vanishing / Exploding Gradient | 기울기 소실 / 폭발 | 역전파 중 기울기가 0으로 사라지거나 터지는 현상 |
+| Gradient Clipping | 기울기 클리핑 | 기울기 크기를 상한으로 자르기 |
+| Dead ReLU | 죽은 ReLU | 입력이 늘 음수라 출력·기울기가 0으로 굳은 뉴런 |
+| Focal Loss | 포컬 손실(focal loss) | 쉬운 예제의 손실을 줄여 어려운 예제에 집중 (초점 손실 아님) |
+| Triplet Loss | 트리플렛 손실(triplet loss) | 앵커를 양성엔 가깝게, 음성엔 멀게 (삼중항 손실 아님) |
+| Label Smoothing | 레이블 스무딩 | 정답 확률 1을 조금 깎아 과신을 막기 |
+| Early Stopping | 조기 종료 | 검증 손실이 나빠지기 시작하면 학습 중단 |
+| Receptive Field | 수용 영역 | 출력 한 칸이 입력에서 보는 범위 |
+| Backbone / Head | 백본 / 헤드 | 특징을 뽑는 몸통 / 과제별 출력부 |
+| Non-Maximum Suppression | 비최대 억제(NMS) | 겹치는 상자 중 점수 최고만 남기기 |
+| Semantic / Instance Segmentation | 의미론적 / 인스턴스 분할 | 픽셀마다 클래스 / 객체마다 마스크 |
+| Dense Prediction | 밀집 예측 | 픽셀마다 출력을 내는 과제 (조밀 예측 아님) |
+| Mode Collapse | 모드 붕괴 | GAN 생성기가 몇 가지 출력만 반복하는 현상 |
+| Classifier-Free Guidance | 분류기 없는 가이던스(CFG) | 조건부·무조건 예측 차이로 프롬프트 반영 강도를 조절 |
+| Point Cloud | 포인트 클라우드(point cloud) | 3D 점들의 집합 (점 구름 아님) |
+| Radiance Field | 방사 필드(radiance field) | 위치·방향마다 색과 밀도를 주는 함수(NeRF) (복사장 아님) |
+| Knowledge Distillation | 지식 증류 | 큰 모델의 출력을 작은 모델이 흉내 내게 학습 |
+| Catastrophic Forgetting | 파국적 망각 | 새 과제를 배우며 이전 과제를 잊는 현상 |
+
+### NLP · 음성 · 트랜스포머
+
+| English | 한국어 표기 | 한 줄 뜻 |
+|---|---|---|
+| Coreference Resolution | 상호참조 해결 | "그"가 누구인지 같은 대상을 묶기 (해소 아님) |
+| Mention | 멘션(mention) | 텍스트 안에서 개체를 가리키는 구절 |
+| Entity Linking | 개체 연결 | 멘션을 지식 베이스의 항목에 잇기 |
+| Natural Language Inference | 자연어 추론(NLI) | 전제가 가설을 함의·모순·중립하는지 판정 |
+| Subword / Tokenizer | 서브워드 / 토크나이저 | 단어보다 작은 토큰 단위 / 텍스트를 토큰으로 자르는 도구 |
+| Out-of-Vocabulary | 미등록어(OOV) | 어휘에 없는 단어 |
+| Chunking | 청킹(chunking) | 긴 문서를 검색 단위로 자르기 |
+| Reranker / Cross-Encoder | 리랭커 / 크로스 인코더 | 1차 검색 결과를 쿼리와 함께 다시 점수 매기는 모델 |
+| Instruction Tuning | 지시 튜닝(instruction tuning) | 지시-응답 쌍으로 파인튜닝 (인스트럭션 튜닝 아님) |
+| Teacher Forcing | 교사 강요(teacher forcing) | 학습 때 이전 정답 토큰을 다음 입력으로 넣기 |
+| In-Context Learning | 인컨텍스트 학습 | 가중치 갱신 없이 프롬프트 예시만으로 과제 수행 |
+| Speculative Decoding | 추측 디코딩 | 작은 모델이 초안을 쓰고 큰 모델이 한 번에 검증 |
+| KV Cache | KV 캐시 | 이전 토큰의 키·값을 저장해 재계산을 피하기 |
+| Mixture of Experts | 전문가 혼합(MoE) | 토큰마다 일부 전문가만 켜는 구조 |
+| Positional Encoding | 위치 인코딩 | 순서 정보를 토큰 표현에 넣는 방법(사인파, RoPE, ALiBi) |
+| Scaling Laws | 스케일링 법칙 | 모델·데이터·연산을 늘릴 때 손실이 줄어드는 거듭제곱 관계 |
+| Voice Activity Detection | 음성 구간 검출(VAD) | 오디오에서 말하는 구간 찾기 (음성 활동 감지 아님) |
+| Speaker Diarization | 화자 분리(diarization) | 누가 언제 말했는지 나누기 (화자 분할 아님) |
+| Vocoder | 보코더(vocoder) | 음향 특징을 파형으로 바꾸는 모델 |
+| Mel Spectrogram | 멜 스펙트로그램 | 사람 청각에 맞춘 주파수 축의 스펙트로그램 |
+| Answer Relevance | 답변 관련성 | RAG 평가: 답이 질문에 맞는 정도 (답 관련성 아님) |
+
 ## 표에 없는 용어를 만나면
 
 노트를 쓰다 표에 없는 용어가 나오면 **위 정책 1~3으로 판단해 표에 한 줄 추가**하고
